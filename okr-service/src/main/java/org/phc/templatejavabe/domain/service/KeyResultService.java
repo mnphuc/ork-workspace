@@ -17,6 +17,10 @@ public class KeyResultService {
         this.keyResultRepository = keyResultRepository;
     }
 
+    public List<KeyResult> findAll() {
+        return keyResultRepository.findAll();
+    }
+
     public List<KeyResult> findByObjectiveId(String objectiveId) {
         return keyResultRepository.findByObjectiveId(objectiveId);
     }

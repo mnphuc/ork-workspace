@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 019-add-weight-to-objectives
+      author: system
+      changes:
+        - addColumn:
+            tableName: objectives
+            columns:
+              - column:
+                  name: weight
+                  type: DECIMAL(5,2)
+                  defaultValue: 1.00
+                  constraints:
+                    nullable: true

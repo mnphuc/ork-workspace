@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Chức năng Authentication cho phép người dùng đăng nhập vào hệ thống Oboard thông qua nhiều phương thức khác nhau. Hệ thống hỗ trợ đăng nhập bằng email/password truyền thống và đăng nhập thông qua các nhà cung cấp OAuth như Google và Microsoft.
+Chức năng Authentication cho phép người dùng đăng nhập vào hệ thống TS OKR thông qua nhiều phương thức khác nhau. Hệ thống hỗ trợ đăng nhập bằng email/password truyền thống và đăng nhập thông qua các nhà cung cấp OAuth như Google và Microsoft.
 
 == Use Cases
 
@@ -32,7 +32,7 @@ Chức năng Authentication cho phép người dùng đăng nhập vào hệ th�
    - "Continue with Google"
    - "Continue with Microsoft"
 3. Chuyển hướng đến trang xác thực của nhà cung cấp
-4. Cấp quyền truy cập cho Oboard
+4. Cấp quyền truy cập cho TS OKR
 5. Tự động đăng nhập vào hệ thống
 
 == Luồng sử dụng chi tiết

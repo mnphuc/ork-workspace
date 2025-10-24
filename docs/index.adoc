@@ -1,4 +1,4 @@
-= Oboard Documentation
+= TS OKR Documentation
 :toc:
 :toclevels: 3
 :sectnums:
@@ -6,7 +6,7 @@
 
 == Giới thiệu
 
-Oboard là một nền tảng quản lý OKR (Objectives and Key Results) toàn diện, giúp tổ chức thiết lập, theo dõi và đạt được các mục tiêu chiến lược. Tài liệu này cung cấp hướng dẫn chi tiết về tất cả các chức năng của hệ thống.
+TS OKR là một nền tảng quản lý OKR (Objectives and Key Results) toàn diện, giúp tổ chức thiết lập, theo dõi và đạt được các mục tiêu chiến lược. Tài liệu này cung cấp hướng dẫn chi tiết về tất cả các chức năng của hệ thống.
 
 == Các chức năng chính
 

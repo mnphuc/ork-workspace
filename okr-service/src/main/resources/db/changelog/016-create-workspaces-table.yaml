@@ -6,15 +6,15 @@ databaseChangeLog:
         - createTable:
             tableName: workspaces
             columns:
-              - column: { name: id, length: 26, type: varchar(26), constraints: { primaryKey: true, nullable: false } }
-              - column: { name: name, length: 128, type: varchar(128), constraints: { nullable: false } }
-              - column: { name: description, length: 500, type: varchar(500) }
-              - column: { name: owner_id, length: 26, type: varchar(26), constraints: { nullable: false } }
-              - column: { name: status, length: 20, type: varchar(20), constraints: { nullable: false } }
+              - column: { name: id, type: varchar(26), constraints: { primaryKey: true, nullable: false } }
+              - column: { name: name, type: varchar(128), constraints: { nullable: false } }
+              - column: { name: description, type: varchar(500) }
+              - column: { name: owner_id, type: varchar(26), constraints: { nullable: false } }
+              - column: { name: status, type: varchar(20), constraints: { nullable: false } }
               - column: { name: settings, type: text }
-              - column: { name: created_by, length: 64, type: varchar(64) }
+              - column: { name: created_by, type: varchar(64) }
               - column: { name: created_date, type: timestamp, defaultValueComputed: CURRENT_TIMESTAMP }
-              - column: { name: last_modified_by, length: 64, type: varchar(64) }
+              - column: { name: last_modified_by, type: varchar(64) }
               - column: { name: last_modified_date, type: timestamp }
             constraints:
               - uniqueConstraint:

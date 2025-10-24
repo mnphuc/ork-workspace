@@ -8,7 +8,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.math.BigDecimal;
@@ -45,6 +44,9 @@ public class Objective {
     @Column(name = "team_id", length = 26)
     private String teamId;
 
+    @Column(name = "workspace_id", length = 26)
+    private String workspaceId;
+
     @NotBlank(message = "Quarter is required")
     @Size(max = 16, message = "Quarter must not exceed 16 characters")
     @Column(name = "quarter", length = 16, nullable = false)
@@ -56,6 +58,9 @@ public class Objective {
 
     @Column(name = "progress", precision = 5, scale = 2)
     private BigDecimal progress;
+
+    @Column(name = "weight", precision = 5, scale = 2)
+    private BigDecimal weight;
 
     @Column(name = "created_by", length = 64)
     private String createdBy;
@@ -98,6 +103,8 @@ public class Objective {
     public void setOwnerId(String ownerId) { this.ownerId = ownerId; }
     public String getTeamId() { return teamId; }
     public void setTeamId(String teamId) { this.teamId = teamId; }
+    public String getWorkspaceId() { return workspaceId; }
+    public void setWorkspaceId(String workspaceId) { this.workspaceId = workspaceId; }
     public String getQuarter() { return quarter; }
     public void setQuarter(String quarter) { this.quarter = quarter; }
     public ObjectiveStatus getStatus() { return status; }

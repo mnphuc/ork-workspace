@@ -16,11 +16,11 @@ public class CommentService {
     }
 
     public List<Comment> getCommentsByObjective(String objectiveId) {
-        return commentRepository.findByObjectiveIdOrderByCreatedDateDesc(objectiveId);
+        return commentRepository.findByObjectiveIdOrderByIdDesc(objectiveId);
     }
 
     public List<Comment> getCommentsByKeyResult(String keyResultId) {
-        return commentRepository.findByKeyResultIdOrderByCreatedDateDesc(keyResultId);
+        return commentRepository.findByKeyResultIdOrderByIdDesc(keyResultId);
     }
 
     @Transactional

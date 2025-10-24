@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Trang Home là dashboard chính của Oboard, cung cấp cái nhìn tổng quan về tiến độ cá nhân và nhóm. Đây là điểm khởi đầu cho người dùng sau khi đăng nhập, hiển thị các thông tin quan trọng về objectives, progress tracking và các hoạt động gần đây.
+Trang Home là dashboard chính của TS OKR, cung cấp cái nhìn tổng quan về tiến độ cá nhân và nhóm. Đây là điểm khởi đầu cho người dùng sau khi đăng nhập, hiển thị các thông tin quan trọng về objectives, progress tracking và các hoạt động gần đây.
 
 == Use Cases
 
@@ -78,7 +78,7 @@ Phần "Phuc Mai Nhan's groups" hiển thị:
 
 == Ảnh minh họa
 
-image::home-page.png[Trang chủ Oboard với tổng quan tiến độ, width=800]
+image::home-page.png[Trang chủ TS OKR với tổng quan tiến độ, width=800]
 
 *Hình 1: Giao diện trang chủ hiển thị tổng quan tiến độ cá nhân và nhóm*
 

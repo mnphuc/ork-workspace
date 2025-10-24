@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Chức năng Notifications cho phép người dùng cấu hình các thông báo email và in-app để theo dõi hoạt động OKR trong hệ thống Oboard. Đây là công cụ quan trọng để đảm bảo người dùng luôn được cập nhật về tiến độ và thay đổi trong objectives.
+Chức năng Notifications cho phép người dùng cấu hình các thông báo email và in-app để theo dõi hoạt động OKR trong hệ thống TS OKR. Đây là công cụ quan trọng để đảm bảo người dùng luôn được cập nhật về tiến độ và thay đổi trong objectives.
 
 == Use Cases
 

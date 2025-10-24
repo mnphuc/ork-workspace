@@ -4,31 +4,27 @@ import React, { useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { WorkspaceProvider } from '@/contexts/WorkspaceContext';
+import { AuthErrorHandler } from '@/components/AuthErrorHandler';
 
 interface LayoutProps {
   children: React.ReactNode;
-  user?: {
-    full_name: string;
-    email: string;
-  };
   onLogout?: () => void;
 }
 
-export function Layout({ children, user, onLogout }: LayoutProps) {
+export function Layout({ children, onLogout }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
-    console.log('toggleSidebar called, current state:', sidebarOpen);
-    setSidebarOpen(!sidebarOpen);
+    setSidebarOpen(prev => !prev);
   };
 
   const closeSidebar = () => {
-    console.log('closeSidebar called');
     setSidebarOpen(false);
   };
 
   return (
     <WorkspaceProvider>
+      <AuthErrorHandler />
       <div className="min-h-screen bg-gray-50">
         <div className="flex h-screen">
           {/* Mobile sidebar overlay */}
@@ -47,11 +43,10 @@ export function Layout({ children, user, onLogout }: LayoutProps) {
           />
           
           <div className="flex-1 flex flex-col overflow-hidden">
-            <Header 
-              user={user} 
-              onLogout={onLogout}
-              onToggleSidebar={toggleSidebar}
-            />
+          <Header 
+            onLogout={onLogout}
+            onToggleSidebar={toggleSidebar}
+          />
             
             <main className="flex-1 overflow-y-auto p-4 sm:p-6">
               {children}

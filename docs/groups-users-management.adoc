@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Chức năng Groups & Users Management cho phép quản trị viên tạo, quản lý và cấu hình cấu trúc tổ chức trong Oboard. Đây là nơi thiết lập hierarchy nhóm, phân quyền người dùng, và quản lý các mối quan hệ trong tổ chức.
+Chức năng Groups & Users Management cho phép quản trị viên tạo, quản lý và cấu hình cấu trúc tổ chức trong TS OKR. Đây là nơi thiết lập hierarchy nhóm, phân quyền người dùng, và quản lý các mối quan hệ trong tổ chức.
 
 == Use Cases
 

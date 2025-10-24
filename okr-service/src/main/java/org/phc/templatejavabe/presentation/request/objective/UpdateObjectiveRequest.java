@@ -7,8 +7,10 @@ public record UpdateObjectiveRequest(
     String description,
     @JsonProperty("owner_id") String ownerId,
     @JsonProperty("team_id") String teamId,
+    @JsonProperty("workspace_id") String workspaceId,
     String quarter,
-    String status
+    String status,
+    java.math.BigDecimal weight
 ) {}
 
 

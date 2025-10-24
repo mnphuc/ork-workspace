@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 018-add-workspace-id-to-objectives
+      author: assistant
+      changes:
+        - addColumn:
+            tableName: objectives
+            columns:
+              - column: { name: workspace_id, type: varchar(26) }
+        - addForeignKeyConstraint:
+            constraintName: fk_objectives_workspace
+            baseTableName: objectives
+            baseColumnNames: workspace_id
+            referencedTableName: workspaces
+            referencedColumnNames: id
+            onDelete: SET NULL
+        - createIndex:
+            tableName: objectives
+            indexName: idx_objectives_workspace
+            columns:
+              - column: { name: workspace_id }

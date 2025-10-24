@@ -35,7 +35,7 @@ export function CheckInFeed({ checkIns, keyResults, onOpenCheckInForm }: CheckIn
 
   // Get key result info for each check-in
   const getKeyResultInfo = (keyResultId: string) => {
-    return keyResults.find(kr => kr.id === keyResultId);
+    return keyResults?.find(kr => kr.id === keyResultId);
   };
 
   // Filter check-ins based on current filter

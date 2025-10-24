@@ -67,7 +67,7 @@ class CheckInServiceTest {
         
         Objective objective = new Objective();
         objective.setId(objectiveId);
-        objective.setProgress(60);
+        objective.setProgress(BigDecimal.valueOf(60));
         
         List<KeyResult> keyResults = Arrays.asList(keyResult);
         

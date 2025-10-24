@@ -303,7 +303,7 @@ export default function WorkspaceDetailPage() {
               <Input
                 type="text"
                 value={editForm.name || ''}
-                onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                onChange={(value) => setEditForm({ ...editForm, name: value })}
                 placeholder="Enter workspace name"
                 className="w-full"
               />
@@ -315,7 +315,7 @@ export default function WorkspaceDetailPage() {
               </label>
               <Textarea
                 value={editForm.description || ''}
-                onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                onChange={(value) => setEditForm({ ...editForm, description: value })}
                 placeholder="Enter workspace description"
                 rows={3}
                 className="w-full"
@@ -355,7 +355,7 @@ export default function WorkspaceDetailPage() {
               <Input
                 type="email"
                 value={inviteForm.user_email}
-                onChange={(e) => setInviteForm({ ...inviteForm, user_email: e.target.value })}
+                onChange={(value) => setInviteForm({ ...inviteForm, user_email: value })}
                 placeholder="Enter user email"
                 className="w-full"
               />

@@ -1,25 +1,41 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LanguageSelector } from '@/components';
 import { UserDropdown } from '@/components/UserDropdown';
+import { useUser } from '@/contexts/UserContext';
 
 interface HeaderProps {
-  user?: {
-    full_name: string;
-    email: string;
-  };
   onLogout?: () => void;
   onToggleSidebar?: () => void;
 }
 
-export function Header({ user, onLogout, onToggleSidebar }: HeaderProps) {
+export function Header({ onLogout, onToggleSidebar }: HeaderProps) {
+  const { user } = useUser();
   const pathname = usePathname();
-  const { t } = useTranslation();
+  const { t, ready } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   
   const getPageTitle = () => {
+    if (!isClient || !ready) {
+      // Return static titles during SSR to avoid hydration mismatch
+      if (pathname === '/dashboard') return 'Dashboard';
+      if (pathname === '/okr') return 'Objectives';
+      if (pathname.startsWith('/okr/')) {
+        if (pathname === '/okr/alignment') return 'Alignment';
+        if (pathname === '/okr/new') return 'Create Objective';
+        return 'Objectives';
+      }
+      if (pathname === '/settings') return 'Settings';
+      return 'OKR Management';
+    }
+    
     if (pathname === '/dashboard') return t('navigation.dashboard');
     if (pathname === '/okr') return t('navigation.objectives');
     if (pathname.startsWith('/okr/')) {
@@ -32,6 +48,7 @@ export function Header({ user, onLogout, onToggleSidebar }: HeaderProps) {
   };
 
   const getBreadcrumbs = () => {
+    if (!isClient || !ready) return [];
     const crumbs = [];
     if (pathname !== '/dashboard') {
       crumbs.push({ label: t('navigation.dashboard'), href: '/dashboard' });
@@ -52,7 +69,6 @@ export function Header({ user, onLogout, onToggleSidebar }: HeaderProps) {
           <button
             onClick={(e) => {
               e.preventDefault();
-              console.log('Hamburger menu clicked, onToggleSidebar:', !!onToggleSidebar);
               if (onToggleSidebar) {
                 onToggleSidebar();
               }
@@ -88,7 +104,7 @@ export function Header({ user, onLogout, onToggleSidebar }: HeaderProps) {
         <div className="flex items-center space-x-2 sm:space-x-4">
           <LanguageSelector />
           
-          {/* User Info */}
+          {/* User Info - only show if user data is available */}
           {user && onLogout && (
             <UserDropdown 
               user={user}

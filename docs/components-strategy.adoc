@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Chức năng Components & Strategy cho phép quản trị viên định nghĩa và quản lý các thành phần chiến lược trong hệ thống Oboard. Đây là nơi thiết lập các OKR levels, metrics types, và các components tùy chỉnh để phù hợp với cấu trúc tổ chức.
+Chức năng Components & Strategy cho phép quản trị viên định nghĩa và quản lý các thành phần chiến lược trong hệ thống TS OKR. Đây là nơi thiết lập các OKR levels, metrics types, và các components tùy chỉnh để phù hợp với cấu trúc tổ chức.
 
 == Use Cases
 

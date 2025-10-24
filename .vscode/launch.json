@@ -1,24 +1,19 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
         {
             "type": "java",
-            "name": "Current File",
+            "name": "Run okr-service (auto main)",
             "request": "launch",
-            "mainClass": "${file}",
-            "runtime": "JavaSE-17"
+            "mainClass": "",
+            "projectName": "okr-service"
         },
         {
             "type": "java",
             "name": "TemplateJavaBeApplication",
             "request": "launch",
             "mainClass": "org.phc.templatejavabe.TemplateJavaBeApplication",
-            "projectName": "okr-service",
-            "runtime": "JavaSE-17"
+            "projectName": "okr-service"
         }
     ]
 }

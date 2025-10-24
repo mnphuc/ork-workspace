@@ -6,14 +6,14 @@ databaseChangeLog:
         - createTable:
             tableName: workspace_members
             columns:
-              - column: { name: id, length: 26, type: varchar(26), constraints: { primaryKey: true, nullable: false } }
-              - column: { name: workspace_id, length: 26, type: varchar(26), constraints: { nullable: false } }
-              - column: { name: user_id, length: 26, type: varchar(26), constraints: { nullable: false } }
-              - column: { name: role, length: 20, type: varchar(20), constraints: { nullable: false } }
-              - column: { name: status, length: 20, type: varchar(20), constraints: { nullable: false } }
-              - column: { name: created_by, length: 64, type: varchar(64) }
+              - column: { name: id, type: varchar(26), constraints: { primaryKey: true, nullable: false } }
+              - column: { name: workspace_id, type: varchar(26), constraints: { nullable: false } }
+              - column: { name: user_id, type: varchar(26), constraints: { nullable: false } }
+              - column: { name: role, type: varchar(20), constraints: { nullable: false } }
+              - column: { name: status, type: varchar(20), constraints: { nullable: false } }
+              - column: { name: created_by, type: varchar(64) }
               - column: { name: created_date, type: timestamp, defaultValueComputed: CURRENT_TIMESTAMP }
-              - column: { name: last_modified_by, length: 64, type: varchar(64) }
+              - column: { name: last_modified_by, type: varchar(64) }
               - column: { name: last_modified_date, type: timestamp }
             constraints:
               - uniqueConstraint:

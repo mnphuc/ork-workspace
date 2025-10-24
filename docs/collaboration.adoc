@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Chức năng Collaboration trong Oboard cho phép người dùng làm việc cùng nhau một cách hiệu quả thông qua việc chia sẻ objectives, mời người dùng, quản lý nhóm và tương tác thông qua comments và mentions. Đây là nền tảng để xây dựng văn hóa cộng tác trong tổ chức.
+Chức năng Collaboration trong TS OKR cho phép người dùng làm việc cùng nhau một cách hiệu quả thông qua việc chia sẻ objectives, mời người dùng, quản lý nhóm và tương tác thông qua comments và mentions. Đây là nền tảng để xây dựng văn hóa cộng tác trong tổ chức.
 
 == Use Cases
 

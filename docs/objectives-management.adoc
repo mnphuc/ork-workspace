@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Chức năng Objectives Management là trung tâm của hệ thống Oboard, cho phép tạo, quản lý và theo dõi các mục tiêu (objectives) và kết quả then chốt (key results). Hệ thống hỗ trợ nhiều loại objectives khác nhau và cung cấp các view khác nhau để xem và quản lý objectives.
+Chức năng Objectives Management là trung tâm của hệ thống TS OKR, cho phép tạo, quản lý và theo dõi các mục tiêu (objectives) và kết quả then chốt (key results). Hệ thống hỗ trợ nhiều loại objectives khác nhau và cung cấp các view khác nhau để xem và quản lý objectives.
 
 == Use Cases
 

@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Chức năng Personal Settings cho phép người dùng quản lý thông tin cá nhân, cài đặt ngôn ngữ, và cấu hình các preferences cá nhân trong hệ thống Oboard. Đây là nơi người dùng có thể tùy chỉnh trải nghiệm sử dụng theo nhu cầu cá nhân.
+Chức năng Personal Settings cho phép người dùng quản lý thông tin cá nhân, cài đặt ngôn ngữ, và cấu hình các preferences cá nhân trong hệ thống TS OKR. Đây là nơi người dùng có thể tùy chỉnh trải nghiệm sử dụng theo nhu cầu cá nhân.
 
 == Use Cases
 
