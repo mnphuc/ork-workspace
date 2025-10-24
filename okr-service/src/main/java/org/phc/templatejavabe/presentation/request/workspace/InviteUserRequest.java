@@ -20,3 +20,4 @@ public class InviteUserRequest {
     private String role = "MEMBER"; // OWNER, ADMIN, MEMBER, VIEWER
 }
 
+

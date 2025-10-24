@@ -27,3 +27,4 @@ public class GroupInfoResponse {
     private int avgMetricsProgress;
 }
 
+

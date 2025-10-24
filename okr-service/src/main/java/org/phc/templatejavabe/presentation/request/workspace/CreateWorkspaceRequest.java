@@ -24,3 +24,4 @@ public class CreateWorkspaceRequest {
     private String settings; // JSON string for workspace settings
 }
 
+

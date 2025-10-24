@@ -24,3 +24,4 @@ public class HomeSummaryResponse {
     private StatusDistributionResponse statusDistribution;
 }
 
+

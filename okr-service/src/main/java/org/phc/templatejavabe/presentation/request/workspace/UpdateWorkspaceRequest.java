@@ -23,3 +23,4 @@ public class UpdateWorkspaceRequest {
     private String settings; // JSON string for workspace settings
 }
 
+

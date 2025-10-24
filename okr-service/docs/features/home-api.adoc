@@ -226,3 +226,4 @@ Accept: application/json
 - Current implementation uses "Q1 2024" as default quarter
 - Team membership is determined by manager_id field (simplified implementation)
 
+

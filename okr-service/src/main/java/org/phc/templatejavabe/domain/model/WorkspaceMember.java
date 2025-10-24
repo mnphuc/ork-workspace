@@ -99,3 +99,4 @@ public class WorkspaceMember {
     public void setLastModifiedDate(Instant lastModifiedDate) { this.lastModifiedDate = lastModifiedDate; }
 }
 
+
