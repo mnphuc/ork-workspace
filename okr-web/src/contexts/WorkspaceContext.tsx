@@ -39,13 +39,27 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
       const data = await apiFetch<WorkspaceSummary[]>('/workspaces');
       setWorkspaces(data);
       
-      // Set first workspace as current if none selected
-      if (data.length > 0 && !currentWorkspace) {
+      // Always set first workspace as current if available
+      if (data.length > 0) {
         setCurrentWorkspace(data[0]);
       }
     } catch (e: any) {
-      setError(e.message || 'Failed to load workspaces');
       console.error('Error loading workspaces:', e);
+      
+      // Check if it's an authentication error
+      if (e.message && (
+        e.message.includes('401') || 
+        e.message.includes('403') || 
+        e.message.includes('Authentication') ||
+        e.message.includes('Unauthorized')
+      )) {
+        // Don't set error for auth failures, just clear workspaces
+        setWorkspaces([]);
+        setCurrentWorkspace(null);
+        setError(null);
+      } else {
+        setError(e.message || 'Failed to load workspaces');
+      }
     } finally {
       setLoading(false);
     }
@@ -58,6 +72,13 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
   useEffect(() => {
     loadWorkspaces();
   }, []);
+
+  // Load workspaces when currentWorkspace changes
+  useEffect(() => {
+    if (currentWorkspace && workspaces.length === 0) {
+      loadWorkspaces();
+    }
+  }, [currentWorkspace]);
 
   const value: WorkspaceContextType = {
     currentWorkspace,

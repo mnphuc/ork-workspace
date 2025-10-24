@@ -14,6 +14,7 @@ public class ObjectiveMapper {
         o.setDescription(req.description());
         o.setOwnerId(req.ownerId());
         o.setTeamId(req.teamId());
+        o.setWorkspaceId(req.workspaceId());
         o.setQuarter(req.quarter());
         
         // Handle status enum conversion
@@ -39,6 +40,7 @@ public class ObjectiveMapper {
         }
         
         // Set new fields
+        o.setWeight(req.weight() != null ? req.weight() : java.math.BigDecimal.ONE);
         o.setGroups(req.groups());
         o.setLabels(req.labels());
         o.setStakeholders(req.stakeholders());
@@ -67,6 +69,7 @@ public class ObjectiveMapper {
         if (req.description() != null) existing.setDescription(req.description());
         if (req.ownerId() != null) existing.setOwnerId(req.ownerId());
         if (req.teamId() != null) existing.setTeamId(req.teamId());
+        if (req.workspaceId() != null) existing.setWorkspaceId(req.workspaceId());
         if (req.quarter() != null) existing.setQuarter(req.quarter());
         if (req.status() != null) {
             try {
@@ -75,6 +78,7 @@ public class ObjectiveMapper {
                 // Keep existing status if invalid
             }
         }
+        if (req.weight() != null) existing.setWeight(req.weight());
     }
 
     public static ObjectiveResponse toResponse(Objective o) {
@@ -84,18 +88,32 @@ public class ObjectiveMapper {
             o.getDescription(), 
             o.getOwnerId(), 
             o.getTeamId(), 
+            o.getWorkspaceId(),
             o.getQuarter(), 
             o.getStatus() != null ? o.getStatus().name() : null,
             o.getProgress(),
+            o.getWeight(),
             o.getCreatedDate(),
             o.getLastModifiedDate(),
             o.getType() != null ? o.getType().name() : null,
-            o.getGroups(),
+            parseGroups(o.getGroups()),
             o.getLabels(),
             o.getStakeholders(),
             o.getStartDate() != null ? o.getStartDate().toString() : null,
-            o.getEndDate() != null ? o.getEndDate().toString() : null
+            o.getEndDate() != null ? o.getEndDate().toString() : null,
+            null, // lastCheckInDate - will be calculated separately
+            0 // commentsCount - will be calculated separately
         );
+    }
+
+    private static java.util.List<String> parseGroups(String groups) {
+        if (groups == null || groups.trim().isEmpty()) {
+            return java.util.List.of();
+        }
+        return java.util.Arrays.stream(groups.split(","))
+            .map(String::trim)
+            .filter(s -> !s.isEmpty())
+            .collect(java.util.stream.Collectors.toList());
     }
 }
 

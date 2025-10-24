@@ -2,7 +2,6 @@
 alwaysApply: true
 ---
 okr-service:
-JDK 17 C:\Users\Admin\.jdks\ms-17.0.16\bin\java.exe
 not running backend using cmd, cli in tool
 đây là project backend, sử dụng công nghệ spring boot, postgres database, liquibase tool
 

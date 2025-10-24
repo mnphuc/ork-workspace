@@ -28,6 +28,14 @@ public class ObjectiveService {
     public List<Objective> findAll() { return objectiveRepository.findAll(); }
     public Optional<Objective> findById(String id) { return objectiveRepository.findById(id); }
 
+    public List<Objective> findByWorkspace(String workspaceId) {
+        return objectiveRepository.findByWorkspaceId(workspaceId);
+    }
+
+    public List<Objective> findByWorkspaceAndQuarter(String workspaceId, String quarter) {
+        return objectiveRepository.findByWorkspaceIdAndQuarter(workspaceId, quarter);
+    }
+
     public List<Objective> findByOwnerAndQuarter(String ownerId, String quarter) {
         return objectiveRepository.findByOwnerIdAndQuarter(ownerId, quarter);
     }

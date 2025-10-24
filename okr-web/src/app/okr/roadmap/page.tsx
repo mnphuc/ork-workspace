@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Layout } from '@/components/layout';
+import { WorkspaceRequired } from '@/components/WorkspaceRequired';
 import { logout } from '@/lib/auth';
 import { clearTokens } from '@/lib/api';
 import { RoadmapTimeline } from '@/components/RoadmapTimeline';
@@ -315,7 +316,9 @@ export default function RoadmapPage() {
   if (loading) {
     return (
       <Layout onLogout={handleLogout}>
-        <Loading text="Loading roadmap..." />
+        <WorkspaceRequired>
+          <Loading text="Loading roadmap..." />
+        </WorkspaceRequired>
       </Layout>
     );
   }
@@ -323,15 +326,18 @@ export default function RoadmapPage() {
   if (error) {
     return (
       <Layout onLogout={handleLogout}>
-        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
-          {error}
-        </div>
+        <WorkspaceRequired>
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
+            {error}
+          </div>
+        </WorkspaceRequired>
       </Layout>
     );
   }
 
   return (
     <Layout onLogout={handleLogout}>
+      <WorkspaceRequired>
       <div className="space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
@@ -408,6 +414,7 @@ export default function RoadmapPage() {
           dataCount={filteredObjectives.length}
         />
       </div>
+      </WorkspaceRequired>
     </Layout>
   );
 }

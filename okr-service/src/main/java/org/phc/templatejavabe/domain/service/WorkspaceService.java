@@ -1,9 +1,7 @@
 package org.phc.templatejavabe.domain.service;
 
-import org.phc.templatejavabe.domain.model.User;
 import org.phc.templatejavabe.domain.model.Workspace;
-import org.phc.templatejavabe.domain.model.WorkspaceMember;
-import org.phc.templatejavabe.infrastructure.repository.UserRepository;
+import org.phc.templatejavabe.domain.repository.UserRepository;
 import org.phc.templatejavabe.infrastructure.repository.WorkspaceRepository;
 import org.phc.templatejavabe.presentation.request.workspace.*;
 import org.phc.templatejavabe.presentation.response.workspace.*;
@@ -19,10 +17,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@SuppressWarnings("unused")
 public class WorkspaceService {
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceService.class);
     
     private final WorkspaceRepository workspaceRepository;
+    // UserRepository will be used when implementing workspace member checks and member count
     private final UserRepository userRepository;
     private final IdGeneratorService idGeneratorService;
 
@@ -49,7 +49,6 @@ public class WorkspaceService {
 
             // Create new workspace
             Workspace workspace = new Workspace();
-            workspace.setId(idGeneratorService.generateId());
             workspace.setName(request.getName());
             workspace.setDescription(request.getDescription());
             workspace.setOwnerId(ownerId);

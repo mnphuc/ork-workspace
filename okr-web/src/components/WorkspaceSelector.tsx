@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 
 interface WorkspaceSelectorProps {
@@ -8,8 +8,27 @@ interface WorkspaceSelectorProps {
 }
 
 export function WorkspaceSelector({ onWorkspaceChange }: WorkspaceSelectorProps) {
-  const { currentWorkspace, workspaces, loading, setCurrentWorkspace } = useWorkspace();
+  const { currentWorkspace, workspaces, loading, setCurrentWorkspace, refreshWorkspaces } = useWorkspace();
   const [isOpen, setIsOpen] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleWorkspaceSelect = (workspace: typeof workspaces[0]) => {
     setCurrentWorkspace(workspace);
@@ -50,15 +69,31 @@ export function WorkspaceSelector({ onWorkspaceChange }: WorkspaceSelectorProps)
   }
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <div 
         className="px-3 py-2 bg-blue-50 rounded-lg border border-blue-200 cursor-pointer hover:bg-blue-100 transition-colors"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={async (e) => {
+          e.stopPropagation();
+          if (!isOpen) {
+            // Only refresh workspaces if they are empty to avoid blink
+            if (workspaces.length === 0 && !loading && !isRefreshing) {
+              setIsRefreshing(true);
+              try {
+                await refreshWorkspaces();
+              } finally {
+                setIsRefreshing(false);
+              }
+            }
+          }
+          setIsOpen(!isOpen);
+        }}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <span className="text-blue-600">🏢</span>
-            <span className="text-sm font-medium text-blue-800">Current Workspace</span>
+            <span className="text-sm font-medium text-blue-800 truncate">
+              {isRefreshing ? 'Loading...' : (currentWorkspace?.name || 'Select Workspace')}
+            </span>
           </div>
           <svg 
             className={`w-4 h-4 text-blue-600 transition-transform ${isOpen ? 'rotate-180' : ''}`}
@@ -68,9 +103,6 @@ export function WorkspaceSelector({ onWorkspaceChange }: WorkspaceSelectorProps)
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
-        </div>
-        <div className="mt-1 text-xs text-blue-600 truncate">
-          {currentWorkspace?.name || 'Select Workspace'}
         </div>
       </div>
 

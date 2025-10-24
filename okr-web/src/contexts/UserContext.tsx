@@ -38,10 +38,23 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       // Fetch real user data from backend
       const userData = await apiFetch<User>('/auth/me');
       setUser(userData);
-    } catch (err) {
-      setError('Failed to load user data');
+    } catch (err: any) {
       console.error('User context error:', err);
-      setUser(null);
+      
+      // Check if it's an authentication error
+      if (err.message && (
+        err.message.includes('401') || 
+        err.message.includes('403') || 
+        err.message.includes('Authentication') ||
+        err.message.includes('Unauthorized')
+      )) {
+        // Don't set error for auth failures, just clear user
+        setUser(null);
+        setError(null);
+      } else {
+        setError('Failed to load user data');
+        setUser(null);
+      }
     } finally {
       setLoading(false);
     }

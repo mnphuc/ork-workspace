@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from 'react';
 import { Layout } from '@/components/layout';
+import { WorkspaceRequired } from '@/components/WorkspaceRequired';
 import { apiFetch, clearTokens } from '@/lib/api';
 import { logout } from '@/lib/auth';
 import { formatQuarter } from '@/lib/date-utils';

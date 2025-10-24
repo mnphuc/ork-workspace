@@ -23,6 +23,18 @@ public class KeyResultController {
         this.keyResultService = keyResultService;
     }
 
+    @GetMapping
+    public List<KeyResultResponse> list(@RequestParam(required = false) String objectiveId) {
+        if (objectiveId != null) {
+            return keyResultService.findByObjectiveId(objectiveId).stream()
+                .map(KeyResultMapper::toResponse)
+                .collect(Collectors.toList());
+        }
+        return keyResultService.findAll().stream()
+            .map(KeyResultMapper::toResponse)
+            .collect(Collectors.toList());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<KeyResultResponse> get(@PathVariable String id) {
         return keyResultService.findById(id)

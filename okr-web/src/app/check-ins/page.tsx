@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Layout } from '@/components/layout';
+import { WorkspaceRequired } from '@/components/WorkspaceRequired';
 import { CheckInFeed } from '@/components/CheckInFeed';
 import { CheckInForm } from '@/components/CheckInForm';
 import { apiFetch } from '@/lib/api';
@@ -34,7 +35,7 @@ interface CheckInFeedData {
   key_results: KeyResult[];
 }
 
-export default function CheckInsPage() {
+function CheckInsContent() {
   const { t } = useTranslation();
   const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
   const [keyResults, setKeyResults] = useState<KeyResult[]>([]);
@@ -77,6 +78,132 @@ export default function CheckInsPage() {
     }
   };
 
+  const handleSubmitCheckIn = async (keyResultId: string, value: number, note?: string) => {
+    try {
+      setIsSubmitting(true);
+      
+      const checkInData = {
+        key_result_id: keyResultId,
+        value: value,
+        note: note
+      };
+      
+      await apiFetch('/check-ins', {
+        method: 'POST',
+        body: JSON.stringify(checkInData)
+      });
+      
+      // Reload check-ins after successful submission
+      await loadCheckIns();
+      
+      // Close form
+      setSelectedKeyResult(null);
+      setIsFormOpen(false);
+    } catch (e: any) {
+      setError(e.message || 'Failed to submit check-in');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleOpenForm = (keyResult: KeyResult) => {
+    setSelectedKeyResult(keyResult);
+    setIsFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setSelectedKeyResult(null);
+    setIsFormOpen(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading check-ins...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-600 mb-4">{error}</p>
+        <button
+          onClick={loadCheckIns}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-gray-900">Check-ins</h1>
+        <button
+          onClick={() => setIsFormOpen(true)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        >
+          New Check-in
+        </button>
+      </div>
+
+      {/* Check-in Feed */}
+      <CheckInFeed 
+        checkIns={checkIns}
+        onRefresh={loadCheckIns}
+      />
+
+      {/* Key Results for Check-in */}
+      {keyResults.length > 0 && (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Available Key Results</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {keyResults.map((keyResult) => (
+              <div key={keyResult.id} className="p-4 border border-gray-200 rounded-lg">
+                <h3 className="font-medium text-gray-900 mb-2">{keyResult.title}</h3>
+                <p className="text-sm text-gray-600 mb-2">
+                  {keyResult.objective_title}
+                </p>
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-sm text-gray-500">
+                    {keyResult.current_value} / {keyResult.target_value} {keyResult.unit}
+                  </span>
+                  <span className="text-sm font-medium text-blue-600">
+                    {Math.round((keyResult.current_value / keyResult.target_value) * 100)}%
+                  </span>
+                </div>
+                <button
+                  onClick={() => handleOpenForm(keyResult)}
+                  className="w-full px-3 py-2 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 transition-colors"
+                >
+                  Check-in
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Individual Check-in Form */}
+      {selectedKeyResult && (
+        <CheckInForm
+          keyResult={selectedKeyResult}
+          onSubmit={handleSubmitCheckIn}
+          onCancel={handleCloseForm}
+          isLoading={isSubmitting}
+        />
+      )}
+    </div>
+  );
+}
+
+export default function CheckInsPage() {
   const handleLogout = async () => {
     try {
       await logout();
@@ -88,153 +215,11 @@ export default function CheckInsPage() {
     }
   };
 
-  const handleOpenCheckInForm = (keyResult: KeyResult) => {
-    setSelectedKeyResult(keyResult);
-    setIsFormOpen(true);
-  };
-
-  const handleCloseForm = () => {
-    setIsFormOpen(false);
-    setSelectedKeyResult(null);
-  };
-
-  const handleSubmitCheckIn = async (value: number, note?: string) => {
-    if (!selectedKeyResult) return;
-
-    try {
-      setIsSubmitting(true);
-      
-      const checkInData = {
-        keyResultId: selectedKeyResult.id,
-        value: value,
-        note: note
-      };
-
-      const newCheckIn = await apiFetch<CheckIn>('/check-ins', {
-        method: 'POST',
-        body: JSON.stringify(checkInData)
-      });
-
-      // Add to the beginning of the list
-      setCheckIns(prev => [newCheckIn, ...prev]);
-      
-      // Update the key result's current value
-      setKeyResults(prev => 
-        prev.map(kr => 
-          kr.id === selectedKeyResult.id 
-            ? { ...kr, current_value: value }
-            : kr
-        )
-      );
-
-      handleCloseForm();
-    } catch (e: any) {
-      console.error('Failed to submit check-in:', e);
-      alert('Failed to submit check-in: ' + (e.message || 'Unknown error'));
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <Layout onLogout={handleLogout}>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading check-ins...</p>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (error) {
-    return (
-      <Layout onLogout={handleLogout}>
-        <div className="text-center py-12">
-          <p className="text-red-600 mb-4">{error}</p>
-          <button
-            onClick={loadCheckIns}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            Retry
-          </button>
-        </div>
-      </Layout>
-    );
-  }
-
   return (
     <Layout onLogout={handleLogout}>
-      <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Check-ins</h1>
-            <p className="text-gray-600 mt-1 text-sm sm:text-base">
-              Track progress and update your objectives
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
-            <button 
-              onClick={() => setIsFormOpen(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium min-h-[44px]"
-            >
-              Quick Check-in
-            </button>
-          </div>
-        </div>
-
-        {/* Check-ins Feed */}
-        <CheckInFeed 
-          checkIns={checkIns}
-          keyResults={keyResults}
-          onOpenCheckInForm={handleOpenCheckInForm}
-        />
-
-        {/* Check-in Form Modal */}
-        {isFormOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-xl p-4 sm:p-6 w-full max-w-md">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Quick Check-in</h3>
-                <button
-                  onClick={handleCloseForm}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  ✕
-                </button>
-              </div>
-              
-              <div className="space-y-3">
-                {keyResults.map((keyResult) => (
-                  <button
-                    key={keyResult.id}
-                    onClick={() => handleOpenCheckInForm(keyResult)}
-                    className="w-full text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="font-medium text-gray-900">{keyResult.title}</div>
-                    <div className="text-sm text-gray-500">
-                      {keyResult.objective_title} • Current: {keyResult.current_value} {keyResult.unit}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Individual Check-in Form */}
-        {selectedKeyResult && (
-          <CheckInForm
-            keyResult={selectedKeyResult}
-            onSubmit={handleSubmitCheckIn}
-            onCancel={handleCloseForm}
-            isLoading={isSubmitting}
-          />
-        )}
-      </div>
+      <WorkspaceRequired>
+        <CheckInsContent />
+      </WorkspaceRequired>
     </Layout>
   );
 }
-

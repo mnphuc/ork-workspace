@@ -27,8 +27,14 @@ public class DashboardService {
     /**
      * Get team summary for dashboard
      */
-    public Map<String, Object> getTeamSummary(String teamId, String quarter) {
-        List<Objective> objectives = objectiveRepository.findByTeamIdAndQuarter(teamId, quarter);
+    public Map<String, Object> getTeamSummary(String teamId, String quarter, String workspaceId) {
+        List<Objective> objectives;
+        
+        if (workspaceId != null && !workspaceId.isBlank()) {
+            objectives = objectiveRepository.findByWorkspaceIdAndQuarter(workspaceId, quarter);
+        } else {
+            objectives = objectiveRepository.findByTeamIdAndQuarter(teamId, quarter);
+        }
         
         Map<String, Object> summary = new HashMap<>();
         summary.put("total_objectives", objectives.size());
@@ -61,8 +67,14 @@ public class DashboardService {
     /**
      * Get personal OKR summary
      */
-    public Map<String, Object> getMyOKRSummary(String userId, String quarter) {
-        List<Objective> objectives = objectiveRepository.findByOwnerIdAndQuarter(userId, quarter);
+    public Map<String, Object> getMyOKRSummary(String userId, String quarter, String workspaceId) {
+        List<Objective> objectives;
+        
+        if (workspaceId != null && !workspaceId.isBlank()) {
+            objectives = objectiveRepository.findByWorkspaceIdAndQuarter(workspaceId, quarter);
+        } else {
+            objectives = objectiveRepository.findByOwnerIdAndQuarter(userId, quarter);
+        }
         
         Map<String, Object> summary = new HashMap<>();
         summary.put("total_objectives", objectives.size());
@@ -113,8 +125,14 @@ public class DashboardService {
     /**
      * Get top performing objectives
      */
-    public List<Map<String, Object>> getTopPerformers(String quarter, int limit) {
-        List<Objective> objectives = objectiveRepository.findByQuarterOrderByProgressDesc(quarter);
+    public List<Map<String, Object>> getTopPerformers(String quarter, int limit, String workspaceId) {
+        List<Objective> objectives;
+        
+        if (workspaceId != null && !workspaceId.isBlank()) {
+            objectives = objectiveRepository.findByWorkspaceIdAndQuarter(workspaceId, quarter);
+        } else {
+            objectives = objectiveRepository.findByQuarterOrderByProgressDesc(quarter);
+        }
         
         return objectives.stream()
             .limit(limit)

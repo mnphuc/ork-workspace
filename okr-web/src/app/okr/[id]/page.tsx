@@ -106,23 +106,19 @@ export default function ObjectiveDetailPage() {
         return;
       }
 
-      const [objectiveData, keyResultsData, commentsData, activitiesData, stakeholdersData, availableObjectivesData, availableUsersData] = await Promise.all([
+      const [objectiveData, keyResultsData, commentsData] = await Promise.all([
         apiFetch<Objective>(`/objectives/${objectiveId}`),
         apiFetch<KeyResult[]>(`/objectives/${objectiveId}/key-results`),
-        apiFetch<Comment[]>(`/comments?objective_id=${objectiveId}`),
-        apiFetch<any[]>(`/objectives/${objectiveId}/activities`).catch(() => []),
-        apiFetch<any[]>(`/objectives/${objectiveId}/stakeholders`).catch(() => []),
-        apiFetch<Objective[]>(`/objectives`).catch(() => []),
-        apiFetch<any[]>(`/users`).catch(() => [])
+        apiFetch<Comment[]>(`/comments?objective_id=${objectiveId}`)
       ]);
 
       setObjective(objectiveData);
       setKeyResults(keyResultsData);
       setComments(commentsData);
-      setActivities(activitiesData);
-      setStakeholders(stakeholdersData);
-      setAvailableObjectives(availableObjectivesData);
-      setAvailableUsers(availableUsersData);
+      setActivities([]); // Empty for now
+      setStakeholders([]); // Empty for now
+      setAvailableObjectives([]); // Empty for now
+      setAvailableUsers([]); // Empty for now
 
       // Load check-in history for each key result
       const historyPromises = keyResultsData.map(async (kr) => {

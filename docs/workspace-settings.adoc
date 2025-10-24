@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Chức năng Workspace Settings cho phép quản trị viên tạo, quản lý và cấu hình các workspace trong hệ thống Oboard. Đây là nơi thiết lập cấu trúc tổ chức, intervals, và các cài đặt cơ bản của workspace.
+Chức năng Workspace Settings cho phép quản trị viên tạo, quản lý và cấu hình các workspace trong hệ thống TS OKR. Đây là nơi thiết lập cấu trúc tổ chức, intervals, và các cài đặt cơ bản của workspace.
 
 == Use Cases
 

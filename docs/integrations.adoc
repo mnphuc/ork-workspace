@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Chức năng Integrations cho phép kết nối Oboard với các hệ thống và công cụ khác để tăng cường hiệu quả làm việc và tự động hóa quy trình. Hệ thống hỗ trợ tích hợp với các nền tảng phổ biến như Jira, Slack, Microsoft Teams, Discord và cung cấp API để tích hợp tùy chỉnh.
+Chức năng Integrations cho phép kết nối TS OKR với các hệ thống và công cụ khác để tăng cường hiệu quả làm việc và tự động hóa quy trình. Hệ thống hỗ trợ tích hợp với các nền tảng phổ biến như Jira, Slack, Microsoft Teams, Discord và cung cấp API để tích hợp tùy chỉnh.
 
 == Use Cases
 
@@ -33,7 +33,7 @@ Chức năng Integrations cho phép kết nối Oboard với các hệ thống v
 === Thiết lập Slack Integration
 
 1. Click "Slack" integration
-2. Authorize Oboard với Slack
+2. Authorize TS OKR với Slack
 3. Chọn channels để gửi reminders
 4. Cấu hình notification settings
 5. Test notifications
@@ -61,7 +61,7 @@ Trang hiển thị các loại integrations:
 
 **Jira Integration**:
 - **Mục đích**: Link issues, users, groups
-- **Chức năng**: Sync data giữa Oboard và Jira
+- **Chức năng**: Sync data giữa TS OKR và Jira
 - **Cấu hình**: Jira URL, credentials, project mapping
 - **Benefits**: Tự động hóa workflow, sync progress
 
@@ -140,14 +140,14 @@ image::settings-integrations.png[Trang Integrations với các tùy chọn tích
 === Jira Workflow
 
 1. **Setup**: Cấu hình Jira connection
-2. **Mapping**: Map fields giữa Oboard và Jira
+2. **Mapping**: Map fields giữa TS OKR và Jira
 3. **Sync**: Đồng bộ dữ liệu
 4. **Monitor**: Theo dõi sync status
 5. **Troubleshoot**: Xử lý lỗi nếu có
 
 === Slack Workflow
 
-1. **Authorization**: Authorize Oboard với Slack
+1. **Authorization**: Authorize TS OKR với Slack
 2. **Channel Selection**: Chọn channels
 3. **Notification Setup**: Cấu hình notifications
 4. **Testing**: Test notifications

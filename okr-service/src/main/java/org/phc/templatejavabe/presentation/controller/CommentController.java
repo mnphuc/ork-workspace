@@ -23,8 +23,8 @@ public class CommentController {
     }
 
     @GetMapping
-    public List<CommentResponse> list(@RequestParam(required = false) String objectiveId, 
-                                     @RequestParam(required = false) String keyResultId) {
+    public List<CommentResponse> list(@RequestParam(required = false, value = "objective_id") String objectiveId, 
+                                     @RequestParam(required = false, value = "key_result_id") String keyResultId) {
         List<Comment> comments;
         
         if (objectiveId != null) {

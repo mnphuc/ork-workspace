@@ -6,7 +6,7 @@
 
 == Mô tả tổng quan
 
-Chức năng Export and Import cho phép người dùng xuất dữ liệu từ Oboard ra các định dạng khác nhau và nhập dữ liệu từ bên ngoài vào hệ thống. Đây là công cụ quan trọng để backup dữ liệu, tạo báo cáo và tích hợp với các hệ thống khác.
+Chức năng Export and Import cho phép người dùng xuất dữ liệu từ TS OKR ra các định dạng khác nhau và nhập dữ liệu từ bên ngoài vào hệ thống. Đây là công cụ quan trọng để backup dữ liệu, tạo báo cáo và tích hợp với các hệ thống khác.
 
 == Use Cases
 

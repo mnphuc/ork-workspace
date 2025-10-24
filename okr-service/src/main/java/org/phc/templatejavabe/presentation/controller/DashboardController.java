@@ -1,6 +1,5 @@
 package org.phc.templatejavabe.presentation.controller;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,20 +24,23 @@ public class DashboardController {
     }
 
     @GetMapping("/summary")
-    public DashboardSummaryResponse summary(@RequestParam String quarter, @RequestParam(required = false) String teamId) {
+    public DashboardSummaryResponse summary(@RequestParam String quarter, 
+                                           @RequestParam(required = false) String teamId,
+                                           @RequestParam(required = false) String workspaceId) {
         Map<String, Object> summary;
         
         if (teamId != null && !teamId.isBlank()) {
-            summary = dashboardService.getTeamSummary(teamId, quarter);
+            summary = dashboardService.getTeamSummary(teamId, quarter, workspaceId);
         } else {
             // For now, use a default team or return general summary
-            summary = dashboardService.getMyOKRSummary("current_user", quarter);
+            summary = dashboardService.getMyOKRSummary("current_user", quarter, workspaceId);
         }
         
         // Convert to response format
         int objectivesProgress = ((java.math.BigDecimal) summary.get("average_progress")).intValue();
         int metricsProgress = objectivesProgress; // Same for now
         
+        @SuppressWarnings("unchecked")
         Map<String, Long> statusDistribution = (Map<String, Long>) summary.get("status_distribution");
         var statusCounts = new StatusCountsResponse(
             statusDistribution.getOrDefault("not_started", 0L).intValue(),
@@ -58,8 +60,10 @@ public class DashboardController {
     }
 
     @GetMapping("/top-performers")
-    public List<Map<String, Object>> topPerformers(@RequestParam String quarter, @RequestParam(defaultValue = "10") int limit) {
-        return dashboardService.getTopPerformers(quarter, limit);
+    public List<Map<String, Object>> topPerformers(@RequestParam String quarter, 
+                                                   @RequestParam(defaultValue = "10") int limit,
+                                                   @RequestParam(required = false) String workspaceId) {
+        return dashboardService.getTopPerformers(quarter, limit, workspaceId);
     }
 
     // @GetMapping("/recent-check-ins")

@@ -3,7 +3,6 @@ package org.phc.templatejavabe.presentation.controller;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.phc.templatejavabe.domain.model.Objective;
 import org.phc.templatejavabe.domain.model.KeyResult;
@@ -35,12 +34,20 @@ public class ObjectiveController {
     }
 
     @GetMapping
-    public List<ObjectiveResponse> list(@RequestParam(required = false) String quarter,
+    public List<ObjectiveResponse> list(@RequestParam(required = false) String workspaceId,
+                                       @RequestParam(required = false) String quarter,
                                        @RequestParam(required = false) String teamId,
                                        @RequestParam(required = false) String ownerId) {
         List<Objective> objectives;
         
-        if (quarter != null && ownerId != null) {
+        // If workspaceId is provided, filter by workspace
+        if (workspaceId != null && !workspaceId.isBlank()) {
+            if (quarter != null && !quarter.isBlank()) {
+                objectives = objectiveService.findByWorkspaceAndQuarter(workspaceId, quarter);
+            } else {
+                objectives = objectiveService.findByWorkspace(workspaceId);
+            }
+        } else if (quarter != null && ownerId != null) {
             objectives = objectiveService.findByOwnerAndQuarter(ownerId, quarter);
         } else if (quarter != null && teamId != null) {
             objectives = objectiveService.findByTeamAndQuarter(teamId, quarter);

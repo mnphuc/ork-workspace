@@ -7,6 +7,8 @@ import { Select } from '@/components/Select';
 import { Textarea } from '@/components/Textarea';
 import { apiFetch } from '@/lib/api';
 import { ObjectiveType } from '@/components/ObjectiveTypeSelector';
+import { useWorkspace } from '@/contexts/WorkspaceContext';
+import { useUser } from '@/contexts/UserContext';
 
 interface ObjectiveFormData {
   title: string;
@@ -33,6 +35,8 @@ export function ObjectiveModal({
   onSave, 
   selectedType 
 }: ObjectiveModalProps) {
+  const { currentWorkspace } = useWorkspace();
+  const { user } = useUser();
   const [formData, setFormData] = useState<ObjectiveFormData>({
     title: '',
     description: '',
@@ -62,11 +66,25 @@ export function ObjectiveModal({
     setLoading(true);
     setError(null);
 
+    if (!currentWorkspace) {
+      setError('No workspace selected');
+      setLoading(false);
+      return;
+    }
+
+    if (!user) {
+      setError('User not found');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await apiFetch('/objectives', {
         method: 'POST',
         body: {
           ...formData,
+          workspace_id: currentWorkspace.id,
+          owner_id: user.id, // Use snake_case for backend
           // Convert arrays to strings for backend compatibility
           groups: formData.groups.join(','),
           labels: formData.labels.join(','),

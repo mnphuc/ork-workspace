@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Layout } from '@/components/layout';
+import { WorkspaceRequired } from '@/components/WorkspaceRequired';
 import { apiFetch } from '@/lib/api';
 import { clearTokens } from '@/lib/api';
 import { logout } from '@/lib/auth';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '@/lib/date-utils';
-import { User } from '@/types';
 
 interface HomeSummary {
   personal_progress: number;
@@ -41,12 +41,11 @@ interface GroupInfo {
   avg_metrics_progress: number;
 }
 
-export default function HomePage() {
+function HomeContent() {
   const { t } = useTranslation();
   const [summary, setSummary] = useState<HomeSummary | null>(null);
   const [personalObjectives, setPersonalObjectives] = useState<PersonalObjective[]>([]);
   const [groups, setGroups] = useState<GroupInfo[]>([]);
-  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -64,10 +63,6 @@ export default function HomePage() {
     try {
       setLoading(true);
       setError(null);
-      
-      // Load user info first
-      const userData = await apiFetch<User>('/auth/me');
-      setUser(userData);
       
       // Load home summary data
       const summaryData = await apiFetch<HomeSummary>('/home/summary');
@@ -88,17 +83,6 @@ export default function HomePage() {
       }
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.warn('Logout failed:', error);
-    } finally {
-      clearTokens();
-      window.location.href = '/login';
     }
   };
 
@@ -130,35 +114,30 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <Layout user={user} onLogout={handleLogout}>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading home...</p>
-          </div>
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading home...</p>
         </div>
-      </Layout>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Layout user={user} onLogout={handleLogout}>
-        <div className="text-center py-12">
-          <p className="text-red-600 mb-4">{error}</p>
-          <button
-            onClick={loadHomeData}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            Retry
-          </button>
-        </div>
-      </Layout>
+      <div className="text-center py-12">
+        <p className="text-red-600 mb-4">{error}</p>
+        <button
+          onClick={loadHomeData}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        >
+          Retry
+        </button>
+      </div>
     );
   }
 
   return (
-    <Layout user={user} onLogout={handleLogout}>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900">Home</h1>
@@ -344,6 +323,26 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+  );
+}
+
+export default function HomePage() {
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.warn('Logout failed:', error);
+    } finally {
+      clearTokens();
+      window.location.href = '/login';
+    }
+  };
+
+  return (
+    <Layout onLogout={handleLogout}>
+      <WorkspaceRequired>
+        <HomeContent />
+      </WorkspaceRequired>
     </Layout>
   );
 }

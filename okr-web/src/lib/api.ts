@@ -31,6 +31,13 @@ export function clearTokens(): void {
   localStorage.removeItem('refresh_token');
 }
 
+// Handle authentication errors and redirect to login
+export function handleAuthError(): void {
+  if (typeof window === 'undefined') return;
+  clearTokens();
+  window.location.href = '/login';
+}
+
 // Refresh token function
 async function refreshAccessToken(): Promise<string> {
   const refreshToken = getRefreshToken();
@@ -130,8 +137,8 @@ export async function apiFetch<T>(path: string, options: {
     next,
   });
 
-  // If 401 and we have a refresh token, try to refresh
-  if (res.status === 401 && getRefreshToken() && !token) {
+  // If 401/403 and we have a refresh token, try to refresh
+  if ((res.status === 401 || res.status === 403) && getRefreshToken() && !token) {
     try {
       accessToken = await refreshAccessToken();
       headers['Authorization'] = `Bearer ${accessToken}`;
@@ -147,12 +154,15 @@ export async function apiFetch<T>(path: string, options: {
       });
     } catch (refreshError) {
       // If refresh fails, redirect to login
-      if (typeof window !== 'undefined') {
-        clearTokens();
-        window.location.href = '/login';
-      }
+      handleAuthError();
       throw new Error('Authentication failed. Please login again.');
     }
+  }
+
+  // If still 401/403 after refresh attempt, redirect to login
+  if ((res.status === 401 || res.status === 403) && !token) {
+    handleAuthError();
+    throw new Error('Authentication failed. Please login again.');
   }
 
   if (!res.ok) {

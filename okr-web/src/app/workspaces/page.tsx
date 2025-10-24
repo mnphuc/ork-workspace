@@ -209,7 +209,7 @@ export default function WorkspacesPage() {
               <Input
                 type="text"
                 value={createForm.name}
-                onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
+                onChange={(value) => setCreateForm({ ...createForm, name: value })}
                 placeholder="Enter workspace name"
                 className="w-full"
               />
@@ -221,7 +221,7 @@ export default function WorkspacesPage() {
               </label>
               <Textarea
                 value={createForm.description}
-                onChange={(e) => setCreateForm({ ...createForm, description: e.target.value })}
+                onChange={(value) => setCreateForm({ ...createForm, description: value })}
                 placeholder="Enter workspace description"
                 rows={3}
                 className="w-full"

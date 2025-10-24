@@ -35,6 +35,10 @@ databaseChangeLog:
       file: db/changelog/016-create-workspaces-table.yaml
   - include:
       file: db/changelog/017-create-workspace-members-table.yaml
+  - include:
+      file: db/changelog/018-add-workspace-id-to-objectives.yaml
+  - include:
+      file: db/changelog/019-add-weight-to-objectives.yaml
 
 
 
