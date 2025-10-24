@@ -1,0 +1,243 @@
+= Objectives Management (Quản lý Mục tiêu)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Chức năng Objectives Management là trung tâm của hệ thống Oboard, cho phép tạo, quản lý và theo dõi các mục tiêu (objectives) và kết quả then chốt (key results). Hệ thống hỗ trợ nhiều loại objectives khác nhau và cung cấp các view khác nhau để xem và quản lý objectives.
+
+== Use Cases
+
+* **Tạo objectives mới**: Thiết lập mục tiêu cho cá nhân, nhóm hoặc công ty
+* **Theo dõi tiến độ**: Cập nhật và monitor progress của objectives
+* **Xem alignment**: Hiểu cách các objectives liên kết với nhau
+* **Quản lý roadmap**: Lập kế hoạch và theo dõi timeline
+* **Phân loại objectives**: Tổ chức theo Company, Department, Team, KPI
+
+== Hành vi người dùng
+
+=== Tạo Objective mới
+
+1. Nhấn nút "Create" trên trang Objectives
+2. Chọn loại objective (Company, Department, Team, KPI)
+3. Nhập thông tin:
+   - Title
+   - Description
+   - Owner
+   - Groups
+   - Interval
+   - Due dates
+4. Lưu objective
+
+=== Xem danh sách Objectives
+
+1. Truy cập trang Objectives
+2. Chọn view phù hợp:
+   - **Alignment view**: Xem cấu trúc phân cấp
+   - **List view**: Xem dạng bảng
+   - **Roadmap view**: Xem timeline
+3. Sử dụng filters để lọc objectives
+
+=== Chỉnh sửa Objective
+
+1. Click vào objective cần chỉnh sửa
+2. Modal detail mở ra
+3. Chỉnh sửa thông tin
+4. Lưu thay đổi
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Truy cập trang Objectives
+
+URL: `#/workspaces/{workspaceId}/objectives`
+
+Trang hiển thị danh sách tất cả objectives với các thông tin:
+- Objectives và Metrics
+- Current/Target values
+- Progress percentage
+- Status
+- Interval
+- Groups
+- Owner
+- Check-in status
+- Comments
+- Last progress update
+- Due date
+
+=== Bước 2: Chọn View Mode
+
+**Alignment View** (mặc định):
+- Hiển thị cấu trúc phân cấp objectives
+- Thể hiện mối quan hệ parent-child
+- Dễ dàng xem alignment
+
+**List View**:
+- Hiển thị dạng bảng
+- Dễ so sánh và sắp xếp
+- Phù hợp cho việc quản lý nhiều objectives
+
+**Roadmap View**:
+- Hiển thị timeline
+- Thấy được timeline của objectives
+- Phù hợp cho planning
+
+=== Bước 3: Tạo Objective mới
+
+1. Click nút "Create"
+2. Chọn loại objective:
+   - **Company (C)**: Mục tiêu cấp công ty
+   - **Department (Dp)**: Mục tiêu cấp phòng ban
+   - **Team (T)**: Mục tiêu cấp nhóm
+   - **KPI**: Chỉ số hiệu suất
+3. Nhập thông tin chi tiết
+4. Assign owner và groups
+5. Set interval và due dates
+6. Save objective
+
+=== Bước 4: Quản lý Objective
+
+**Xem chi tiết**:
+- Click vào objective để xem modal detail
+- Xem nested items (sub-objectives)
+- Xem comments và activity log
+- Cập nhật progress
+
+**Chỉnh sửa**:
+- Click vào các trường có thể edit
+- Thay đổi title, owner, groups
+- Cập nhật dates và intervals
+
+**Check-in**:
+- Cập nhật progress
+- Thay đổi status
+- Thêm comments
+
+== Ảnh minh họa
+
+image::objectives-detailed.png[Trang quản lý Objectives chi tiết với bảng objectives, width=800]
+
+*Hình 1: Giao diện Objectives Management chi tiết hiển thị danh sách objectives với đầy đủ thông tin*
+
+image::create-objective-tooltip.png[Tooltip tạo objective với các loại objectives, width=800]
+
+*Hình 2: Tooltip hiển thị các loại objectives có thể tạo (Company, Department, Team, KPI)*
+
+image::objective-detail-view.png[Chi tiết Objective với nested items, width=800]
+
+*Hình 3: Modal chi tiết Objective với nested items và comments*
+
+image::roadmap-view.png[Roadmap view hiển thị timeline, width=800]
+
+*Hình 4: Roadmap view với timeline của objectives*
+
+== Các loại Objectives
+
+=== Company Objectives (C)
+
+* **Mục đích**: Mục tiêu cấp công ty
+* **Phạm vi**: Toàn bộ tổ chức
+* **Ví dụ**: "Become the market leader in the AI calendar assistance category in 2025"
+
+=== Department Objectives (Dp)
+
+* **Mục đích**: Mục tiêu cấp phòng ban
+* **Phạm vi**: Một phòng ban cụ thể
+* **Ví dụ**: "Expand Market Reach and Drive Sales Growth"
+
+=== Team Objectives (T)
+
+* **Mục đích**: Mục tiêu cấp nhóm
+* **Phạm vi**: Một nhóm cụ thể
+* **Ví dụ**: "Drive Sales and Revenue Growth"
+
+=== KPIs
+
+* **Mục đích**: Chỉ số hiệu suất
+* **Phạm vi**: Có thể áp dụng ở mọi cấp
+* **Ví dụ**: "Less than 4 production incidents a quarter pro Team"
+
+=== Key Results (KR)
+
+* **Mục đích**: Kết quả then chốt
+* **Phạm vi**: Đo lường tiến độ của objectives
+* **Ví dụ**: "AI app reaches 20 million seven-day active users"
+
+== Filters và Search
+
+=== Filters
+
+* **Interval**: Lọc theo Q1, Q2, Q3, Q4
+* **Owner**: Lọc theo người sở hữu
+* **Groups**: Lọc theo nhóm
+* **Status**: Lọc theo trạng thái
+* **Due dates**: Lọc theo ngày hết hạn
+
+=== Search
+
+* Tìm kiếm theo tên objective
+* Tìm kiếm theo owner
+* Tìm kiếm theo groups
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập vào hệ thống
+* Có quyền tạo/chỉnh sửa objectives
+* Workspace đã được thiết lập
+
+=== Yêu cầu dữ liệu
+
+* Groups đã được tạo
+* Users đã được thêm vào groups
+* Intervals đã được cấu hình
+* Components đã được định nghĩa
+
+== Best Practices
+
+=== Tạo Objectives hiệu quả
+
+* **Sử dụng SMART criteria**: Specific, Measurable, Achievable, Relevant, Time-bound
+* **Tạo alignment**: Đảm bảo objectives cấp dưới hỗ trợ objectives cấp trên
+* **Set realistic targets**: Đặt mục tiêu thực tế và có thể đo lường được
+* **Regular check-ins**: Cập nhật tiến độ thường xuyên
+
+=== Quản lý Progress
+
+* **Update weekly**: Cập nhật tiến độ hàng tuần
+* **Use status indicators**: Sử dụng trạng thái để theo dõi
+* **Add comments**: Ghi chú về tiến độ và challenges
+* **Monitor alignment**: Kiểm tra xem objectives có align với strategy không
+
+=== Collaboration
+
+* **Assign clear owners**: Giao quyền sở hữu rõ ràng
+* **Involve stakeholders**: Tham gia các bên liên quan
+* **Regular reviews**: Review objectives định kỳ
+* **Share updates**: Chia sẻ cập nhật với team
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Không thể tạo objective**: Kiểm tra quyền và workspace settings
+* **Progress không cập nhật**: Kiểm tra kết nối và thử refresh
+* **Alignment không hiển thị**: Kiểm tra parent-child relationships
+* **Filters không hoạt động**: Clear cache và thử lại
+
+=== Giải pháp
+
+1. **Kiểm tra quyền**: Liên hệ admin để kiểm tra permissions
+2. **Refresh trang**: Nhấn F5 để tải lại
+3. **Clear cache**: Xóa cache trình duyệt
+4. **Check network**: Kiểm tra kết nối internet
+
+== Liên kết liên quan
+
+* <<home,Trang chủ>>
+* <<check-ins,Check-ins>>
+* <<dashboard,Dashboard>>
+* <<components-strategy,Components & Strategy>>
+* <<groups-users-management,Quản lý Nhóm và Người dùng>>

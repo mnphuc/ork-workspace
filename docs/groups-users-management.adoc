@@ -1,0 +1,259 @@
+= Groups & Users Management (Quản lý Nhóm và Người dùng)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Chức năng Groups & Users Management cho phép quản trị viên tạo, quản lý và cấu hình cấu trúc tổ chức trong Oboard. Đây là nơi thiết lập hierarchy nhóm, phân quyền người dùng, và quản lý các mối quan hệ trong tổ chức.
+
+== Use Cases
+
+* **Tạo cấu trúc tổ chức**: Thiết lập hierarchy nhóm (Company, Department, Team)
+* **Quản lý người dùng**: Thêm, xóa, chỉnh sửa thông tin người dùng
+* **Phân quyền**: Thiết lập quyền truy cập cho từng nhóm và người dùng
+* **Quản lý administrators**: Cấu hình quyền admin
+* **Cấu trúc hierarchy**: Thiết lập mối quan hệ parent-child giữa các nhóm
+
+== Hành vi người dùng
+
+=== Tạo Group mới
+
+1. Truy cập trang Groups & Users
+2. Click nút "Create group"
+3. Nhập thông tin group:
+   - Group name
+   - Parent group (nếu có)
+   - Description
+4. Assign users to group
+5. Set permissions
+6. Save group
+
+=== Quản lý Users
+
+1. Navigate đến Users tab
+2. Xem danh sách users
+3. Thêm user mới hoặc chỉnh sửa user hiện có
+4. Assign users to groups
+5. Set user permissions
+
+=== Quản lý Administrators
+
+1. Navigate đến Administrators tab
+2. Xem danh sách administrators
+3. Thêm hoặc xóa admin permissions
+4. Set admin roles
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Truy cập Groups & Users Management
+
+URL: `#/workspaces/settings/organization/global-groups`
+
+Trang hiển thị các tabs:
+- **Groups**: Quản lý nhóm
+- **Users**: Quản lý người dùng
+- **Administrators**: Quản lý quyền admin
+
+=== Bước 2: Quản lý Groups
+
+**Group Hierarchy Structure**:
+- **Company Level**: Cấp công ty
+- **Department Level**: Cấp phòng ban
+- **Team Level**: Cấp nhóm
+
+**Group Information**:
+- **Group Name**: Tên nhóm
+- **Workspaces**: Workspace thuộc về
+- **Users Count**: Số lượng users
+- **Objectives Count**: Số lượng objectives
+
+**Example Groups**:
+- **tech**: Main technology group
+- **Marketing**: Marketing department
+- **Product**: Product team
+- **Finance**: Finance department
+- **Customer Success**: Customer success team
+- **Engineering**: Engineering team
+- **IT Operations**: IT operations team
+- **QA**: Quality assurance team
+- **Sales**: Sales team
+- **HR**: Human resources team
+
+=== Bước 3: Tạo Group mới
+
+**Create Group Process**:
+1. Click "Create group" button
+2. Fill group information:
+   - **Group Name**: Tên nhóm
+   - **Parent Group**: Nhóm cha (nếu có)
+   - **Description**: Mô tả nhóm
+3. Assign to workspaces
+4. Set group permissions
+5. Save group
+
+**Group Hierarchy Example**:
+```
+Company
+├── Department (Marketing)
+│   ├── Team (Product)
+│   └── Team (Sales)
+├── Department (Technology)
+│   ├── Team (Engineering)
+│   ├── Team (QA)
+│   │   ├── Automation QA
+│   │   └── Manual QA
+│   └── Team (IT Operations)
+└── Department (HR)
+    └── Team (Recruitment)
+```
+
+=== Bước 4: Quản lý Users
+
+**User Management**:
+1. **Add Users**: Thêm người dùng mới
+2. **Edit Users**: Chỉnh sửa thông tin người dùng
+3. **Remove Users**: Xóa người dùng
+4. **Assign to Groups**: Gán người dùng vào nhóm
+5. **Set Permissions**: Thiết lập quyền
+
+**User Information**:
+- **Name**: Tên người dùng
+- **Email**: Email
+- **Groups**: Các nhóm thuộc về
+- **Role**: Vai trò
+- **Permissions**: Quyền truy cập
+
+=== Bước 5: Quản lý Administrators
+
+**Admin Management**:
+1. **View Admins**: Xem danh sách admin
+2. **Add Admins**: Thêm quyền admin
+3. **Remove Admins**: Xóa quyền admin
+4. **Set Admin Roles**: Thiết lập vai trò admin
+
+== Ảnh minh họa
+
+image::settings-groups-users.png[Trang quản lý Groups & Users với cấu trúc hierarchy, width=800]
+
+*Hình 1: Giao diện Groups & Users Management hiển thị cấu trúc tổ chức*
+
+== Cấu trúc Groups
+
+=== Company Level
+
+* **Mục đích**: Cấp công ty
+* **Phạm vi**: Toàn bộ tổ chức
+* **Quyền**: Full access
+* **Ví dụ**: "TEC" - Technology company
+
+=== Department Level
+
+* **Mục đích**: Cấp phòng ban
+* **Phạm vi**: Một phòng ban cụ thể
+* **Quyền**: Department access
+* **Ví dụ**: Marketing, Technology, HR
+
+=== Team Level
+
+* **Mục đích**: Cấp nhóm
+* **Phạm vi**: Một nhóm cụ thể
+* **Quyền**: Team access
+* **Ví dụ**: Engineering, QA, Sales
+
+=== Sub-team Level
+
+* **Mục đích**: Cấp nhóm con
+* **Phạm vi**: Nhóm con trong team
+* **Quyền**: Sub-team access
+* **Ví dụ**: Automation QA, Manual QA
+
+== User Roles
+
+=== Administrator
+
+* **Quyền**: Full system access
+* **Chức năng**: Quản lý toàn bộ hệ thống
+* **Giới hạn**: Không có giới hạn
+
+=== Manager
+
+* **Quyền**: Department/Team management
+* **Chức năng**: Quản lý nhóm được giao
+* **Giới hạn**: Trong phạm vi quản lý
+
+=== User
+
+* **Quyền**: Basic access
+* **Chức năng**: Sử dụng cơ bản
+* **Giới hạn**: Chỉ objectives được assign
+
+=== Viewer
+
+* **Quyền**: Read-only access
+* **Chức năng**: Chỉ xem
+* **Giới hạn**: Không thể chỉnh sửa
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập với quyền admin
+* Có quyền quản lý groups/users
+* Workspace đã được thiết lập
+* Network connectivity
+
+=== Yêu cầu dữ liệu
+
+* Valid group structure
+* User information
+* Permission matrix
+* Workspace configuration
+
+== Best Practices
+
+=== Group Design
+
+* **Clear Hierarchy**: Cấu trúc rõ ràng
+* **Logical Grouping**: Nhóm logic
+* **Scalable Structure**: Cấu trúc có thể mở rộng
+* **Regular Reviews**: Review định kỳ
+
+=== User Management
+
+* **Role-based Access**: Truy cập theo vai trò
+* **Regular Audits**: Audit định kỳ
+* **Clear Onboarding**: Onboarding rõ ràng
+* **Training**: Đào tạo người dùng
+
+=== Permission Management
+
+* **Principle of Least Privilege**: Nguyên tắc quyền tối thiểu
+* **Regular Reviews**: Review quyền định kỳ
+* **Documentation**: Ghi lại quyền
+* **Monitoring**: Theo dõi sử dụng
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Không thể tạo group**: Kiểm tra quyền và cấu trúc
+* **Users không thể truy cập**: Kiểm tra permissions
+* **Hierarchy không đúng**: Kiểm tra parent-child relationships
+* **Permissions không hoạt động**: Kiểm tra role assignments
+
+=== Giải pháp
+
+1. **Check permissions**: Kiểm tra quyền admin
+2. **Validate structure**: Kiểm tra cấu trúc nhóm
+3. **Review assignments**: Review gán quyền
+4. **Contact support**: Liên hệ hỗ trợ nếu cần
+
+== Liên kết liên quan
+
+* <<workspace-settings,Cài đặt Workspace>>
+* <<personal-settings,Cài đặt Cá nhân>>
+* <<collaboration,Tính năng Cộng tác>>
+* <<authentication,Đăng nhập>>
+* <<objectives-management,Quản lý Objectives>>

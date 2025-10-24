@@ -1,0 +1,426 @@
+= Workspace Management API Documentation
+
+== Overview
+
+The Workspace Management API provides endpoints for creating, managing, and organizing workspaces. Workspaces are containers that help organize objectives, teams, and users within the OKR system.
+
+== Authentication
+
+All endpoints require a valid JWT token in the Authorization header:
+```
+Authorization: Bearer <jwt_token>
+```
+
+== Endpoints
+
+=== GET /workspaces
+
+Retrieves all workspaces owned by the authenticated user.
+
+==== Request
+
+[source,http]
+----
+GET /workspaces HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Accept: application/json
+----
+
+==== Response
+
+[source,json]
+----
+[
+  {
+    "id": "01HX123456789ABCDEFGHIJKLMN",
+    "name": "Engineering Team",
+    "description": "Workspace for engineering team objectives",
+    "owner_id": "01HX987654321ZYXWVUTSRQPON",
+    "status": "ACTIVE",
+    "member_count": 5,
+    "objective_count": 12,
+    "team_count": 2,
+    "last_activity": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": "01HX11111111111111111111111",
+    "name": "Product Team",
+    "description": "Product development workspace",
+    "owner_id": "01HX987654321ZYXWVUTSRQPON",
+    "status": "ACTIVE",
+    "member_count": 3,
+    "objective_count": 8,
+    "team_count": 1,
+    "last_activity": "2024-01-14T15:20:00Z"
+  }
+]
+----
+
+=== POST /workspaces
+
+Creates a new workspace.
+
+==== Request
+
+[source,http]
+----
+POST /workspaces HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+  "name": "Marketing Team",
+  "description": "Workspace for marketing team objectives and campaigns",
+  "settings": "{\"theme\": \"blue\", \"notifications\": true}"
+}
+----
+
+==== Response
+
+[source,json]
+----
+{
+  "id": "01HX22222222222222222222222",
+  "name": "Marketing Team",
+  "description": "Workspace for marketing team objectives and campaigns",
+  "owner_id": "01HX987654321ZYXWVUTSRQPON",
+  "status": "ACTIVE",
+  "settings": "{\"theme\": \"blue\", \"notifications\": true}",
+  "created_date": "2024-01-15T10:30:00Z",
+  "last_modified_date": "2024-01-15T10:30:00Z",
+  "member_count": 1,
+  "objective_count": 0
+}
+----
+
+=== GET /workspaces/{id}
+
+Retrieves a specific workspace by ID.
+
+==== Request
+
+[source,http]
+----
+GET /workspaces/01HX123456789ABCDEFGHIJKLMN HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Accept: application/json
+----
+
+==== Response
+
+[source,json]
+----
+{
+  "id": "01HX123456789ABCDEFGHIJKLMN",
+  "name": "Engineering Team",
+  "description": "Workspace for engineering team objectives",
+  "owner_id": "01HX987654321ZYXWVUTSRQPON",
+  "status": "ACTIVE",
+  "settings": "{\"theme\": \"blue\", \"notifications\": true}",
+  "created_date": "2024-01-10T09:00:00Z",
+  "last_modified_date": "2024-01-15T10:30:00Z",
+  "member_count": 5,
+  "objective_count": 12
+}
+----
+
+=== PUT /workspaces/{id}
+
+Updates a workspace.
+
+==== Request
+
+[source,http]
+----
+PUT /workspaces/01HX123456789ABCDEFGHIJKLMN HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+  "name": "Engineering Team Updated",
+  "description": "Updated description for engineering team",
+  "settings": "{\"theme\": \"green\", \"notifications\": false}"
+}
+----
+
+==== Response
+
+[source,json]
+----
+{
+  "id": "01HX123456789ABCDEFGHIJKLMN",
+  "name": "Engineering Team Updated",
+  "description": "Updated description for engineering team",
+  "owner_id": "01HX987654321ZYXWVUTSRQPON",
+  "status": "ACTIVE",
+  "settings": "{\"theme\": \"green\", \"notifications\": false}",
+  "created_date": "2024-01-10T09:00:00Z",
+  "last_modified_date": "2024-01-15T11:00:00Z",
+  "member_count": 5,
+  "objective_count": 12
+}
+----
+
+=== DELETE /workspaces/{id}
+
+Deletes a workspace (soft delete by setting status to ARCHIVED).
+
+==== Request
+
+[source,http]
+----
+DELETE /workspaces/01HX123456789ABCDEFGHIJKLMN HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+----
+
+==== Response
+
+[source,json]
+----
+{
+  "message": "Workspace deleted successfully"
+}
+----
+
+=== GET /workspaces/search
+
+Searches workspaces by name.
+
+==== Request
+
+[source,http]
+----
+GET /workspaces/search?q=engineering HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Accept: application/json
+----
+
+==== Response
+
+[source,json]
+----
+[
+  {
+    "id": "01HX123456789ABCDEFGHIJKLMN",
+    "name": "Engineering Team",
+    "description": "Workspace for engineering team objectives",
+    "owner_id": "01HX987654321ZYXWVUTSRQPON",
+    "status": "ACTIVE",
+    "member_count": 5,
+    "objective_count": 12,
+    "team_count": 2,
+    "last_activity": "2024-01-15T10:30:00Z"
+  }
+]
+----
+
+=== POST /workspaces/{id}/invite
+
+Invites a user to join the workspace.
+
+==== Request
+
+[source,http]
+----
+POST /workspaces/01HX123456789ABCDEFGHIJKLMN/invite HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+  "user_email": "user@example.com",
+  "role": "MEMBER"
+}
+----
+
+==== Response
+
+[source,json]
+----
+{
+  "message": "User invitation sent successfully",
+  "email": "user@example.com"
+}
+----
+
+=== GET /workspaces/{id}/members
+
+Retrieves all members of a workspace.
+
+==== Request
+
+[source,http]
+----
+GET /workspaces/01HX123456789ABCDEFGHIJKLMN/members HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Accept: application/json
+----
+
+==== Response
+
+[source,json]
+----
+[
+  {
+    "id": "01HX33333333333333333333333",
+    "workspace_id": "01HX123456789ABCDEFGHIJKLMN",
+    "user_id": "01HX987654321ZYXWVUTSRQPON",
+    "user_email": "owner@example.com",
+    "user_name": "John Doe",
+    "role": "OWNER",
+    "status": "ACTIVE",
+    "joined_date": "2024-01-10T09:00:00Z"
+  },
+  {
+    "id": "01HX44444444444444444444444",
+    "workspace_id": "01HX123456789ABCDEFGHIJKLMN",
+    "user_id": "01HX55555555555555555555555",
+    "user_email": "member@example.com",
+    "user_name": "Jane Smith",
+    "role": "MEMBER",
+    "status": "ACTIVE",
+    "joined_date": "2024-01-12T14:30:00Z"
+  }
+]
+----
+
+== Data Models
+
+=== WorkspaceResponse
+
+[source,json]
+----
+{
+  "id": "string - ULID",
+  "name": "string - workspace name",
+  "description": "string - workspace description (optional)",
+  "owner_id": "string - user ID of workspace owner",
+  "status": "string - ACTIVE|INACTIVE|SUSPENDED|ARCHIVED",
+  "settings": "string - JSON string for workspace settings",
+  "created_date": "string - ISO 8601 datetime",
+  "last_modified_date": "string - ISO 8601 datetime",
+  "member_count": "integer - number of members",
+  "objective_count": "integer - number of objectives"
+}
+----
+
+=== WorkspaceSummaryResponse
+
+[source,json]
+----
+{
+  "id": "string - ULID",
+  "name": "string - workspace name",
+  "description": "string - workspace description (optional)",
+  "owner_id": "string - user ID of workspace owner",
+  "status": "string - ACTIVE|INACTIVE|SUSPENDED|ARCHIVED",
+  "member_count": "integer - number of members",
+  "objective_count": "integer - number of objectives",
+  "team_count": "integer - number of teams",
+  "last_activity": "string - ISO 8601 datetime of last activity"
+}
+----
+
+=== WorkspaceMemberResponse
+
+[source,json]
+----
+{
+  "id": "string - ULID",
+  "workspace_id": "string - workspace ID",
+  "user_id": "string - user ID",
+  "user_email": "string - user email",
+  "user_name": "string - user full name",
+  "role": "string - OWNER|ADMIN|MEMBER|VIEWER",
+  "status": "string - ACTIVE|PENDING|INACTIVE|SUSPENDED",
+  "joined_date": "string - ISO 8601 datetime"
+}
+----
+
+=== CreateWorkspaceRequest
+
+[source,json]
+----
+{
+  "name": "string - workspace name (required)",
+  "description": "string - workspace description (optional)",
+  "settings": "string - JSON string for workspace settings (optional)"
+}
+----
+
+=== UpdateWorkspaceRequest
+
+[source,json]
+----
+{
+  "name": "string - workspace name (optional)",
+  "description": "string - workspace description (optional)",
+  "settings": "string - JSON string for workspace settings (optional)"
+}
+----
+
+=== InviteUserRequest
+
+[source,json]
+----
+{
+  "user_email": "string - email of user to invite (required)",
+  "role": "string - OWNER|ADMIN|MEMBER|VIEWER (default: MEMBER)"
+}
+----
+
+== Error Codes
+
+|===
+|Code |Description |Example
+
+|400
+|Bad Request - Invalid input data
+|`{"error": "Workspace name is required"}`
+
+|401
+|Unauthorized - Invalid or missing JWT token
+|`{"error": "User not authenticated"}`
+
+|403
+|Forbidden - User doesn't have permission
+|`{"error": "Only workspace owner can update workspace"}`
+
+|404
+|Not Found - Workspace not found
+|`{"error": "Workspace not found"}`
+
+|409
+|Conflict - Workspace name already exists
+|`{"error": "Workspace with name 'Engineering Team' already exists"}`
+
+|500
+|Internal Server Error - Database or system error
+|`{"error": "Failed to create workspace", "stackTrace": "..."}`
+
+|===
+
+== Business Rules
+
+1. **Workspace Ownership**: Only the workspace owner can update or delete the workspace
+2. **Unique Names**: Workspace names must be unique within the same owner's workspaces
+3. **Soft Delete**: Workspaces are soft deleted by setting status to ARCHIVED
+4. **Member Roles**: Users can have different roles (OWNER, ADMIN, MEMBER, VIEWER) with different permissions
+5. **Access Control**: Users can only access workspaces they own or are members of
+6. **Settings**: Workspace settings are stored as JSON strings for flexibility
+
+== Notes
+
+- All timestamps are in ISO 8601 format
+- Workspace IDs use ULID format for better performance and uniqueness
+- Settings field allows storing custom workspace configuration as JSON
+- Member count and objective count are calculated dynamically
+- Workspace search is case-insensitive and supports partial matching
+

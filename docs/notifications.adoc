@@ -1,0 +1,192 @@
+= Notifications (Thông báo)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Chức năng Notifications cho phép người dùng cấu hình các thông báo email và in-app để theo dõi hoạt động OKR trong hệ thống Oboard. Đây là công cụ quan trọng để đảm bảo người dùng luôn được cập nhật về tiến độ và thay đổi trong objectives.
+
+== Use Cases
+
+* **Cấu hình email notifications**: Thiết lập thông báo email cho các hoạt động OKR
+* **Theo dõi thay đổi status**: Nhận thông báo khi status objectives thay đổi
+* **Theo dõi comments**: Nhận thông báo khi có comment mới
+* **Theo dõi @mentions**: Nhận thông báo khi được mention
+* **Theo dõi check-ins**: Nhận thông báo về check-ins được lên lịch
+* **Cấu hình stakeholders**: Thiết lập thông báo cho stakeholders
+
+== Hành vi người dùng
+
+=== Cấu hình Email Notifications
+
+1. Truy cập trang Notifications
+2. Xem email hiện tại (phucmnp9@gmail.com)
+3. Cấu hình các điều kiện nhận thông báo:
+   - Khi là owner
+   - Khi là stakeholder
+   - Khi được @mention
+   - Khi có check-in được lên lịch
+4. Lưu cài đặt
+
+=== Quản lý Notification Preferences
+
+1. Chọn loại thông báo muốn nhận
+2. Cấu hình frequency (tần suất)
+3. Thiết lập filters
+4. Test notifications
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Truy cập Notifications Settings
+
+URL: `#/workspaces/settings/notifications`
+
+Trang hiển thị:
+- **Email Address**: Địa chỉ email hiện tại
+- **Notification Rules**: Các quy tắc thông báo
+- **Configuration Options**: Tùy chọn cấu hình
+
+=== Bước 2: Cấu hình Email Notifications
+
+**Email Configuration**:
+- **Current Email**: phucmnp9@gmail.com
+- **Notification Trigger**: "When someone manually changes status or leaves a comment in the elements where:"
+
+**Notification Conditions**:
+1. **You're the owner**: Khi bạn là chủ sở hữu của objective
+2. **You're the stakeholder**: Khi bạn là stakeholder của objective
+3. **When someone @mentions and reply to you**: Khi ai đó mention bạn
+4. **A check-in is scheduled by the OKR admin**: Khi admin lên lịch check-in
+
+=== Bước 3: Advanced Configuration
+
+**Additional Settings**:
+- **Learn more about email notifications**: Link đến documentation
+- **Frequency settings**: Tần suất nhận thông báo
+- **Filter options**: Lọc loại thông báo
+- **Digest options**: Tùy chọn tóm tắt
+
+== Ảnh minh họa
+
+image::notifications-settings.png[Trang cài đặt Notifications với các tùy chọn thông báo, width=800]
+
+*Hình 1: Giao diện Notifications Settings hiển thị cấu hình thông báo email*
+
+== Các loại Notifications
+
+=== Email Notifications
+
+* **Status Changes**: Thay đổi trạng thái objectives
+* **Comment Updates**: Cập nhật comments
+* **Mention Notifications**: Thông báo khi được mention
+* **Check-in Reminders**: Nhắc nhở check-in
+* **Progress Updates**: Cập nhật tiến độ
+
+=== In-app Notifications
+
+* **Real-time Updates**: Cập nhật thời gian thực
+* **Activity Feed**: Feed hoạt động
+* **System Messages**: Thông báo hệ thống
+* **Alert Messages**: Thông báo cảnh báo
+
+=== Digest Notifications
+
+* **Daily Digest**: Tóm tắt hàng ngày
+* **Weekly Digest**: Tóm tắt hàng tuần
+* **Monthly Digest**: Tóm tắt hàng tháng
+* **Custom Digest**: Tóm tắt tùy chỉnh
+
+== Notification Rules
+
+=== Owner Notifications
+
+* **Objective Updates**: Cập nhật objectives
+* **Status Changes**: Thay đổi trạng thái
+* **Comment Activity**: Hoạt động comment
+* **Progress Updates**: Cập nhật tiến độ
+
+=== Stakeholder Notifications
+
+* **Objective Changes**: Thay đổi objectives
+* **Status Updates**: Cập nhật trạng thái
+* **Comment Mentions**: Mention trong comments
+* **Progress Reports**: Báo cáo tiến độ
+
+=== Mention Notifications
+
+* **@mentions in Comments**: Mention trong comments
+* **@mentions in Objectives**: Mention trong objectives
+* **Reply Notifications**: Thông báo reply
+* **Tag Notifications**: Thông báo tag
+
+=== Check-in Notifications
+
+* **Scheduled Check-ins**: Check-ins được lên lịch
+* **Reminder Notifications**: Nhắc nhở check-in
+* **Overdue Alerts**: Cảnh báo quá hạn
+* **Completion Notifications**: Thông báo hoàn thành
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập vào hệ thống
+* Có email address hợp lệ
+* Workspace đã được thiết lập
+* Notification system đã được cấu hình
+
+=== Yêu cầu dữ liệu
+
+* Valid email address
+* Notification preferences
+* User permissions
+* Workspace configuration
+
+== Best Practices
+
+=== Notification Management
+
+* **Selective Notifications**: Chọn thông báo cần thiết
+* **Avoid Spam**: Tránh spam notifications
+* **Regular Reviews**: Review cài đặt định kỳ
+* **Test Notifications**: Test thông báo trước khi sử dụng
+
+=== Email Configuration
+
+* **Valid Email**: Sử dụng email hợp lệ
+* **Check Spam Folder**: Kiểm tra thư mục spam
+* **Email Filters**: Thiết lập filters email
+* **Backup Email**: Email dự phòng
+
+=== Frequency Settings
+
+* **Appropriate Frequency**: Tần suất phù hợp
+* **Digest Options**: Tùy chọn tóm tắt
+* **Urgent Notifications**: Thông báo khẩn cấp
+* **Regular Updates**: Cập nhật thường xuyên
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Không nhận được email**: Kiểm tra spam folder và email address
+* **Thông báo không đúng**: Kiểm tra cài đặt notification rules
+* **Email bị reject**: Kiểm tra email server settings
+* **Notifications bị delay**: Kiểm tra network và server
+
+=== Giải pháp
+
+1. **Check email settings**: Kiểm tra cài đặt email
+2. **Verify email address**: Xác minh địa chỉ email
+3. **Check spam folder**: Kiểm tra thư mục spam
+4. **Contact support**: Liên hệ hỗ trợ nếu cần
+
+== Liên kết liên quan
+
+* <<personal-settings,Cài đặt Cá nhân>>
+* <<workspace-settings,Cài đặt Workspace>>
+* <<collaboration,Tính năng Cộng tác>>
+* <<check-ins,Check-ins>>
+* <<objectives-management,Quản lý Objectives>>

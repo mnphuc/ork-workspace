@@ -1,0 +1,251 @@
+= Filters and Search (Lọc và Tìm kiếm)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Chức năng Filters and Search cho phép người dùng tìm kiếm và lọc objectives, metrics và các dữ liệu khác trong hệ thống một cách hiệu quả. Đây là công cụ quan trọng để quản lý và truy cập thông tin trong workspace lớn.
+
+== Use Cases
+
+* **Tìm kiếm objectives**: Tìm kiếm objectives theo tên, owner, hoặc keywords
+* **Lọc theo thời gian**: Lọc objectives theo interval (Q1, Q2, Q3, Q4)
+* **Lọc theo owner**: Xem objectives của người cụ thể
+* **Lọc theo nhóm**: Xem objectives của nhóm cụ thể
+* **Lọc theo trạng thái**: Xem objectives theo trạng thái
+* **Advanced filtering**: Sử dụng các bộ lọc nâng cao
+
+== Hành vi người dùng
+
+=== Sử dụng Search
+
+1. Nhập từ khóa vào search box
+2. Hệ thống tự động tìm kiếm trong:
+   - Objective titles
+   - Owner names
+   - Group names
+   - Comments
+3. Kết quả hiển thị real-time
+
+=== Sử dụng Filters
+
+1. Click vào filter dropdowns
+2. Chọn criteria cần lọc:
+   - Interval (Q4 2025)
+   - Owner (All owners)
+   - Groups (All groups)
+3. Kết quả được cập nhật ngay lập tức
+
+=== Kết hợp Search và Filters
+
+1. Sử dụng search để tìm keywords
+2. Áp dụng filters để thu hẹp kết quả
+3. Kết quả cuối cùng là intersection của search và filters
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Truy cập Search và Filters
+
+Trên trang Objectives, người dùng có thể thấy:
+
+**Search Box**:
+- Icon search
+- Placeholder text: "Search"
+- Real-time search results
+
+**Filter Controls**:
+- **Interval Filter**: Q4 2025 (dropdown)
+- **Owner Filter**: All owners (dropdown)
+- **Groups Filter**: All groups (dropdown)
+- **More Filters**: Additional options
+
+=== Bước 2: Sử dụng Search
+
+**Basic Search**:
+1. Click vào search box
+2. Nhập từ khóa (ví dụ: "AI", "calendar", "market")
+3. Hệ thống tìm kiếm trong:
+   - Objective titles
+   - Descriptions
+   - Owner names
+   - Group names
+4. Kết quả hiển thị ngay lập tức
+
+**Advanced Search**:
+- Sử dụng operators: AND, OR, NOT
+- Search trong specific fields
+- Use wildcards: *, ?
+- Case-sensitive search
+
+=== Bước 3: Sử dụng Filters
+
+**Interval Filter**:
+- Q1 2025
+- Q2 2025
+- Q3 2025
+- Q4 2025
+- Custom date range
+
+**Owner Filter**:
+- All owners
+- Specific users
+- My objectives only
+- Team objectives
+
+**Groups Filter**:
+- All groups
+- Specific groups
+- My groups only
+- Department groups
+
+**Status Filter**:
+- All statuses
+- Not Started
+- On Track
+- Behind
+- At Risk
+- Closed
+- Abandoned
+
+=== Bước 4: Advanced Filters
+
+**Date Filters**:
+- Start date
+- Due date
+- Last update date
+- Created date
+
+**Progress Filters**:
+- Progress range (0-100%)
+- Progress change
+- Target vs current
+
+**Custom Fields**:
+- Labels
+- Stakeholders
+- Custom attributes
+
+== Các loại Filters
+
+=== Time-based Filters
+
+* **Interval**: Lọc theo quarter (Q1, Q2, Q3, Q4)
+* **Date Range**: Lọc theo khoảng thời gian
+* **Created Date**: Lọc theo ngày tạo
+* **Due Date**: Lọc theo ngày hết hạn
+* **Last Update**: Lọc theo lần cập nhật cuối
+
+=== People-based Filters
+
+* **Owner**: Lọc theo người sở hữu
+* **Creator**: Lọc theo người tạo
+* **Stakeholders**: Lọc theo stakeholders
+* **Team Members**: Lọc theo thành viên nhóm
+
+=== Organization Filters
+
+* **Groups**: Lọc theo nhóm
+* **Departments**: Lọc theo phòng ban
+* **Teams**: Lọc theo team
+* **Workspace**: Lọc theo workspace
+
+=== Status Filters
+
+* **Objective Status**: On Track, Behind, At Risk, etc.
+* **Progress Status**: Completed, In Progress, Not Started
+* **Check-in Status**: Up to date, Overdue, Not checked in
+
+=== Content Filters
+
+* **Labels**: Lọc theo labels
+* **Tags**: Lọc theo tags
+* **Categories**: Lọc theo categories
+* **Types**: Company, Department, Team, KPI
+
+== Search Capabilities
+
+=== Text Search
+
+* **Title Search**: Tìm trong tên objectives
+* **Description Search**: Tìm trong mô tả
+* **Comment Search**: Tìm trong comments
+* **Full-text Search**: Tìm trong tất cả nội dung
+
+=== Advanced Search
+
+* **Boolean Operators**: AND, OR, NOT
+* **Wildcards**: *, ?
+* **Phrase Search**: "exact phrase"
+* **Field-specific Search**: title:"AI calendar"
+
+=== Search Suggestions
+
+* **Auto-complete**: Gợi ý khi typing
+* **Recent Searches**: Lịch sử tìm kiếm
+* **Popular Searches**: Tìm kiếm phổ biến
+* **Related Searches**: Tìm kiếm liên quan
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập vào hệ thống
+* Có quyền xem objectives
+* Workspace đã được thiết lập
+* Dữ liệu đã được tạo
+
+=== Yêu cầu dữ liệu
+
+* Objectives với metadata
+* User và group information
+* Historical data
+* Search index
+
+== Best Practices
+
+=== Sử dụng Search hiệu quả
+
+* **Use specific keywords**: Sử dụng từ khóa cụ thể
+* **Combine search and filters**: Kết hợp search và filters
+* **Save frequent searches**: Lưu các tìm kiếm thường dùng
+* **Use advanced operators**: Sử dụng operators nâng cao
+
+=== Filter Management
+
+* **Start broad, then narrow**: Bắt đầu rộng, sau đó thu hẹp
+* **Use multiple filters**: Sử dụng nhiều filters cùng lúc
+* **Save filter presets**: Lưu các bộ lọc thường dùng
+* **Clear filters regularly**: Xóa filters định kỳ
+
+=== Performance Optimization
+
+* **Limit result sets**: Giới hạn số lượng kết quả
+* **Use specific filters**: Sử dụng filters cụ thể
+* **Avoid overly broad searches**: Tránh tìm kiếm quá rộng
+* **Cache frequent searches**: Cache các tìm kiếm thường dùng
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Search không trả về kết quả**: Kiểm tra từ khóa và filters
+* **Filters không hoạt động**: Kiểm tra permissions và data
+* **Performance chậm**: Kiểm tra số lượng data và filters
+* **Kết quả không chính xác**: Kiểm tra search logic
+
+=== Giải pháp
+
+1. **Check keywords**: Kiểm tra từ khóa tìm kiếm
+2. **Clear filters**: Xóa tất cả filters và thử lại
+3. **Refresh page**: Tải lại trang
+4. **Contact support**: Liên hệ hỗ trợ nếu cần
+
+== Liên kết liên quan
+
+* <<objectives-management,Quản lý Objectives>>
+* <<home,Trang chủ>>
+* <<dashboard,Dashboard>>
+* <<collaboration,Tính năng Cộng tác>>
+* <<export-import,Xuất và Nhập dữ liệu>>

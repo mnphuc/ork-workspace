@@ -1,0 +1,98 @@
+= Oboard Documentation
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Giới thiệu
+
+Oboard là một nền tảng quản lý OKR (Objectives and Key Results) toàn diện, giúp tổ chức thiết lập, theo dõi và đạt được các mục tiêu chiến lược. Tài liệu này cung cấp hướng dẫn chi tiết về tất cả các chức năng của hệ thống.
+
+== Các chức năng chính
+
+=== Core Features (Tính năng cốt lõi)
+
+* <<authentication,Authentication (Đăng nhập)>> - Hệ thống đăng nhập và xác thực
+* <<home,Home (Trang chủ)>> - Dashboard tổng quan và theo dõi tiến độ
+* <<objectives-management,Objectives Management (Quản lý Mục tiêu)>> - Tạo và quản lý objectives
+* <<check-ins,Check-ins (Cập nhật tiến độ)>> - Cập nhật và theo dõi tiến độ
+* <<dashboard,Dashboard (Báo cáo và Phân tích)>> - Báo cáo và phân tích hiệu suất
+
+=== Advanced Features (Tính năng nâng cao)
+
+* <<filters-search,Filters and Search (Lọc và Tìm kiếm)>> - Tìm kiếm và lọc dữ liệu
+* <<collaboration,Collaboration Features (Tính năng Cộng tác)>> - Làm việc nhóm và chia sẻ
+* <<export-import,Export and Import (Xuất và Nhập dữ liệu)>> - Quản lý dữ liệu
+
+=== Settings and Administration (Cài đặt và Quản trị)
+
+* <<workspace-settings,Workspace Settings (Cài đặt Workspace)>> - Cấu hình workspace
+* <<personal-settings,Personal Settings (Cài đặt Cá nhân)>> - Cài đặt người dùng
+* <<groups-users-management,Groups & Users Management (Quản lý Nhóm và Người dùng)>> - Quản lý tổ chức
+* <<components-strategy,Components & Strategy (Thành phần Chiến lược)>> - Cấu hình OKR levels
+* <<integrations,Integrations (Tích hợp)>> - Tích hợp với hệ thống khác
+* <<notifications,Notifications (Thông báo)>> - Hệ thống thông báo
+
+== Cấu trúc tài liệu
+
+Mỗi chức năng được mô tả chi tiết với các phần:
+
+1. **Mô tả tổng quan** - Giải thích chức năng là gì
+2. **Use Cases** - Các tình huống sử dụng thực tế
+3. **Hành vi người dùng** - Cách người dùng tương tác
+4. **Luồng sử dụng chi tiết** - Từng bước thực hiện
+5. **Ảnh minh họa** - Screenshots với chú thích
+6. **Requirements** - Điều kiện cần thiết
+7. **Best Practices** - Gợi ý sử dụng tốt nhất
+8. **Troubleshooting** - Xử lý lỗi thường gặp
+
+== Bắt đầu sử dụng
+
+=== Cho người dùng mới
+
+1. <<authentication,Đăng nhập>> vào hệ thống
+2. Khám phá <<home,trang chủ>> để hiểu tổng quan
+3. Tạo <<objectives-management,objectives đầu tiên>>
+4. Học cách <<check-ins,cập nhật tiến độ>>
+5. Sử dụng <<dashboard,dashboard>> để theo dõi
+
+=== Cho quản trị viên
+
+1. <<workspace-settings,Cấu hình workspace>>
+2. <<groups-users-management,Thiết lập nhóm và người dùng>>
+3. <<components-strategy,Cấu hình OKR levels>>
+4. <<integrations,Thiết lập tích hợp>>
+5. <<notifications,Cấu hình thông báo>>
+
+=== Cho người dùng nâng cao
+
+1. <<filters-search,Sử dụng filters và search>>
+2. <<collaboration,Tối ưu hóa collaboration>>
+3. <<export-import,Xuất và nhập dữ liệu>>
+4. <<labels-custom-fields,Tùy chỉnh fields>>
+5. <<statuses-management,Quản lý trạng thái>>
+
+== Liên kết nhanh
+
+=== Chức năng cơ bản
+- <<authentication,Đăng nhập>>
+- <<home,Trang chủ>>
+- <<objectives-management,Quản lý Objectives>>
+
+=== Chức năng nâng cao
+- <<dashboard,Dashboard>>
+- <<check-ins,Check-ins>>
+- <<collaboration,Cộng tác>>
+
+=== Cài đặt và Quản trị
+- <<workspace-settings,Cài đặt Workspace>>
+- <<groups-users-management,Quản lý Nhóm>>
+- <<integrations,Tích hợp>>
+
+== Hỗ trợ
+
+Nếu bạn gặp vấn đề hoặc cần hỗ trợ, hãy tham khảo phần Troubleshooting trong mỗi chức năng hoặc liên hệ với team hỗ trợ.
+
+== Cập nhật tài liệu
+
+Tài liệu này được cập nhật thường xuyên để phản ánh các tính năng mới và cải tiến của hệ thống. Hãy kiểm tra phiên bản mới nhất để có trải nghiệm tốt nhất.

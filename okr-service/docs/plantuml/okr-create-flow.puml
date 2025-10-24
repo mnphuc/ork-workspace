@@ -1,0 +1,32 @@
+@startuml OKR_Create_Flow
+title OKR Creation Flow
+
+actor User
+participant Frontend
+participant "ObjectiveController" as OC
+participant "ObjectiveService" as OS
+participant "KeyResultService" as KRS
+participant Database
+
+User -> Frontend: Create Objective
+Frontend -> OC: POST /objectives
+OC -> OS: create(objective)
+OS -> Database: save(objective)
+Database --> OS: objective saved
+OS --> OC: objective created
+OC --> Frontend: objective response
+
+User -> Frontend: Add Key Results
+Frontend -> OC: POST /objectives/{id}/key-results
+OC -> KRS: create(keyResult)
+KRS -> Database: save(keyResult)
+Database --> KRS: keyResult saved
+KRS -> OS: update parent objective progress
+OS -> Database: update objective progress
+Database --> OS: objective updated
+OS --> KRS: objective updated
+KRS --> OC: keyResult created
+OC --> Frontend: keyResult response
+
+@enduml
+

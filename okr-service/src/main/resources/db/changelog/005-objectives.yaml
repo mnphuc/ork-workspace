@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-objectives
+      author: assistant
+      changes:
+        - createTable:
+            tableName: objectives
+            columns:
+              - column: { name: id, type: varchar(26), constraints: { primaryKey: true, nullable: false } }
+              - column: { name: title, type: varchar(255), constraints: { nullable: false } }
+              - column: { name: description, type: varchar(2000) }
+              - column: { name: owner_id, type: varchar(26), constraints: { nullable: false } }
+              - column: { name: team_id, type: varchar(26) }
+              - column: { name: quarter, type: varchar(16), constraints: { nullable: false } }
+              - column: { name: status, type: varchar(32), defaultValue: 'NOT_STARTED' }
+              - column: { name: progress, type: "numeric(5,2)", defaultValueNumeric: 0 }
+              - column: { name: created_by, type: varchar(64) }
+              - column: { name: created_date, type: timestamp, defaultValueComputed: CURRENT_TIMESTAMP }
+              - column: { name: last_modified_by, type: varchar(64) }
+              - column: { name: last_modified_date, type: timestamp }
+        - addForeignKeyConstraint:
+            constraintName: fk_objectives_owner
+            baseTableName: objectives
+            baseColumnNames: owner_id
+            referencedTableName: users
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_objectives_team
+            baseTableName: objectives
+            baseColumnNames: team_id
+            referencedTableName: teams
+            referencedColumnNames: id
+        - createIndex:
+            tableName: objectives
+            indexName: idx_objectives_team_quarter
+            columns:
+              - column: { name: team_id }
+              - column: { name: quarter }
+        - createIndex:
+            tableName: objectives
+            indexName: idx_objectives_owner_quarter
+            columns:
+              - column: { name: owner_id }
+              - column: { name: quarter }
+        - createIndex:
+            tableName: objectives
+            indexName: idx_objectives_status
+            columns:
+              - column: { name: status }
+
+
+

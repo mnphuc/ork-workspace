@@ -1,0 +1,220 @@
+= Dashboard (Báo cáo và Phân tích)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Dashboard cung cấp cái nhìn tổng quan về hiệu suất và tiến độ của workspace thông qua các metrics, charts và báo cáo. Đây là công cụ quan trọng để leaders và managers theo dõi tình hình tổng thể và đưa ra quyết định dựa trên dữ liệu.
+
+== Use Cases
+
+* **Tổng quan hiệu suất**: Xem tổng quan về hiệu suất của workspace
+* **Phân tích tiến độ**: Đánh giá tiến độ objectives và metrics
+* **Báo cáo cho leadership**: Tạo báo cáo cho cấp lãnh đạo
+* **Theo dõi KPIs**: Monitor các chỉ số hiệu suất quan trọng
+* **Phân tích xu hướng**: Xem xu hướng phát triển theo thời gian
+
+== Hành vi người dùng
+
+=== Xem General Dashboard
+
+1. Truy cập trang Dashboard
+2. Chọn "General dashboard" (mặc định)
+3. Xem các metrics chính:
+   - Average progress
+   - Objectives count
+   - Status distribution
+   - Days left in cycle
+
+=== Chuyển đổi Dashboard Types
+
+1. Click vào các tab dashboard:
+   - **General dashboard**: Tổng quan chung
+   - **Performance report**: Báo cáo hiệu suất
+   - **Custom dashboard**: Dashboard tùy chỉnh
+2. Xem dữ liệu tương ứng
+
+=== Lọc dữ liệu
+
+1. Sử dụng interval selector (Q4 2025)
+2. Chọn khoảng thời gian cần xem
+3. Xem dữ liệu được cập nhật
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Truy cập Dashboard
+
+URL: `#/workspaces/{workspaceId}/dashboard/`
+
+Trang hiển thị các loại dashboard:
+- General dashboard
+- Performance report  
+- Custom dashboard
+
+=== Bước 2: Xem General Dashboard
+
+**Key Metrics**:
+- **Average progress**: 16% (trong cycle hiện tại)
+- **Objectives**: 2 objectives trong workspace
+- **Status distribution**:
+  - Not Started: 2
+  - On Track: 4
+  - Behind: 2
+  - At Risk: 0
+  - Closed: 0
+  - Abandoned: 0
+
+**Cycle Information**:
+- **Days left**: 32 days trong cycle
+- **Progress**: 24.18% đã trôi qua
+- **No linked metrics**: 0 objectives không có metrics liên kết
+
+**Workspace Stats**:
+- **Groups**: 7 groups trong workspace
+- **People**: 0 people trong workspace
+- **Company Type Elements**: 2
+- **Department Type Elements**: 4
+- **Team Type Elements**: 2
+- **KPI Type Elements**: 0
+
+=== Bước 3: Phân tích dữ liệu
+
+**Progress Analysis**:
+- Xem tiến độ trung bình
+- So sánh với các cycle trước
+- Xác định objectives cần chú ý
+
+**Status Analysis**:
+- Phân tích phân bố trạng thái
+- Xác định objectives có vấn đề
+- Lập kế hoạch cải thiện
+
+**Resource Analysis**:
+- Xem số lượng groups và people
+- Phân tích cấu trúc tổ chức
+- Đánh giá resource allocation
+
+== Ảnh minh họa
+
+image::dashboard-detailed.png[Dashboard chi tiết với metrics và statistics, width=800]
+
+*Hình 1: Dashboard chi tiết hiển thị metrics, progress và statistics*
+
+== Các loại Dashboard
+
+=== General Dashboard
+
+* **Mục đích**: Tổng quan chung về workspace
+* **Nội dung**: 
+  - Average progress
+  - Objectives count
+  - Status distribution
+  - Cycle information
+  - Workspace statistics
+* **Đối tượng**: All users
+
+=== Performance Report
+
+* **Mục đích**: Báo cáo hiệu suất chi tiết
+* **Nội dung**:
+  - Performance metrics
+  - Trend analysis
+  - Comparative data
+  - Historical data
+* **Đối tượng**: Managers, Leaders
+
+=== Custom Dashboard
+
+* **Mục đích**: Dashboard tùy chỉnh theo nhu cầu
+* **Nội dung**:
+  - Custom metrics
+  - Specific KPIs
+  - Team-specific data
+  - Project-specific views
+* **Đối tượng**: Specific teams, Projects
+
+== Metrics và KPIs
+
+=== Progress Metrics
+
+* **Average Progress**: Tiến độ trung bình của workspace
+* **Objectives Progress**: Tiến độ của từng objective
+* **Metrics Progress**: Tiến độ của các metrics
+* **Trend Analysis**: Phân tích xu hướng
+
+=== Status Metrics
+
+* **Status Distribution**: Phân bố trạng thái objectives
+* **Status Changes**: Thay đổi trạng thái theo thời gian
+* **Risk Analysis**: Phân tích rủi ro
+
+=== Resource Metrics
+
+* **Group Performance**: Hiệu suất của các nhóm
+* **Individual Performance**: Hiệu suất cá nhân
+* **Resource Utilization**: Sử dụng tài nguyên
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập vào hệ thống
+* Có quyền xem dashboard
+* Workspace đã được thiết lập
+* Objectives đã được tạo
+
+=== Yêu cầu dữ liệu
+
+* Objectives với progress data
+* Check-ins history
+* User và group data
+* Historical data
+
+== Best Practices
+
+=== Sử dụng Dashboard hiệu quả
+
+* **Regular Review**: Xem dashboard hàng tuần
+* **Focus on Trends**: Chú ý đến xu hướng thay đổi
+* **Identify Issues**: Xác định các vấn đề sớm
+* **Take Action**: Hành động dựa trên insights
+
+=== Dashboard Analysis
+
+* **Compare Periods**: So sánh với các period trước
+* **Look for Patterns**: Tìm kiếm patterns trong dữ liệu
+* **Identify Outliers**: Xác định các giá trị bất thường
+* **Track Progress**: Theo dõi tiến độ theo thời gian
+
+=== Reporting
+
+* **Create Reports**: Tạo báo cáo định kỳ
+* **Share Insights**: Chia sẻ insights với team
+* **Document Findings**: Ghi lại các phát hiện
+* **Follow up**: Theo dõi và cải thiện
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Dashboard không load**: Kiểm tra kết nối internet
+* **Dữ liệu không cập nhật**: Refresh trang hoặc kiểm tra data source
+* **Metrics không chính xác**: Kiểm tra data quality và calculations
+* **Performance chậm**: Kiểm tra số lượng data và filters
+
+=== Giải pháp
+
+1. **Refresh trang**: Nhấn F5 để tải lại
+2. **Check data source**: Kiểm tra nguồn dữ liệu
+3. **Clear cache**: Xóa cache trình duyệt
+4. **Contact support**: Liên hệ hỗ trợ nếu cần
+
+== Liên kết liên quan
+
+* <<home,Trang chủ>>
+* <<objectives-management,Quản lý Objectives>>
+* <<check-ins,Check-ins>>
+* <<export-import,Xuất và Nhập dữ liệu>>
+* <<workspace-settings,Cài đặt Workspace>>

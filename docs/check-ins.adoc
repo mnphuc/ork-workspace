@@ -1,0 +1,217 @@
+= Check-ins (Cập nhật tiến độ)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Chức năng Check-ins cho phép người dùng cập nhật tiến độ objectives một cách thường xuyên và có cấu trúc. Đây là nơi diễn ra các hoạt động cập nhật progress, thảo luận về challenges, và chia sẻ updates với team.
+
+== Use Cases
+
+* **Cập nhật tiến độ**: Thường xuyên update progress của objectives
+* **Báo cáo tình hình**: Chia sẻ tình hình hiện tại với team và stakeholders
+* **Thảo luận challenges**: Thảo luận về các khó khăn và tìm giải pháp
+* **Theo dõi hoạt động**: Xem lịch sử các check-ins và updates
+* **Collaboration**: Tương tác với team thông qua comments và replies
+
+== Hành vi người dùng
+
+=== Tạo Check-in mới
+
+1. Truy cập trang Check-ins
+2. Nhấn nút "Create" hoặc "Check-in"
+3. Chọn objective cần cập nhật
+4. Nhập thông tin:
+   - Progress percentage
+   - Status update
+   - Comments
+   - Challenges/blockers
+5. Submit check-in
+
+=== Xem Check-in Feed
+
+1. Truy cập trang Check-ins
+2. Xem danh sách các check-ins gần đây
+3. Lọc theo:
+   - Date
+   - User
+   - Objective
+   - Status
+4. Đọc comments và replies
+
+=== Reply và Comment
+
+1. Click vào check-in cần comment
+2. Nhập comment trong textbox
+3. Sử dụng @mention để tag người khác
+4. Submit comment
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Truy cập trang Check-ins
+
+URL: `#/check-ins/feed`
+
+Trang hiển thị feed các check-in activities với thông tin:
+- Ngày và giờ check-in
+- Người thực hiện check-in
+- Objective được cập nhật
+- Progress values
+- Status changes
+- Comments và replies
+
+=== Bước 2: Xem Check-in Details
+
+Mỗi check-in entry bao gồm:
+
+**Header Information**:
+- User avatar và tên
+- Timestamp (Oct 23, 4:26 PM)
+- Objective ID (TEC-7)
+- Objective title
+
+**Progress Information**:
+- Value: Current value / Target value
+- Progress: Percentage completion
+- Status: Current status (Behind, On Track, etc.)
+
+**Metadata**:
+- Interval (Q4 2025)
+- Group (Engineering)
+- Owner information
+
+=== Bước 3: Tạo Check-in mới
+
+1. Click nút "Check-in" trên objective
+2. Modal check-in form mở ra
+3. Nhập thông tin:
+   - **Value**: Current value / Target value
+   - **Progress**: Percentage (0% → 10%)
+   - **Status**: Not Started → Behind
+4. Thêm comments nếu cần
+5. Submit check-in
+
+=== Bước 4: Tương tác với Check-ins
+
+**Reply to Check-in**:
+1. Click nút "Reply" trên check-in
+2. Nhập comment
+3. Sử dụng @mention để tag người khác
+4. Submit reply
+
+**View Activity**:
+- Xem lịch sử thay đổi
+- Theo dõi progress over time
+- Xem comments và discussions
+
+== Ảnh minh họa
+
+image::check-ins-detailed.png[Check-ins feed chi tiết với updates và progress, width=800]
+
+*Hình 1: Check-ins feed chi tiết hiển thị các updates, progress và status changes*
+
+== Các loại Check-ins
+
+=== Progress Updates
+
+* **Mục đích**: Cập nhật tiến độ objectives
+* **Nội dung**: Percentage, values, status changes
+* **Tần suất**: Hàng tuần hoặc theo yêu cầu
+
+=== Status Changes
+
+* **Mục đích**: Thay đổi trạng thái objectives
+* **Nội dung**: On Track → Behind, Behind → At Risk, etc.
+* **Tần suất**: Khi có thay đổi đáng kể
+
+=== Value Updates
+
+* **Mục đích**: Cập nhật giá trị hiện tại
+* **Nội dung**: Current value / Target value
+* **Tần suất**: Khi có dữ liệu mới
+
+=== Comments và Discussions
+
+* **Mục đích**: Thảo luận về progress và challenges
+* **Nội dung**: Comments, questions, suggestions
+* **Tần suất**: Khi cần thiết
+
+== Check-in Workflow
+
+=== Regular Check-ins
+
+1. **Weekly Review**: Review objectives hàng tuần
+2. **Update Progress**: Cập nhật tiến độ
+3. **Identify Blockers**: Xác định các vấn đề
+4. **Plan Next Week**: Lập kế hoạch tuần tới
+
+=== Ad-hoc Updates
+
+1. **Significant Changes**: Khi có thay đổi lớn
+2. **Blockers Identified**: Khi gặp khó khăn
+3. **Milestones Reached**: Khi đạt milestone
+4. **Status Changes**: Khi trạng thái thay đổi
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập vào hệ thống
+* Có quyền check-in trên objectives
+* Objectives đã được tạo và assigned
+
+=== Yêu cầu dữ liệu
+
+* Objectives với owners
+* Users với proper permissions
+* Check-in settings configured
+* Notification settings
+
+== Best Practices
+
+=== Check-in Frequency
+
+* **Weekly**: Check-in hàng tuần cho tất cả objectives
+* **Bi-weekly**: Cho objectives dài hạn
+* **Ad-hoc**: Khi có thay đổi đáng kể
+* **Monthly**: Review tổng thể
+
+=== Check-in Content
+
+* **Be Specific**: Cung cấp thông tin cụ thể
+* **Include Context**: Giải thích lý do thay đổi
+* **Identify Blockers**: Nêu rõ các vấn đề
+* **Plan Next Steps**: Đề xuất hành động tiếp theo
+
+=== Collaboration
+
+* **Use @mentions**: Tag relevant people
+* **Respond to Comments**: Trả lời comments kịp thời
+* **Share Updates**: Chia sẻ với stakeholders
+* **Ask Questions**: Đặt câu hỏi khi cần
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Không thể tạo check-in**: Kiểm tra quyền và objective status
+* **Progress không cập nhật**: Kiểm tra kết nối và thử refresh
+* **Comments không hiển thị**: Kiểm tra notification settings
+* **@mentions không hoạt động**: Kiểm tra user permissions
+
+=== Giải pháp
+
+1. **Kiểm tra quyền**: Liên hệ admin để kiểm tra permissions
+2. **Refresh trang**: Nhấn F5 để tải lại
+3. **Check network**: Kiểm tra kết nối internet
+4. **Clear cache**: Xóa cache trình duyệt
+
+== Liên kết liên quan
+
+* <<objectives-management,Quản lý Objectives>>
+* <<home,Trang chủ>>
+* <<dashboard,Dashboard>>
+* <<notifications,Thông báo>>
+* <<collaboration,Tính năng Cộng tác>>

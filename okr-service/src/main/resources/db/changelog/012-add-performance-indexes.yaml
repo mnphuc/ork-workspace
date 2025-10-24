@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-add-performance-indexes
+      author: system
+      changes:
+        - createIndex:
+            indexName: idx_key_results_objective_id_created_date
+            tableName: key_results
+            columns:
+              - column:
+                  name: objective_id
+              - column:
+                  name: created_date
+                  
+        - createIndex:
+            indexName: idx_check_ins_key_result_id_created_date
+            tableName: check_ins
+            columns:
+              - column:
+                  name: key_result_id
+              - column:
+                  name: created_date
+                  
+        - createIndex:
+            indexName: idx_objectives_owner_id_quarter
+            tableName: objectives
+            columns:
+              - column:
+                  name: owner_id
+              - column:
+                  name: quarter
+                  
+        - createIndex:
+            indexName: idx_objectives_team_id_status
+            tableName: objectives
+            columns:
+              - column:
+                  name: team_id
+              - column:
+                  name: status
+                  
+        - createIndex:
+            indexName: idx_comments_objective_id_created_date
+            tableName: comments
+            columns:
+              - column:
+                  name: objective_id
+              - column:
+                  name: created_date
+                  
+        - createIndex:
+            indexName: idx_users_email_status
+            tableName: users
+            columns:
+              - column:
+                  name: email
+              - column:
+                  name: status

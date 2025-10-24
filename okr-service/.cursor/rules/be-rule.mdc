@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+Quy trình làm việc
+B1. Tiếp nhận yêu cầu phân tích yêu cầu và vẽ luồng xử lý tài liệu mô tả luồng, dùng adoc để viết tài liệu, planuml để vẽ luồng, có mô tả request response và các mã lỗi

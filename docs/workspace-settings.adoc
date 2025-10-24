@@ -1,0 +1,216 @@
+= Workspace Settings (Cài đặt Workspace)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Chức năng Workspace Settings cho phép quản trị viên tạo, quản lý và cấu hình các workspace trong hệ thống Oboard. Đây là nơi thiết lập cấu trúc tổ chức, intervals, và các cài đặt cơ bản của workspace.
+
+== Use Cases
+
+* **Tạo workspace mới**: Thiết lập workspace cho tổ chức mới
+* **Quản lý workspace**: Cấu hình và quản lý workspace hiện có
+* **Thiết lập intervals**: Cấu hình các khoảng thời gian (Q1, Q2, Q3, Q4)
+* **Quản lý visibility**: Thiết lập quyền truy cập workspace
+* **Cấu hình cơ bản**: Thiết lập các thông số cơ bản của workspace
+
+== Hành vi người dùng
+
+=== Tạo Workspace mới
+
+1. Truy cập trang Workspace Settings
+2. Click nút "Create workspace"
+3. Nhập thông tin workspace:
+   - Workspace name
+   - Description
+   - Visibility settings
+4. Cấu hình intervals
+5. Tạo workspace
+
+=== Quản lý Workspace hiện có
+
+1. Chọn workspace cần quản lý
+2. Xem thông tin workspace:
+   - Workspace name
+   - Groups count
+   - Users count
+   - Intervals count
+   - Visibility status
+3. Chỉnh sửa thông tin nếu cần
+
+=== Cấu hình Intervals
+
+1. Chọn workspace
+2. Navigate đến intervals settings
+3. Tạo intervals mới:
+   - Q1 2025
+   - Q2 2025
+   - Q3 2025
+   - Q4 2025
+4. Set start và end dates
+5. Save configuration
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Truy cập Workspace Settings
+
+URL: `#/workspaces/settings/workspaces`
+
+Trang hiển thị:
+- **Search box**: Tìm kiếm workspace
+- **Create workspace button**: Tạo workspace mới
+- **Workspace list**: Danh sách các workspace
+
+=== Bước 2: Xem thông tin Workspace
+
+**Workspace Information**:
+- **Workspace name**: Tên workspace (TEC)
+- **Groups**: Số lượng groups (15 Groups)
+- **Users**: Số lượng users (1 User)
+- **Intervals**: Số lượng intervals (5 Intervals)
+- **Visibility**: Trạng thái visibility (Public)
+
+=== Bước 3: Tạo Workspace mới
+
+**Create Workspace Process**:
+1. Click "Create workspace" button
+2. Fill workspace information:
+   - **Workspace Name**: Tên workspace
+   - **Description**: Mô tả workspace
+   - **Visibility**: Public/Private
+3. Configure intervals:
+   - Set quarter dates
+   - Define fiscal year
+   - Set working days
+4. Set default settings:
+   - Default language
+   - Time zone
+   - Date format
+5. Save workspace
+
+=== Bước 4: Quản lý Workspace
+
+**Workspace Management**:
+1. **Edit Workspace**: Chỉnh sửa thông tin workspace
+2. **Delete Workspace**: Xóa workspace (nếu có quyền)
+3. **Archive Workspace**: Lưu trữ workspace
+4. **Export Workspace**: Xuất dữ liệu workspace
+5. **Import Workspace**: Nhập dữ liệu workspace
+
+== Ảnh minh họa
+
+image::settings-workspaces.png[Trang cài đặt Workspace với danh sách workspace, width=800]
+
+*Hình 1: Giao diện Workspace Settings hiển thị danh sách workspace và thông tin chi tiết*
+
+== Các loại Workspace
+
+=== Public Workspace
+
+* **Mục đích**: Workspace công khai
+* **Truy cập**: Mọi người có thể xem
+* **Sử dụng**: Cho tổ chức muốn minh bạch
+* **Bảo mật**: Thấp
+
+=== Private Workspace
+
+* **Mục đích**: Workspace riêng tư
+* **Truy cập**: Chỉ thành viên được mời
+* **Sử dụng**: Cho tổ chức cần bảo mật
+* **Bảo mật**: Cao
+
+=== Enterprise Workspace
+
+* **Mục đích**: Workspace doanh nghiệp
+* **Truy cập**: Quản lý bởi IT admin
+* **Sử dụng**: Cho tổ chức lớn
+* **Bảo mật**: Rất cao
+
+== Intervals Management
+
+=== Quarter Intervals
+
+* **Q1**: January - March
+* **Q2**: April - June
+* **Q3**: July - September
+* **Q4**: October - December
+
+=== Custom Intervals
+
+* **Monthly**: Theo tháng
+* **Semi-annual**: Nửa năm
+* **Annual**: Hàng năm
+* **Custom dates**: Ngày tùy chỉnh
+
+=== Interval Configuration
+
+* **Start Date**: Ngày bắt đầu
+* **End Date**: Ngày kết thúc
+* **Working Days**: Ngày làm việc
+* **Holidays**: Ngày nghỉ lễ
+* **Time Zone**: Múi giờ
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập với quyền admin
+* Có quyền tạo workspace
+* Workspace limit chưa đạt
+* Network connectivity
+
+=== Yêu cầu dữ liệu
+
+* Valid workspace name
+* Proper intervals configuration
+* User permissions
+* Storage space
+
+== Best Practices
+
+=== Workspace Design
+
+* **Clear Naming**: Đặt tên workspace rõ ràng
+* **Logical Structure**: Cấu trúc logic
+* **Proper Permissions**: Phân quyền phù hợp
+* **Regular Cleanup**: Dọn dẹp định kỳ
+
+=== Intervals Planning
+
+* **Align with Business**: Căn cứ theo business cycle
+* **Consider Time Zones**: Xem xét múi giờ
+* **Plan Ahead**: Lập kế hoạch trước
+* **Flexible Dates**: Ngày linh hoạt
+
+=== User Management
+
+* **Role-based Access**: Truy cập theo vai trò
+* **Regular Reviews**: Review định kỳ
+* **Clear Onboarding**: Onboarding rõ ràng
+* **Training**: Đào tạo người dùng
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Không thể tạo workspace**: Kiểm tra quyền và limit
+* **Intervals không hoạt động**: Kiểm tra cấu hình dates
+* **Users không thể truy cập**: Kiểm tra permissions
+* **Data không sync**: Kiểm tra network và settings
+
+=== Giải pháp
+
+1. **Check permissions**: Kiểm tra quyền admin
+2. **Validate dates**: Kiểm tra cấu hình intervals
+3. **Review user access**: Kiểm tra quyền user
+4. **Contact support**: Liên hệ hỗ trợ nếu cần
+
+== Liên kết liên quan
+
+* <<groups-users-management,Quản lý Nhóm và Người dùng>>
+* <<personal-settings,Cài đặt Cá nhân>>
+* <<components-strategy,Components & Strategy>>
+* <<integrations,Tích hợp>>
+* <<authentication,Đăng nhập>>

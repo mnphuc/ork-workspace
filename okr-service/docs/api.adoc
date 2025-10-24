@@ -1,0 +1,421 @@
+= OKR System API Documentation
+
+== Overview
+
+This document describes the RESTful API for the OKR (Objectives and Key Results) management system. The API follows REST principles and uses JSON for data exchange.
+
+== Base URL
+
+The API base URL is: `http://localhost:8080`
+
+== Authentication
+
+The API uses JWT (JSON Web Token) for authentication. Include the token in the Authorization header:
+
+```
+Authorization: Bearer <your-jwt-token>
+```
+
+== Data Format
+
+All request and response data uses `snake_case` format.
+
+== Core Entities
+
+=== Objective
+
+Represents a high-level goal with the following properties:
+
+* `id` (string): Unique identifier
+* `title` (string): Objective title
+* `description` (string): Detailed description
+* `owner_id` (string): ID of the user who owns this objective
+* `team_id` (string): ID of the team this objective belongs to
+* `quarter` (string): Quarter identifier (e.g., "2025-Q1")
+* `status` (enum): Current status (NOT_STARTED, ON_TRACK, AT_RISK, BEHIND, CLOSED, ABANDONED)
+* `progress` (number): Overall progress percentage (0-100)
+* `created_by` (string): User who created the objective
+* `created_date` (timestamp): Creation timestamp
+* `last_modified_by` (string): User who last modified the objective
+* `last_modified_date` (timestamp): Last modification timestamp
+
+=== Key Result
+
+Represents a measurable outcome for an objective:
+
+* `id` (string): Unique identifier
+* `objective_id` (string): ID of the parent objective
+* `title` (string): Key result title
+* `metric_type` (enum): Type of metric (NUMBER, PERCENT, CURRENCY, BOOLEAN)
+* `unit` (string): Unit of measurement
+* `target_value` (number): Target value to achieve
+* `current_value` (number): Current progress value
+* `created_by` (string): User who created the key result
+* `created_date` (timestamp): Creation timestamp
+* `last_modified_by` (string): User who last modified the key result
+* `last_modified_date` (timestamp): Last modification timestamp
+
+=== Check-in
+
+Represents a progress update for a key result:
+
+* `id` (string): Unique identifier
+* `key_result_id` (string): ID of the key result being updated
+* `value` (number): New value for the key result
+* `note` (string): Optional note about the check-in
+* `created_by` (string): User who created the check-in
+* `created_date` (timestamp): Creation timestamp
+* `last_modified_by` (string): User who last modified the check-in
+* `last_modified_date` (timestamp): Last modification timestamp
+
+== API Endpoints
+
+=== Objectives
+
+==== GET /objectives
+
+Retrieve a list of objectives with optional filtering.
+
+**Query Parameters:**
+* `quarter` (optional): Filter by quarter
+* `teamId` (optional): Filter by team ID
+* `ownerId` (optional): Filter by owner ID
+
+**Response:** Array of Objective objects
+
+**Example:**
+```
+GET /objectives?quarter=2025-Q1&teamId=team-123
+
+Response:
+[
+  {
+    "id": "obj-123",
+    "title": "Increase Market Share",
+    "description": "Become the market leader",
+    "owner_id": "user-456",
+    "team_id": "team-123",
+    "quarter": "2025-Q1",
+    "status": "ON_TRACK",
+    "progress": 75.5,
+    "created_date": "2024-01-01T00:00:00Z",
+    "last_modified_date": "2024-01-15T10:30:00Z"
+  }
+]
+```
+
+==== GET /objectives/{id}
+
+Retrieve a specific objective by ID.
+
+**Response:** Objective object or 404 if not found
+
+==== POST /objectives
+
+Create a new objective.
+
+**Request Body:**
+```json
+{
+  "title": "New Objective",
+  "description": "Objective description",
+  "owner_id": "user-123",
+  "team_id": "team-456",
+  "quarter": "2025-Q1"
+}
+```
+
+**Response:** Created Objective object
+
+==== PATCH /objectives/{id}
+
+Update an existing objective.
+
+**Request Body:** Partial Objective object with fields to update
+
+**Response:** Updated Objective object or 404 if not found
+
+==== DELETE /objectives/{id}
+
+Delete an objective and all its key results.
+
+**Response:** 204 No Content or 404 if not found
+
+==== GET /objectives/{id}/key-results
+
+Get all key results for a specific objective.
+
+**Response:** Array of Key Result objects
+
+==== POST /objectives/{id}/key-results
+
+Add a new key result to an objective.
+
+**Request Body:**
+```json
+{
+  "title": "New Key Result",
+  "metric_type": "PERCENT",
+  "unit": "%",
+  "target_value": 100
+}
+```
+
+**Response:** Created Key Result object
+
+==== GET /objectives/{id}/progress
+
+Get detailed progress information for an objective.
+
+**Response:**
+```json
+{
+  "objective_id": "obj-123",
+  "overall_progress": 75.5,
+  "status": "ON_TRACK",
+  "key_results": [
+    {
+      "id": "kr-456",
+      "title": "Key Result 1",
+      "current_value": 75,
+      "target_value": 100,
+      "progress": 75.0
+    }
+  ]
+}
+```
+
+=== Key Results
+
+==== GET /key-results/{id}
+
+Get a specific key result by ID.
+
+**Response:** Key Result object or 404 if not found
+
+==== PATCH /key-results/{id}
+
+Update a key result.
+
+**Request Body:** Partial Key Result object
+
+**Response:** Updated Key Result object
+
+==== DELETE /key-results/{id}
+
+Delete a key result.
+
+**Response:** 204 No Content or 404 if not found
+
+==== GET /key-results/{id}/check-ins
+
+Get check-in history for a key result.
+
+**Response:** Array of Check-in objects
+
+==== POST /key-results/{id}/check-ins
+
+Create a new check-in for a key result.
+
+**Request Body:**
+```json
+{
+  "value": 85,
+  "note": "Great progress this week"
+}
+```
+
+**Response:** Created Check-in object
+
+=== Check-ins
+
+==== GET /check-ins
+
+Get check-ins with optional filtering.
+
+**Query Parameters:**
+* `keyResultId` (optional): Filter by key result ID
+
+**Response:** Array of Check-in objects
+
+==== POST /check-ins
+
+Create a new check-in.
+
+**Request Body:**
+```json
+{
+  "key_result_id": "kr-123",
+  "value": 85,
+  "note": "Progress update"
+}
+```
+
+**Response:** Created Check-in object
+
+==== PATCH /check-ins/{id}
+
+Update a check-in (within 24 hours of creation).
+
+**Request Body:** Partial Check-in object
+
+**Response:** Updated Check-in object
+
+==== DELETE /check-ins/{id}
+
+Delete a check-in.
+
+**Response:** 204 No Content or 404 if not found
+
+=== Dashboard
+
+==== GET /dashboard/summary
+
+Get dashboard summary statistics.
+
+**Query Parameters:**
+* `quarter` (required): Quarter to summarize
+* `teamId` (optional): Team ID to filter by
+
+**Response:**
+```json
+{
+  "objectives_progress": 75,
+  "metrics_progress": 80,
+  "status_counts": {
+    "not_started": 0,
+    "at_risk": 1,
+    "behind": 2,
+    "on_track": 5,
+    "closed": 0,
+    "abandoned": 0
+  }
+}
+```
+
+==== GET /dashboard/check-in-trend
+
+Get check-in trend data for charts.
+
+**Query Parameters:**
+* `days` (optional): Number of days to include (default: 30)
+
+**Response:** Trend data object
+
+==== GET /dashboard/top-performers
+
+Get top performing objectives.
+
+**Query Parameters:**
+* `quarter` (required): Quarter to analyze
+* `limit` (optional): Number of results (default: 10)
+
+**Response:** Array of top performer objects
+
+==== GET /dashboard/recent-check-ins
+
+Get recent check-ins across all key results.
+
+**Query Parameters:**
+* `limit` (optional): Number of results (default: 5)
+
+**Response:** Array of recent Check-in objects
+
+=== Comments
+
+==== GET /comments
+
+Get comments with optional filtering.
+
+**Query Parameters:**
+* `objectiveId` (optional): Filter by objective ID
+* `keyResultId` (optional): Filter by key result ID
+
+**Response:** Array of Comment objects
+
+==== POST /comments
+
+Create a new comment.
+
+**Request Body:**
+```json
+{
+  "objective_id": "obj-123",
+  "content": "Great progress on this objective!"
+}
+```
+
+**Response:** Created Comment object
+
+==== DELETE /comments/{id}
+
+Delete a comment (only by the author).
+
+**Query Parameters:**
+* `userId` (required): ID of the user requesting deletion
+
+**Response:** 204 No Content or 400 if not authorized
+
+== Error Handling
+
+The API returns appropriate HTTP status codes and error messages:
+
+* `400 Bad Request`: Invalid request data or validation errors
+* `401 Unauthorized`: Missing or invalid authentication token
+* `403 Forbidden`: Insufficient permissions
+* `404 Not Found`: Resource not found
+* `500 Internal Server Error`: Server error
+
+Error response format:
+```json
+{
+  "timestamp": "2024-01-15T10:30:00Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Validation failed",
+  "errors": {
+    "title": "Title is required",
+    "quarter": "Quarter must not exceed 16 characters"
+  },
+  "path": "/objectives"
+}
+```
+
+== Business Rules
+
+=== OKR Best Practices
+
+1. **Key Result Limit**: Each objective can have maximum 5 key results
+2. **Check-in Frequency**: Only one check-in per day per key result
+3. **Progress Calculation**: Objective progress is calculated as average of all key result progress percentages
+4. **Status Updates**: Objective status is automatically updated based on progress and quarter timing
+
+=== Status Logic
+
+* `NOT_STARTED`: Default status for new objectives
+* `ON_TRACK`: Progress >= 70% or (30% <= progress < 70% and not near deadline)
+* `AT_RISK`: Progress < 30%
+* `BEHIND`: 30% <= progress < 70% and near quarter deadline
+* `CLOSED`: Manually closed objectives
+* `ABANDONED`: Manually abandoned objectives
+
+=== Validation Rules
+
+* Objective title: Required, max 255 characters
+* Objective description: Max 2000 characters
+* Key result title: Required, max 255 characters
+* Target value: Required, must be positive
+* Current value: Must be non-negative
+* Percent metrics: Target value cannot exceed 100%
+* Check-in value: Must be valid for the metric type
+
+== Rate Limiting
+
+API endpoints are rate-limited to prevent abuse:
+* Authentication endpoints: 5 requests per minute
+* Other endpoints: 100 requests per minute
+
+== CORS
+
+The API supports CORS for the frontend application running on `http://localhost:3000`.
+

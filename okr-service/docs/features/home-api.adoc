@@ -1,0 +1,228 @@
+= Home API Documentation
+
+== Overview
+
+The Home API provides endpoints for retrieving user-specific dashboard data including personal progress, objectives, and group information.
+
+== Authentication
+
+All endpoints require a valid JWT token in the Authorization header:
+```
+Authorization: Bearer <jwt_token>
+```
+
+== Endpoints
+
+=== GET /home/summary
+
+Retrieves home summary data including personal progress, metrics progress, and status distribution.
+
+==== Request
+
+[source,http]
+----
+GET /home/summary HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Accept: application/json
+----
+
+==== Response
+
+[source,json]
+----
+{
+  "personal_progress": 75,
+  "metrics_progress": 68,
+  "last_week_change": 5,
+  "status_distribution": {
+    "not_started": 2,
+    "at_risk": 1,
+    "behind": 0,
+    "on_track": 3,
+    "closed": 1,
+    "abandoned": 0
+  }
+}
+----
+
+==== Error Responses
+
+[source,http]
+----
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+
+{
+  "message": "User not authenticated"
+}
+----
+
+[source,http]
+----
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "message": "Internal server error"
+}
+----
+
+=== GET /home/personal-objectives
+
+Retrieves list of personal objectives for the authenticated user.
+
+==== Request
+
+[source,http]
+----
+GET /home/personal-objectives HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Accept: application/json
+----
+
+==== Response
+
+[source,json]
+----
+[
+  {
+    "id": "01HX123456789ABCDEFGHIJKLMN",
+    "title": "Increase customer satisfaction",
+    "progress": 80,
+    "status": "ON_TRACK",
+    "last_check_in": "2024-01-15T10:30:00Z",
+    "due_date": "2024-03-31",
+    "owner": "01HX987654321ZYXWVUTSRQPON"
+  },
+  {
+    "id": "01HX123456789ABCDEFGHIJKLMN",
+    "title": "Reduce customer churn",
+    "progress": 45,
+    "status": "AT_RISK",
+    "last_check_in": "2024-01-10T14:20:00Z",
+    "due_date": "2024-03-31",
+    "owner": "01HX987654321ZYXWVUTSRQPON"
+  }
+]
+----
+
+=== GET /home/groups
+
+Retrieves list of groups/teams that the user belongs to with their statistics.
+
+==== Request
+
+[source,http]
+----
+GET /home/groups HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Accept: application/json
+----
+
+==== Response
+
+[source,json]
+----
+[
+  {
+    "id": "01HX11111111111111111111111",
+    "name": "Engineering Team",
+    "objectives_count": 5,
+    "metrics_count": 12,
+    "avg_objectives_progress": 72,
+    "avg_metrics_progress": 68
+  },
+  {
+    "id": "01HX22222222222222222222222",
+    "name": "Product Team",
+    "objectives_count": 3,
+    "metrics_count": 8,
+    "avg_objectives_progress": 85,
+    "avg_metrics_progress": 78
+  }
+]
+----
+
+== Data Models
+
+=== HomeSummaryResponse
+
+[source,json]
+----
+{
+  "personal_progress": "integer - percentage (0-100)",
+  "metrics_progress": "integer - percentage (0-100)", 
+  "last_week_change": "integer - percentage change from last week",
+  "status_distribution": "StatusDistributionResponse"
+}
+----
+
+=== PersonalObjectiveResponse
+
+[source,json]
+----
+{
+  "id": "string - ULID",
+  "title": "string - objective title",
+  "progress": "integer - percentage (0-100)",
+  "status": "string - NOT_STARTED|AT_RISK|BEHIND|ON_TRACK|CLOSED|ABANDONED",
+  "last_check_in": "string - ISO 8601 datetime or null",
+  "due_date": "string - ISO 8601 date or null",
+  "owner": "string - user ID"
+}
+----
+
+=== GroupInfoResponse
+
+[source,json]
+----
+{
+  "id": "string - ULID",
+  "name": "string - team/group name",
+  "objectives_count": "integer - number of objectives",
+  "metrics_count": "integer - number of key results",
+  "avg_objectives_progress": "integer - average objectives progress (0-100)",
+  "avg_metrics_progress": "integer - average metrics progress (0-100)"
+}
+----
+
+=== StatusDistributionResponse
+
+[source,json]
+----
+{
+  "not_started": "integer - count",
+  "at_risk": "integer - count",
+  "behind": "integer - count", 
+  "on_track": "integer - count",
+  "closed": "integer - count",
+  "abandoned": "integer - count"
+}
+----
+
+== Error Codes
+
+|===
+|Code |Description |Example
+
+|401
+|Unauthorized - Invalid or missing JWT token
+|`{"message": "User not authenticated"}`
+
+|500
+|Internal Server Error - Database or system error
+|`{"message": "Internal server error"}`
+
+|===
+
+== Notes
+
+- All timestamps are in ISO 8601 format
+- Progress values are integers between 0-100
+- User ID is extracted from JWT token claims
+- Current implementation uses "Q1 2024" as default quarter
+- Team membership is determined by manager_id field (simplified implementation)
+

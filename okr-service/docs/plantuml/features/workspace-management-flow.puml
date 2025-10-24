@@ -1,0 +1,121 @@
+@startuml Workspace_Management_Flow
+title Workspace Management Flow
+
+actor User
+participant Frontend
+participant "WorkspaceController" as WC
+participant "WorkspaceService" as WS
+participant "WorkspaceRepository" as WR
+participant "UserRepository" as UR
+participant Database
+
+User -> Frontend: Access /workspaces page
+Frontend -> Frontend: Check authentication token
+Frontend -> WC: GET /workspaces
+WC -> WC: Extract userId from JWT token
+WC -> WS: getUserWorkspaces(userId)
+WS -> WR: findByOwnerIdAndStatus(userId, ACTIVE)
+WR -> Database: SELECT workspaces WHERE owner_id = ? AND status = 'ACTIVE'
+Database --> WR: workspaces list
+WR --> WS: workspaces data
+WS -> WS: Map to WorkspaceSummaryResponse
+WS --> WC: List<WorkspaceSummaryResponse>
+WC --> Frontend: JSON response
+Frontend -> Frontend: Render workspaces list
+
+User -> Frontend: Click "Create Workspace"
+Frontend -> Frontend: Show create workspace modal
+User -> Frontend: Fill workspace form (name, description)
+Frontend -> WC: POST /workspaces
+WC -> WC: Extract userId from JWT token
+WC -> WS: createWorkspace(request, userId)
+WS -> WR: findByNameAndOwnerId(name, userId)
+WR -> Database: SELECT workspaces WHERE name = ? AND owner_id = ?
+Database --> WR: existing workspace check
+WR --> WS: no existing workspace found
+WS -> WS: Create new Workspace entity
+WS -> WR: save(workspace)
+WR -> Database: INSERT INTO workspaces
+Database --> WR: workspace saved
+WR --> WS: saved workspace
+WS -> WS: Map to WorkspaceResponse
+WS --> WC: WorkspaceResponse
+WC --> Frontend: JSON response
+Frontend -> Frontend: Add workspace to list and close modal
+
+User -> Frontend: Click workspace card
+Frontend -> WC: GET /workspaces/{id}
+WC -> WC: Extract userId from JWT token
+WC -> WS: getWorkspace(workspaceId, userId)
+WS -> WR: findById(workspaceId)
+WR -> Database: SELECT workspaces WHERE id = ?
+Database --> WR: workspace data
+WR --> WS: workspace entity
+WS -> WS: Check user access (owner or member)
+WS -> WS: Map to WorkspaceResponse
+WS --> WC: WorkspaceResponse
+WC --> Frontend: JSON response
+Frontend -> Frontend: Navigate to workspace detail page
+
+User -> Frontend: Click "Edit Workspace"
+Frontend -> Frontend: Show edit modal with current data
+User -> Frontend: Update workspace form
+Frontend -> WC: PUT /workspaces/{id}
+WC -> WC: Extract userId from JWT token
+WC -> WS: updateWorkspace(workspaceId, request, userId)
+WS -> WR: findById(workspaceId)
+WR -> Database: SELECT workspaces WHERE id = ?
+Database --> WR: workspace data
+WR --> WS: workspace entity
+WS -> WS: Check user is owner
+WS -> WS: Update workspace fields
+WS -> WR: save(workspace)
+WR -> Database: UPDATE workspaces SET name=?, description=?, last_modified_date=?
+Database --> WR: workspace updated
+WR --> WS: updated workspace
+WS -> WS: Map to WorkspaceResponse
+WS --> WC: WorkspaceResponse
+WC --> Frontend: JSON response
+Frontend -> Frontend: Update workspace display and close modal
+
+User -> Frontend: Click "Invite User"
+Frontend -> Frontend: Show invite modal
+User -> Frontend: Enter user email and select role
+Frontend -> WC: POST /workspaces/{id}/invite
+WC -> WC: Extract userId from JWT token
+WC -> WS: inviteUser(workspaceId, request, userId)
+WS -> UR: findByEmail(userEmail)
+UR -> Database: SELECT users WHERE email = ?
+Database --> UR: user data
+UR --> WS: user entity
+WS -> WS: Create WorkspaceMember entity
+WS -> WR: save(workspaceMember)
+WR -> Database: INSERT INTO workspace_members
+Database --> WR: member saved
+WR --> WS: saved member
+WS --> WC: Success response
+WC --> Frontend: JSON response
+Frontend -> Frontend: Show success message and close modal
+
+User -> Frontend: Click "Delete Workspace"
+Frontend -> Frontend: Show confirmation dialog
+User -> Frontend: Confirm deletion
+Frontend -> WC: DELETE /workspaces/{id}
+WC -> WC: Extract userId from JWT token
+WC -> WS: deleteWorkspace(workspaceId, userId)
+WS -> WR: findById(workspaceId)
+WR -> Database: SELECT workspaces WHERE id = ?
+Database --> WR: workspace data
+WR --> WS: workspace entity
+WS -> WS: Check user is owner
+WS -> WS: Set status to ARCHIVED (soft delete)
+WS -> WR: save(workspace)
+WR -> Database: UPDATE workspaces SET status='ARCHIVED', last_modified_date=?
+Database --> WR: workspace archived
+WR --> WS: archived workspace
+WS --> WC: Success response
+WC --> Frontend: JSON response
+Frontend -> Frontend: Remove workspace from list
+
+@enduml
+

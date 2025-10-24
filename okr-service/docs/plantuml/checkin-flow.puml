@@ -1,0 +1,31 @@
+@startuml CheckIn_Flow
+title Check-in Flow
+
+actor User
+participant Frontend
+participant "CheckInController" as CIC
+participant "CheckInService" as CIS
+participant "KeyResultService" as KRS
+participant "ObjectiveService" as OS
+participant Database
+
+User -> Frontend: Submit Check-in
+Frontend -> CIC: POST /check-ins
+CIC -> CIS: create(keyResultId, checkIn)
+CIS -> Database: validate no duplicate check-in today
+Database --> CIS: validation passed
+CIS -> Database: save(checkIn)
+Database --> CIS: checkIn saved
+CIS -> KRS: update keyResult current_value
+KRS -> Database: save(keyResult)
+Database --> KRS: keyResult updated
+KRS -> OS: update parent objective progress
+OS -> Database: update objective progress and status
+Database --> OS: objective updated
+OS --> KRS: objective updated
+KRS --> CIS: keyResult updated
+CIS --> CIC: checkIn created
+CIC --> Frontend: checkIn response
+
+@enduml
+

@@ -1,0 +1,193 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-seed-data
+      author: assistant
+      changes:
+        # Insert roles
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0W" }
+              - column: { name: code, value: "ADMIN" }
+              - column: { name: name, value: "System Administrator" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0X" }
+              - column: { name: code, value: "MANAGER" }
+              - column: { name: name, value: "Team Manager" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: roles
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0Y" }
+              - column: { name: code, value: "MEMBER" }
+              - column: { name: name, value: "Team Member" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+
+        # Insert teams
+        - insert:
+            tableName: teams
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0Z" }
+              - column: { name: name, value: "Tech Team" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: teams
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1B" }
+              - column: { name: name, value: "Finance Team" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+
+        # Insert users
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1A" }
+              - column: { name: email, value: "phucmnp9@gmail.com" }
+              - column: { name: password_hash, value: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi" }
+              - column: { name: full_name, value: "Phuc Mai Nhan" }
+              - column: { name: status, value: "ACTIVE" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1C" }
+              - column: { name: email, value: "manager@example.com" }
+              - column: { name: password_hash, value: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi" }
+              - column: { name: full_name, value: "Finance Manager" }
+              - column: { name: status, value: "ACTIVE" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1D" }
+              - column: { name: email, value: "dev1@example.com" }
+              - column: { name: password_hash, value: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi" }
+              - column: { name: full_name, value: "Developer 1" }
+              - column: { name: status, value: "ACTIVE" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1E" }
+              - column: { name: email, value: "dev2@example.com" }
+              - column: { name: password_hash, value: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi" }
+              - column: { name: full_name, value: "Developer 2" }
+              - column: { name: status, value: "ACTIVE" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1F" }
+              - column: { name: email, value: "analyst@example.com" }
+              - column: { name: password_hash, value: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi" }
+              - column: { name: full_name, value: "Business Analyst" }
+              - column: { name: status, value: "ACTIVE" }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+
+        # Insert user roles
+        - insert:
+            tableName: user_roles
+            columns:
+              - column: { name: user_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1A" }
+              - column: { name: role_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0W" }
+        - insert:
+            tableName: user_roles
+            columns:
+              - column: { name: user_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1C" }
+              - column: { name: role_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0X" }
+        - insert:
+            tableName: user_roles
+            columns:
+              - column: { name: user_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1D" }
+              - column: { name: role_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0Y" }
+        - insert:
+            tableName: user_roles
+            columns:
+              - column: { name: user_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1E" }
+              - column: { name: role_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0Y" }
+        - insert:
+            tableName: user_roles
+            columns:
+              - column: { name: user_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1F" }
+              - column: { name: role_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0Y" }
+
+        # Insert objectives
+        - insert:
+            tableName: objectives
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1G" }
+              - column: { name: title, value: "Become the market leader in the AI calendar assistance category in 2025" }
+              - column: { name: description, value: "Lead the market in AI calendar solutions and establish our product as the go-to solution for calendar management" }
+              - column: { name: owner_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1A" }
+              - column: { name: team_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0Z" }
+              - column: { name: quarter, value: "2025-Q1" }
+              - column: { name: status, value: "ON_TRACK" }
+              - column: { name: progress, valueNumeric: 39.5 }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: objectives
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1H" }
+              - column: { name: title, value: "Elevate Product Excellence to Unprecedented Levels" }
+              - column: { name: description, value: "Improve product quality and user experience to achieve industry-leading standards" }
+              - column: { name: owner_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1A" }
+              - column: { name: team_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0Z" }
+              - column: { name: quarter, value: "2025-Q1" }
+              - column: { name: status, value: "ON_TRACK" }
+              - column: { name: progress, valueNumeric: 86.2 }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: objectives
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1I" }
+              - column: { name: title, value: "Improve Operational Efficiency and Scalability" }
+              - column: { name: description, value: "Optimize operations and scale systems to handle increased load" }
+              - column: { name: owner_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1D" }
+              - column: { name: team_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V0Z" }
+              - column: { name: quarter, value: "2025-Q1" }
+              - column: { name: status, value: "BEHIND" }
+              - column: { name: progress, valueNumeric: 12.8 }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: objectives
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1J" }
+              - column: { name: title, value: "Less than 4 production incidents a quarter per Team" }
+              - column: { name: description, value: "Maintain system stability and reduce production incidents" }
+              - column: { name: owner_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1C" }
+              - column: { name: team_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1B" }
+              - column: { name: quarter, value: "2025-Q1" }
+              - column: { name: status, value: "ON_TRACK" }
+              - column: { name: progress, valueNumeric: 50.0 }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+        - insert:
+            tableName: objectives
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1K" }
+              - column: { name: title, value: "Keep MRR over 100k USD" }
+              - column: { name: description, value: "Maintain monthly recurring revenue above 100k USD" }
+              - column: { name: owner_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1C" }
+              - column: { name: team_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1B" }
+              - column: { name: quarter, value: "2025-Q1" }
+              - column: { name: status, value: "ON_TRACK" }
+              - column: { name: progress, valueNumeric: 75.5 }
+              - column: { name: created_by, value: "system" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP" }
+

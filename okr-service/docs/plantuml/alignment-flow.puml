@@ -1,0 +1,30 @@
+@startuml Alignment_Flow
+title Objective Alignment Flow
+
+actor User
+participant Frontend
+participant "AlignmentController" as AC
+participant "AlignmentService" as AS
+participant Database
+
+User -> Frontend: Create Alignment
+Frontend -> AC: POST /alignments
+AC -> AS: align(parentObjectiveId, childObjectiveId)
+AS -> AS: validateAlignment()
+AS -> AS: check for circular dependency
+AS -> Database: save(alignment)
+Database --> AS: alignment saved
+AS --> AC: alignment created
+AC --> Frontend: alignment response
+
+User -> Frontend: View Alignment Tree
+Frontend -> AC: GET /alignments/tree?rootId=xxx
+AC -> AS: getAlignmentTree(rootObjectiveId)
+AS -> Database: find children alignments
+Database --> AS: alignments found
+AS -> AS: build tree recursively
+AS --> AC: alignment tree
+AC --> Frontend: tree response
+
+@enduml
+

@@ -1,0 +1,173 @@
+= Home (Trang chủ)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Trang Home là dashboard chính của Oboard, cung cấp cái nhìn tổng quan về tiến độ cá nhân và nhóm. Đây là điểm khởi đầu cho người dùng sau khi đăng nhập, hiển thị các thông tin quan trọng về objectives, progress tracking và các hoạt động gần đây.
+
+== Use Cases
+
+* **Tổng quan hàng ngày**: Người dùng kiểm tra tiến độ objectives của mình
+* **Theo dõi nhóm**: Xem tiến độ của các nhóm liên quan
+* **Check-in nhanh**: Cập nhật tiến độ objectives một cách nhanh chóng
+* **Phân tích hiệu suất**: Đánh giá performance qua các metrics và charts
+
+== Hành vi người dùng
+
+=== Xem tổng quan tiến độ
+
+1. Người dùng truy cập trang Home sau khi đăng nhập
+2. Hệ thống hiển thị:
+   - Tiến độ objectives cá nhân (29%)
+   - Tiến độ metrics (23%)
+   - Thay đổi so với tuần trước (+29%)
+   - Phân bố trạng thái objectives
+
+=== Theo dõi objectives cá nhân
+
+1. Xem danh sách objectives của bản thân
+2. Kiểm tra trạng thái từng objective:
+   - Not Started: 3
+   - At Risk: 0
+   - Behind: 1
+   - On Track: 4
+   - Closed: 0
+   - Abandoned: 0
+
+=== Quản lý nhóm
+
+1. Xem thông tin các nhóm thuộc về
+2. Theo dõi tiến độ trung bình của nhóm
+3. Kiểm tra số lượng objectives và metrics của nhóm
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Truy cập trang Home
+
+Sau khi đăng nhập thành công, người dùng được chuyển hướng đến trang Home tại URL: `#/workspaces/{workspaceId}`
+
+=== Bước 2: Xem tổng quan metrics
+
+Trang Home hiển thị các thông tin chính:
+
+* **Objectives' progress**: 29%
+* **Metrics progress**: 23%
+* **Last week change**: +29%
+
+=== Bước 3: Kiểm tra objectives cá nhân
+
+Danh sách objectives cá nhân bao gồm:
+
+* Tên objective
+* Tiến độ hiện tại
+* Trạng thái (On Track, Behind, Not Started)
+* Thông tin check-in
+* Ngày hết hạn
+
+=== Bước 4: Xem thông tin nhóm
+
+Phần "Phuc Mai Nhan's groups" hiển thị:
+
+* Tên nhóm (tech)
+* Số lượng objectives (4 Objectives)
+* Số lượng metrics (4 Metrics)
+* Tiến độ trung bình (35% cho objectives, 45% cho metrics)
+
+== Ảnh minh họa
+
+image::home-page.png[Trang chủ Oboard với tổng quan tiến độ, width=800]
+
+*Hình 1: Giao diện trang chủ hiển thị tổng quan tiến độ cá nhân và nhóm*
+
+== Các thành phần chính
+
+=== Progress Overview
+
+* **Objectives' progress**: Tiến độ tổng thể của các objectives
+* **Metrics progress**: Tiến độ của các metrics
+* **Last week change**: Thay đổi so với tuần trước
+
+=== Status Distribution
+
+Hiển thị phân bố trạng thái objectives:
+
+* **Not Started**: Chưa bắt đầu
+* **At Risk**: Có nguy cơ
+* **Behind**: Chậm tiến độ
+* **On Track**: Đúng tiến độ
+* **Closed**: Đã hoàn thành
+* **Abandoned**: Đã hủy bỏ
+
+=== Personal Objectives
+
+Danh sách objectives cá nhân với thông tin:
+
+* Mã objective (TEC-1, TEC-2, etc.)
+* Tên objective
+* Tiến độ hiện tại
+* Trạng thái
+* Thông tin check-in
+* Ngày hết hạn
+
+=== Group Information
+
+Thông tin về các nhóm:
+
+* Tên nhóm
+* Số lượng objectives
+* Số lượng metrics
+* Tiến độ trung bình
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập vào hệ thống
+* Có quyền truy cập workspace
+* Kết nối internet ổn định
+
+=== Yêu cầu dữ liệu
+
+* Workspace đã được thiết lập
+* Objectives đã được tạo
+* User đã được assign vào objectives
+* Groups đã được cấu hình
+
+== Best Practices
+
+=== Sử dụng hiệu quả
+
+* Kiểm tra trang Home hàng ngày để theo dõi tiến độ
+* Sử dụng check-in nhanh để cập nhật tiến độ thường xuyên
+* Chú ý đến các objectives có trạng thái "Behind" hoặc "At Risk"
+* Theo dõi thay đổi so với tuần trước để đánh giá hiệu suất
+
+=== Quản lý thời gian
+
+* Dành 5-10 phút mỗi ngày để review trang Home
+* Cập nhật tiến độ objectives ít nhất 2 lần/tuần
+* Kiểm tra thông báo và reminders
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Không hiển thị objectives**: Kiểm tra xem user có được assign vào objectives không
+* **Tiến độ không cập nhật**: Kiểm tra kết nối internet và thử refresh trang
+* **Thông tin nhóm không hiển thị**: Kiểm tra xem user có thuộc nhóm nào không
+
+=== Giải pháp
+
+1. **Refresh trang**: Nhấn F5 hoặc Ctrl+R để tải lại trang
+2. **Kiểm tra quyền**: Liên hệ admin để kiểm tra quyền truy cập
+3. **Clear cache**: Xóa cache trình duyệt nếu cần thiết
+
+== Liên kết liên quan
+
+* <<objectives-management,Quản lý Objectives>>
+* <<check-ins,Check-ins>>
+* <<dashboard,Dashboard>>
+* <<personal-settings,Cài đặt cá nhân>>

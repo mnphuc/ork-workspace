@@ -1,0 +1,71 @@
+@startuml Home_Flow
+title Home API Flow
+
+actor User
+participant Frontend
+participant "HomeController" as HC
+participant "HomeService" as HS
+participant "ObjectiveRepository" as OR
+participant "KeyResultRepository" as KR
+participant "CheckInRepository" as CR
+participant "TeamRepository" as TR
+participant Database
+
+User -> Frontend: Access /home page
+Frontend -> Frontend: Check authentication token
+Frontend -> HC: GET /home/summary
+HC -> HC: Extract userId from JWT token
+HC -> HS: getHomeSummary(userId)
+HS -> OR: findByOwnerIdAndQuarter(userId, quarter)
+OR -> Database: SELECT objectives WHERE owner_id = ?
+Database --> OR: objectives list
+OR --> HS: objectives data
+HS -> KR: findByObjectiveId(objectiveId) for each objective
+KR -> Database: SELECT key_results WHERE objective_id = ?
+Database --> KR: key results list
+KR --> HS: key results data
+HS -> HS: Calculate personal_progress (avg objectives)
+HS -> HS: Calculate metrics_progress (avg key results)
+HS -> HS: Calculate status_distribution
+HS --> HC: HomeSummaryResponse
+HC --> Frontend: JSON response
+
+Frontend -> HC: GET /home/personal-objectives
+HC -> HC: Extract userId from JWT token
+HC -> HS: getPersonalObjectives(userId)
+HS -> OR: findByOwnerIdAndQuarter(userId, quarter)
+OR -> Database: SELECT objectives WHERE owner_id = ?
+Database --> OR: objectives list
+OR --> HS: objectives data
+HS -> CR: findByKeyResultIdOrderByCreatedDateDesc() for each objective
+CR -> Database: SELECT check_ins WHERE key_result_id = ? ORDER BY created_date DESC
+Database --> CR: check-ins list
+CR --> HS: check-ins data
+HS -> HS: Map to PersonalObjectiveResponse
+HS --> HC: List<PersonalObjectiveResponse>
+HC --> Frontend: JSON response
+
+Frontend -> HC: GET /home/groups
+HC -> HC: Extract userId from JWT token
+HC -> HS: getUserGroups(userId)
+HS -> TR: findByManagerId(userId)
+TR -> Database: SELECT teams WHERE manager_id = ?
+Database --> TR: teams list
+TR --> HS: teams data
+HS -> OR: findByTeamIdAndQuarter(teamId, quarter) for each team
+OR -> Database: SELECT objectives WHERE team_id = ? AND quarter = ?
+Database --> OR: team objectives
+OR --> HS: team objectives data
+HS -> KR: findByObjectiveId(objectiveId) for each team objective
+KR -> Database: SELECT key_results WHERE objective_id = ?
+Database --> KR: team key results
+KR --> HS: team key results data
+HS -> HS: Calculate objectives_count, metrics_count, avg progress
+HS -> HS: Map to GroupInfoResponse
+HS --> HC: List<GroupInfoResponse>
+HC --> Frontend: JSON response
+
+Frontend -> Frontend: Render home page with data
+
+@enduml
+

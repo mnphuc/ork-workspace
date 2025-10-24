@@ -1,0 +1,240 @@
+= Export and Import (Xuất và Nhập dữ liệu)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Chức năng Export and Import cho phép người dùng xuất dữ liệu từ Oboard ra các định dạng khác nhau và nhập dữ liệu từ bên ngoài vào hệ thống. Đây là công cụ quan trọng để backup dữ liệu, tạo báo cáo và tích hợp với các hệ thống khác.
+
+== Use Cases
+
+* **Backup dữ liệu**: Xuất dữ liệu để backup
+* **Tạo báo cáo**: Xuất dữ liệu để tạo báo cáo ngoài hệ thống
+* **Tích hợp hệ thống**: Nhập dữ liệu từ hệ thống khác
+* **Migration**: Chuyển dữ liệu giữa các workspace
+* **Bulk operations**: Thực hiện các thao tác hàng loạt
+* **Data analysis**: Phân tích dữ liệu bằng công cụ bên ngoài
+
+== Hành vi người dùng
+
+=== Xuất dữ liệu Excel
+
+1. Truy cập trang Objectives
+2. Click nút "Download .xlsx"
+3. Chọn dữ liệu cần xuất:
+   - All objectives
+   - Filtered objectives
+   - Specific groups
+4. Download file Excel
+
+=== Xuất Roadmap
+
+1. Truy cập Roadmap view
+2. Click nút "Export"
+3. Chọn định dạng xuất:
+   - PDF
+   - PNG
+   - Excel
+4. Download file
+
+=== Bulk Edit
+
+1. Chọn multiple objectives
+2. Click nút "Bulk edit"
+3. Thực hiện thay đổi hàng loạt:
+   - Change status
+   - Update progress
+   - Assign owners
+   - Set due dates
+4. Apply changes
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Xuất dữ liệu Excel
+
+**Excel Export Process**:
+1. Navigate đến trang Objectives
+2. Apply filters nếu cần (interval, owner, groups)
+3. Click nút "Download .xlsx"
+4. Hệ thống tạo file Excel với:
+   - Objectives data
+   - Progress information
+   - Status details
+   - Owner information
+   - Group assignments
+   - Due dates
+5. Download file về máy
+
+**Excel File Structure**:
+- **Sheet 1**: Objectives overview
+- **Sheet 2**: Progress details
+- **Sheet 3**: Status history
+- **Sheet 4**: Group information
+
+=== Bước 2: Xuất Roadmap
+
+**Roadmap Export Options**:
+1. **PDF Export**: Xuất roadmap dạng PDF
+2. **PNG Export**: Xuất roadmap dạng hình ảnh
+3. **Excel Export**: Xuất roadmap dạng Excel
+
+**Export Process**:
+1. Navigate đến Roadmap view
+2. Set timeline và filters
+3. Click nút "Export"
+4. Chọn định dạng xuất
+5. Download file
+
+=== Bước 3: Bulk Edit Operations
+
+**Bulk Edit Features**:
+1. **Select Multiple Items**: Chọn nhiều objectives
+2. **Bulk Status Change**: Thay đổi status hàng loạt
+3. **Bulk Progress Update**: Cập nhật progress hàng loạt
+4. **Bulk Owner Assignment**: Gán owner hàng loạt
+5. **Bulk Date Changes**: Thay đổi dates hàng loạt
+
+**Bulk Edit Process**:
+1. Select objectives cần edit
+2. Click "Bulk edit" button
+3. Choose operation type
+4. Set new values
+5. Preview changes
+6. Apply changes
+
+=== Bước 4: Import dữ liệu
+
+**Import Formats**:
+- **Excel files**: .xlsx, .xls
+- **CSV files**: .csv
+- **JSON files**: .json
+
+**Import Process**:
+1. Prepare data file
+2. Navigate đến import section
+3. Upload file
+4. Map fields
+5. Preview import
+6. Execute import
+
+== Các loại Export
+
+=== Data Export
+
+* **Objectives Export**: Xuất objectives data
+* **Progress Export**: Xuất progress data
+* **Users Export**: Xuất user data
+* **Groups Export**: Xuất group data
+* **Check-ins Export**: Xuất check-ins data
+
+=== Report Export
+
+* **Dashboard Export**: Xuất dashboard data
+* **Performance Export**: Xuất performance data
+* **Analytics Export**: Xuất analytics data
+* **Custom Reports**: Xuất báo cáo tùy chỉnh
+
+=== Visual Export
+
+* **Roadmap Export**: Xuất roadmap
+* **Charts Export**: Xuất charts
+* **Diagrams Export**: Xuất diagrams
+* **Screenshots Export**: Xuất screenshots
+
+== Các loại Import
+
+=== Data Import
+
+* **Objectives Import**: Nhập objectives
+* **Users Import**: Nhập users
+* **Groups Import**: Nhập groups
+* **Progress Import**: Nhập progress data
+
+=== System Import
+
+* **Workspace Import**: Nhập workspace
+* **Settings Import**: Nhập settings
+* **Templates Import**: Nhập templates
+* **Configurations Import**: Nhập configurations
+
+== File Formats
+
+=== Excel Formats
+
+* **.xlsx**: Excel 2007+
+* **.xls**: Excel 97-2003
+* **.csv**: Comma-separated values
+* **.tsv**: Tab-separated values
+
+=== Other Formats
+
+* **.pdf**: PDF documents
+* **.png**: PNG images
+* **.jpg**: JPEG images
+* **.json**: JSON data
+* **.xml**: XML data
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập vào hệ thống
+* Có quyền export/import data
+* Workspace đã được thiết lập
+* Dữ liệu đã được tạo
+
+=== Yêu cầu dữ liệu
+
+* Valid data structure
+* Proper permissions
+* Sufficient storage space
+* Network connectivity
+
+== Best Practices
+
+=== Export Best Practices
+
+* **Regular Backups**: Backup dữ liệu định kỳ
+* **Selective Export**: Chỉ export dữ liệu cần thiết
+* **Format Selection**: Chọn format phù hợp
+* **Data Validation**: Kiểm tra dữ liệu trước khi export
+
+=== Import Best Practices
+
+* **Data Preparation**: Chuẩn bị dữ liệu trước khi import
+* **Field Mapping**: Map fields chính xác
+* **Data Validation**: Validate dữ liệu trước khi import
+* **Backup Before Import**: Backup trước khi import
+
+=== Bulk Operations
+
+* **Test First**: Test với dữ liệu nhỏ trước
+* **Batch Processing**: Xử lý theo batch
+* **Progress Monitoring**: Monitor tiến độ
+* **Error Handling**: Xử lý lỗi phù hợp
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Export fails**: Kiểm tra quyền và dữ liệu
+* **Import errors**: Kiểm tra format và mapping
+* **File too large**: Chia nhỏ file hoặc tăng limit
+* **Format not supported**: Kiểm tra format được hỗ trợ
+
+=== Giải pháp
+
+1. **Check permissions**: Kiểm tra quyền export/import
+2. **Validate data**: Kiểm tra dữ liệu
+3. **Check file size**: Kiểm tra kích thước file
+4. **Contact support**: Liên hệ hỗ trợ nếu cần
+
+== Liên kết liên quan
+
+* <<objectives-management,Quản lý Objectives>>
+* <<dashboard,Dashboard>>
+* <<filters-search,Lọc và Tìm kiếm>>
+* <<collaboration,Tính năng Cộng tác>>
+* <<workspace-settings,Cài đặt Workspace>>

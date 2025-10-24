@@ -1,0 +1,220 @@
+= Components & Strategy (Thành phần Chiến lược)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Chức năng Components & Strategy cho phép quản trị viên định nghĩa và quản lý các thành phần chiến lược trong hệ thống Oboard. Đây là nơi thiết lập các OKR levels, metrics types, và các components tùy chỉnh để phù hợp với cấu trúc tổ chức.
+
+== Use Cases
+
+* **Định nghĩa OKR levels**: Thiết lập các cấp độ objectives (Company, Department, Team)
+* **Tạo custom components**: Tạo các thành phần tùy chỉnh
+* **Quản lý metrics types**: Định nghĩa các loại metrics
+* **Cấu hình strategy framework**: Thiết lập framework chiến lược
+* **Tùy chỉnh theo nhu cầu**: Điều chỉnh theo đặc thù tổ chức
+
+== Hành vi người dùng
+
+=== Tạo Component mới
+
+1. Truy cập trang Components & Strategy
+2. Click nút "Create component"
+3. Chọn loại component:
+   - Objective type
+   - Metric type
+4. Nhập thông tin component
+5. Cấu hình settings
+6. Save component
+
+=== Quản lý Components hiện có
+
+1. Xem danh sách components
+2. Chỉnh sửa component
+3. Xóa component (nếu không sử dụng)
+4. Cấu hình permissions
+
+=== Cấu hình Strategy Framework
+
+1. Thiết lập OKR levels
+2. Định nghĩa metrics types
+3. Cấu hình relationships
+4. Set up workflows
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Truy cập Components & Strategy
+
+URL: `#/workspaces/settings/components`
+
+Trang hiển thị:
+- **Strategy components**: Các thành phần chiến lược
+- **Create component button**: Tạo component mới
+- **Components list**: Danh sách components
+
+=== Bước 2: Xem Components hiện có
+
+**Current Components**:
+- **Company (C)**: Company level objectives
+- **Department (Dp)**: Department level objectives  
+- **Team (T)**: Team level objectives
+- **KPI**: Key Performance Indicators
+- **Key Result (KR)**: Key Results
+
+**Component Information**:
+- **Name**: Tên component
+- **Type**: Loại (Objective/Metric)
+- **Workspaces**: Workspace sử dụng
+- **Usage**: Mức độ sử dụng
+
+=== Bước 3: Tạo Component mới
+
+**Create Component Process**:
+1. Click "Create component" button
+2. Choose component type:
+   - **Objective**: Mục tiêu
+   - **Metric**: Chỉ số đo lường
+3. Fill component details:
+   - **Name**: Tên component
+   - **Description**: Mô tả
+   - **Type**: Objective/Metric
+   - **Icon**: Biểu tượng
+4. Configure settings
+5. Save component
+
+=== Bước 4: Quản lý Components
+
+**Component Management**:
+1. **Edit Component**: Chỉnh sửa thông tin
+2. **Delete Component**: Xóa component
+3. **Configure Permissions**: Thiết lập quyền
+4. **Usage Analytics**: Phân tích sử dụng
+
+**Component Settings**:
+- **Visibility**: Hiển thị/ẩn
+- **Permissions**: Quyền truy cập
+- **Workflow**: Quy trình
+- **Notifications**: Thông báo
+
+== Ảnh minh họa
+
+image::settings-components.png[Trang Components & Strategy với danh sách components, width=800]
+
+*Hình 1: Giao diện Components & Strategy hiển thị các thành phần chiến lược*
+
+== Các loại Components
+
+=== Objective Components
+
+* **Company (C)**: Mục tiêu cấp công ty
+* **Department (Dp)**: Mục tiêu cấp phòng ban
+* **Team (T)**: Mục tiêu cấp nhóm
+* **Individual (I)**: Mục tiêu cá nhân
+* **Custom Objective**: Mục tiêu tùy chỉnh
+
+=== Metric Components
+
+* **KPI**: Chỉ số hiệu suất
+* **Key Result (KR)**: Kết quả then chốt
+* **Initiative (In)**: Sáng kiến
+* **Custom Metric**: Chỉ số tùy chỉnh
+
+=== Recommended Components
+
+* **Individual**: Mục tiêu cá nhân
+* **Initiative**: Sáng kiến
+* **Custom Objective**: Mục tiêu tùy chỉnh
+* **Custom Metric**: Chỉ số tùy chỉnh
+
+== Strategy Framework
+
+=== OKR Framework
+
+* **Objectives**: Mục tiêu chiến lược
+* **Key Results**: Kết quả then chốt
+* **Alignment**: Liên kết giữa các cấp
+* **Tracking**: Theo dõi tiến độ
+
+=== Component Hierarchy
+
+```
+Company Objectives
+├── Department Objectives
+│   ├── Team Objectives
+│   │   ├── Individual Objectives
+│   │   └── Key Results
+│   └── Key Results
+└── Key Results
+```
+
+=== Metrics Framework
+
+* **Leading Metrics**: Chỉ số dẫn đầu
+* **Lagging Metrics**: Chỉ số trễ
+* **Input Metrics**: Chỉ số đầu vào
+* **Output Metrics**: Chỉ số đầu ra
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập với quyền admin
+* Có quyền quản lý components
+* Workspace đã được thiết lập
+* Strategy framework đã được định nghĩa
+
+=== Yêu cầu dữ liệu
+
+* Valid component definitions
+* Proper type assignments
+* Workspace configuration
+* Permission matrix
+
+== Best Practices
+
+=== Component Design
+
+* **Clear Naming**: Đặt tên rõ ràng
+* **Logical Structure**: Cấu trúc logic
+* **Consistent Types**: Loại nhất quán
+* **Documentation**: Ghi lại chi tiết
+
+=== Strategy Alignment
+
+* **Top-down Approach**: Tiếp cận từ trên xuống
+* **Clear Hierarchy**: Cấu trúc rõ ràng
+* **Regular Reviews**: Review định kỳ
+* **Flexible Framework**: Framework linh hoạt
+
+=== Component Management
+
+* **Regular Audits**: Audit định kỳ
+* **Usage Monitoring**: Theo dõi sử dụng
+* **Performance Tracking**: Theo dõi hiệu suất
+* **Continuous Improvement**: Cải tiến liên tục
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Không thể tạo component**: Kiểm tra quyền và giới hạn
+* **Component không hiển thị**: Kiểm tra visibility settings
+* **Type assignment lỗi**: Kiểm tra cấu hình type
+* **Permissions không hoạt động**: Kiểm tra role assignments
+
+=== Giải pháp
+
+1. **Check permissions**: Kiểm tra quyền admin
+2. **Validate configuration**: Kiểm tra cấu hình
+3. **Review assignments**: Review gán quyền
+4. **Contact support**: Liên hệ hỗ trợ nếu cần
+
+== Liên kết liên quan
+
+* <<objectives-management,Quản lý Objectives>>
+* <<workspace-settings,Cài đặt Workspace>>
+* <<groups-users-management,Quản lý Nhóm và Người dùng>>
+* <<dashboard,Dashboard>>
+* <<filters-search,Lọc và Tìm kiếm>>

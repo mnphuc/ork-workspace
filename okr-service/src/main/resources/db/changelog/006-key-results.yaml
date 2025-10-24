@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-key-results
+      author: assistant
+      changes:
+        - createTable:
+            tableName: key_results
+            columns:
+              - column: { name: id, type: varchar(26), constraints: { primaryKey: true, nullable: false } }
+              - column: { name: objective_id, type: varchar(26), constraints: { nullable: false } }
+              - column: { name: title, type: varchar(255), constraints: { nullable: false } }
+              - column: { name: metric_type, type: varchar(32), constraints: { nullable: false } }
+              - column: { name: unit, type: varchar(32) }
+              - column: { name: target_value, type: "numeric(19,2)", constraints: { nullable: false } }
+              - column: { name: current_value, type: "numeric(19,2)", defaultValueNumeric: 0 }
+              - column: { name: created_by, type: varchar(64) }
+              - column: { name: created_date, type: timestamp, defaultValueComputed: CURRENT_TIMESTAMP }
+              - column: { name: last_modified_by, type: varchar(64) }
+              - column: { name: last_modified_date, type: timestamp }
+        - addForeignKeyConstraint:
+            constraintName: fk_key_results_objective
+            baseTableName: key_results
+            baseColumnNames: objective_id
+            referencedTableName: objectives
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - createIndex:
+            tableName: key_results
+            indexName: idx_key_results_objective
+            columns:
+              - column: { name: objective_id }
+
+

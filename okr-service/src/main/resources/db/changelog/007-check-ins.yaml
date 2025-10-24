@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-check-ins
+      author: assistant
+      changes:
+        - createTable:
+            tableName: check_ins
+            columns:
+              - column: { name: id, type: varchar(26), constraints: { primaryKey: true, nullable: false } }
+              - column: { name: key_result_id, type: varchar(26), constraints: { nullable: false } }
+              - column: { name: value, type: "numeric(19,2)", constraints: { nullable: false } }
+              - column: { name: note, type: varchar(1000) }
+              - column: { name: created_by, type: varchar(64) }
+              - column: { name: created_date, type: timestamp, defaultValueComputed: CURRENT_TIMESTAMP }
+              - column: { name: last_modified_by, type: varchar(64) }
+              - column: { name: last_modified_date, type: timestamp }
+        - addForeignKeyConstraint:
+            constraintName: fk_checkins_kr
+            baseTableName: check_ins
+            baseColumnNames: key_result_id
+            referencedTableName: key_results
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - createIndex:
+            tableName: check_ins
+            indexName: idx_checkins_key_result
+            columns:
+              - column: { name: key_result_id }
+
+

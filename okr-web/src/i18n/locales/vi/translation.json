@@ -1,0 +1,218 @@
+{
+  "common": {
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Sửa",
+    "create": "Tạo",
+    "update": "Cập nhật",
+    "submit": "Gửi",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "previous": "Trước",
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "warning": "Cảnh báo",
+    "info": "Thông tin",
+    "confirm": "Xác nhận",
+    "yes": "Có",
+    "no": "Không",
+    "close": "Đóng",
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "clear": "Xóa",
+    "reset": "Đặt lại",
+    "refresh": "Làm mới",
+    "download": "Tải xuống",
+    "upload": "Tải lên",
+    "view": "Xem",
+    "details": "Chi tiết",
+    "actions": "Hành động",
+    "status": "Trạng thái",
+    "date": "Ngày",
+    "time": "Thời gian",
+    "name": "Tên",
+    "description": "Mô tả",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "phone": "Số điện thoại",
+    "address": "Địa chỉ"
+  },
+  "navigation": {
+    "home": "Trang chủ",
+    "dashboard": "Bảng điều khiển",
+    "objectives": "Mục tiêu",
+    "roadmap": "Lộ trình",
+    "checkIns": "Check-in",
+    "alignment": "Liên kết",
+    "settings": "Cài đặt",
+    "profile": "Hồ sơ",
+    "logout": "Đăng xuất",
+    "login": "Đăng nhập",
+    "register": "Đăng ký"
+  },
+  "auth": {
+    "login": {
+      "title": "Đăng nhập",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "rememberMe": "Ghi nhớ đăng nhập",
+      "forgotPassword": "Quên mật khẩu?",
+      "loginButton": "Đăng nhập",
+      "noAccount": "Chưa có tài khoản?",
+      "signUp": "Đăng ký ngay"
+    },
+    "register": {
+      "title": "Đăng ký",
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "registerButton": "Đăng ký",
+      "hasAccount": "Đã có tài khoản?",
+      "signIn": "Đăng nhập ngay"
+    },
+    "messages": {
+      "loginSuccess": "Đăng nhập thành công",
+      "loginFailed": "Đăng nhập thất bại",
+      "registerSuccess": "Đăng ký thành công",
+      "registerFailed": "Đăng ký thất bại",
+      "logoutSuccess": "Đăng xuất thành công",
+      "invalidCredentials": "Thông tin đăng nhập không hợp lệ",
+      "emailRequired": "Email là bắt buộc",
+      "passwordRequired": "Mật khẩu là bắt buộc",
+      "passwordMismatch": "Mật khẩu không khớp"
+    }
+  },
+  "okr": {
+    "objective": {
+      "title": "Mục tiêu",
+      "create": "Tạo mục tiêu",
+      "edit": "Sửa mục tiêu",
+      "delete": "Xóa mục tiêu",
+      "titleLabel": "Tiêu đề",
+      "descriptionLabel": "Mô tả",
+      "quarterLabel": "Quý",
+      "statusLabel": "Trạng thái",
+      "ownerLabel": "Chủ sở hữu",
+      "progressLabel": "Tiến độ",
+      "groupsLabel": "Nhóm",
+      "labelsLabel": "Nhãn",
+      "stakeholdersLabel": "Các bên liên quan",
+      "startDateLabel": "Ngày bắt đầu",
+      "endDateLabel": "Ngày kết thúc",
+      "types": {
+        "company": "Công ty",
+        "department": "Phòng ban",
+        "team": "Nhóm",
+        "kpi": "KPI"
+      },
+      "statuses": {
+        "draft": "Bản nháp",
+        "active": "Hoạt động",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã hủy"
+      }
+    },
+    "keyResult": {
+      "title": "Kết quả then chốt",
+      "create": "Tạo kết quả then chốt",
+      "edit": "Sửa kết quả then chốt",
+      "delete": "Xóa kết quả then chốt",
+      "titleLabel": "Tiêu đề",
+      "descriptionLabel": "Mô tả",
+      "typeLabel": "Loại",
+      "targetLabel": "Mục tiêu",
+      "currentLabel": "Hiện tại",
+      "unitLabel": "Đơn vị",
+      "types": {
+        "number": "Số",
+        "percentage": "Phần trăm",
+        "boolean": "Có/Không",
+        "currency": "Tiền tệ"
+      }
+    },
+    "checkIn": {
+      "title": "Check-in",
+      "create": "Tạo check-in",
+      "edit": "Sửa check-in",
+      "delete": "Xóa check-in",
+      "commentLabel": "Bình luận",
+      "progressLabel": "Tiến độ",
+      "dateLabel": "Ngày",
+      "history": "Lịch sử check-in"
+    },
+    "alignment": {
+      "title": "Liên kết mục tiêu",
+      "create": "Tạo liên kết",
+      "delete": "Xóa liên kết",
+      "parentLabel": "Mục tiêu cha",
+      "childLabel": "Mục tiêu con",
+      "typeLabel": "Loại liên kết",
+      "types": {
+        "supports": "Hỗ trợ",
+        "contributes": "Đóng góp",
+        "blocks": "Chặn"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Bảng điều khiển",
+    "summary": "Tóm tắt",
+    "objectives": "Mục tiêu",
+    "keyResults": "Kết quả then chốt",
+    "checkIns": "Check-in",
+    "progress": "Tiến độ",
+    "filters": {
+      "quarter": "Quý",
+      "team": "Nhóm",
+      "status": "Trạng thái",
+      "owner": "Chủ sở hữu"
+    },
+    "stats": {
+      "totalObjectives": "Tổng mục tiêu",
+      "completedObjectives": "Mục tiêu hoàn thành",
+      "inProgressObjectives": "Mục tiêu đang thực hiện",
+      "averageProgress": "Tiến độ trung bình"
+    }
+  },
+  "validation": {
+    "required": "Trường này là bắt buộc",
+    "email": "Email không hợp lệ",
+    "minLength": "Tối thiểu {{count}} ký tự",
+    "maxLength": "Tối đa {{count}} ký tự",
+    "min": "Giá trị tối thiểu là {{count}}",
+    "max": "Giá trị tối đa là {{count}}",
+    "pattern": "Định dạng không hợp lệ",
+    "unique": "Giá trị đã tồn tại",
+    "passwordMismatch": "Mật khẩu không khớp",
+    "invalidDate": "Ngày không hợp lệ",
+    "invalidNumber": "Số không hợp lệ"
+  },
+  "messages": {
+    "success": {
+      "created": "Tạo thành công",
+      "updated": "Cập nhật thành công",
+      "deleted": "Xóa thành công",
+      "saved": "Lưu thành công"
+    },
+    "error": {
+      "general": "Đã xảy ra lỗi",
+      "network": "Lỗi kết nối mạng",
+      "unauthorized": "Không có quyền truy cập",
+      "forbidden": "Bị cấm truy cập",
+      "notFound": "Không tìm thấy",
+      "serverError": "Lỗi máy chủ",
+      "validation": "Lỗi xác thực",
+      "saveFailed": "Lưu thất bại",
+      "deleteFailed": "Xóa thất bại",
+      "loadFailed": "Tải thất bại"
+    }
+  },
+  "language": {
+    "vi": "Tiếng Việt",
+    "en": "English",
+    "select": "Chọn ngôn ngữ"
+  }
+}

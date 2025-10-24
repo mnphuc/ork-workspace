@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Brand palette inspired by oBoard */
+  --brand-primary: #2563eb; /* blue-600 */
+  --brand-primary-50: #eff6ff; /* blue-50 */
+  --brand-primary-100: #dbeafe; /* blue-100 */
+  --brand-accent: #22c55e; /* green-500 */
+  --brand-warning: #f59e0b; /* amber-500 */
+  --brand-danger: #ef4444; /* red-500 */
+  --brand-muted: #6b7280; /* gray-500 */
+  --brand-border: #e5e7eb; /* gray-200 */
+  --brand-card: #ffffff;
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Utilities */
+.btn-primary { 
+  background-color: var(--brand-primary);
+  color: #fff; 
+  border-radius: 0.5rem; 
+}
+.btn-primary:hover { background-color: #1d4ed8; }
+
+.badge-success { background-color: #dcfce7; color: #166534; }
+.badge-warning { background-color: #fef9c3; color: #854d0e; }
+.badge-danger  { background-color: #fee2e2; color: #991b1b; }
+.badge-info    { background-color: var(--brand-primary-50); color: #1e40af; }
+
+.card { background: var(--brand-card); border: 1px solid var(--brand-border); border-radius: 1rem; }
+
+.sidebar-active { background: #e0ecff; color: #153e75; font-weight: 600; }

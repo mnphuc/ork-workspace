@@ -1,0 +1,238 @@
+= Collaboration Features (Tính năng Cộng tác)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Chức năng Collaboration trong Oboard cho phép người dùng làm việc cùng nhau một cách hiệu quả thông qua việc chia sẻ objectives, mời người dùng, quản lý nhóm và tương tác thông qua comments và mentions. Đây là nền tảng để xây dựng văn hóa cộng tác trong tổ chức.
+
+== Use Cases
+
+* **Mời người dùng mới**: Thêm thành viên mới vào workspace
+* **Chia sẻ objectives**: Chia sẻ objectives với stakeholders
+* **Quản lý nhóm**: Tạo và quản lý các nhóm làm việc
+* **Tương tác thông qua comments**: Thảo luận về objectives và progress
+* **Mentions và notifications**: Thông báo và tag người dùng
+* **Stakeholder management**: Quản lý các bên liên quan
+
+== Hành vi người dùng
+
+=== Mời người dùng mới
+
+1. Click nút "Invite user" trên sidebar
+2. Nhập email của người cần mời
+3. Chọn role và permissions
+4. Gửi lời mời
+5. Người được mời nhận email invitation
+
+=== Chia sẻ Objectives
+
+1. Chọn objective cần chia sẻ
+2. Click nút "Share"
+3. Chọn phương thức chia sẻ:
+   - Link sharing
+   - Email sharing
+   - Workspace sharing
+4. Set permissions (view, edit, comment)
+5. Gửi share link
+
+=== Quản lý Comments
+
+1. Click vào objective để xem comments
+2. Nhập comment trong textbox
+3. Sử dụng @mention để tag người khác
+4. Submit comment
+5. Reply to existing comments
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Mời người dùng
+
+**Invite User Process**:
+1. Click nút "Invite user" (có icon user)
+2. Modal invitation mở ra
+3. Nhập thông tin:
+   - Email address
+   - Full name
+   - Role (Admin, User, Viewer)
+   - Groups assignment
+4. Gửi invitation
+5. Người được mời nhận email với link đăng ký
+
+**User Onboarding**:
+1. Người được mời click link trong email
+2. Tạo tài khoản hoặc đăng nhập
+3. Accept invitation
+4. Được thêm vào workspace với permissions đã set
+
+=== Bước 2: Chia sẻ Objectives
+
+**Share Options**:
+1. **Internal Sharing**: Chia sẻ trong workspace
+2. **External Sharing**: Chia sẻ với người ngoài workspace
+3. **Public Sharing**: Chia sẻ công khai (nếu được phép)
+
+**Share Permissions**:
+- **View Only**: Chỉ xem
+- **Comment**: Xem và comment
+- **Edit**: Xem, comment và chỉnh sửa
+- **Admin**: Full access
+
+**Share Methods**:
+- **Link Sharing**: Tạo shareable link
+- **Email Sharing**: Gửi qua email
+- **Workspace Sharing**: Chia sẻ trong workspace
+
+=== Bước 3: Quản lý Groups
+
+**Group Hierarchy**:
+- **Company Level**: Toàn công ty
+- **Department Level**: Cấp phòng ban
+- **Team Level**: Cấp nhóm
+- **Individual Level**: Cá nhân
+
+**Group Management**:
+1. Tạo group mới
+2. Assign users to groups
+3. Set group permissions
+4. Manage group hierarchy
+5. Archive inactive groups
+
+=== Bước 4: Comments và Mentions
+
+**Comment System**:
+1. **Add Comments**: Thêm comment vào objectives
+2. **Reply to Comments**: Trả lời comment
+3. **Edit Comments**: Chỉnh sửa comment
+4. **Delete Comments**: Xóa comment (nếu có quyền)
+
+**Mention System**:
+1. **@mention**: Tag người dùng trong comment
+2. **Notifications**: Người được mention nhận notification
+3. **Auto-complete**: Gợi ý tên người dùng khi typing @
+4. **Mention History**: Lịch sử mentions
+
+== Các tính năng Collaboration
+
+=== User Management
+
+* **Invite Users**: Mời người dùng mới
+* **User Roles**: Phân quyền người dùng
+* **User Permissions**: Quản lý quyền truy cập
+* **User Groups**: Nhóm người dùng
+* **User Activity**: Theo dõi hoạt động
+
+=== Sharing Features
+
+* **Objective Sharing**: Chia sẻ objectives
+* **Dashboard Sharing**: Chia sẻ dashboard
+* **Report Sharing**: Chia sẻ báo cáo
+* **Link Sharing**: Chia sẻ qua link
+* **Email Sharing**: Chia sẻ qua email
+
+=== Communication Tools
+
+* **Comments**: Hệ thống comment
+* **Mentions**: Tag người dùng
+* **Notifications**: Thông báo
+* **Activity Feed**: Feed hoạt động
+* **Direct Messages**: Tin nhắn trực tiếp
+
+=== Group Management
+
+* **Create Groups**: Tạo nhóm
+* **Group Hierarchy**: Phân cấp nhóm
+* **Group Permissions**: Quyền nhóm
+* **Group Settings**: Cài đặt nhóm
+* **Group Analytics**: Phân tích nhóm
+
+== Stakeholder Management
+
+=== Stakeholder Types
+
+* **Internal Stakeholders**: Nhân viên trong tổ chức
+* **External Stakeholders**: Đối tác, khách hàng
+* **Decision Makers**: Người ra quyết định
+* **Influencers**: Người có ảnh hưởng
+* **Observers**: Người theo dõi
+
+=== Stakeholder Engagement
+
+* **Regular Updates**: Cập nhật thường xuyên
+* **Progress Reports**: Báo cáo tiến độ
+* **Milestone Celebrations**: Kỷ niệm milestone
+* **Feedback Collection**: Thu thập phản hồi
+* **Issue Escalation**: Escalate vấn đề
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập vào hệ thống
+* Có quyền invite users (nếu cần)
+* Workspace đã được thiết lập
+* Email system hoạt động
+
+=== Yêu cầu dữ liệu
+
+* User database
+* Group structure
+* Permission matrix
+* Notification settings
+* Email templates
+
+== Best Practices
+
+=== User Onboarding
+
+* **Clear Instructions**: Hướng dẫn rõ ràng cho người mới
+* **Role-based Training**: Đào tạo theo vai trò
+* **Mentor Assignment**: Giao mentor cho người mới
+* **Regular Check-ins**: Check-in thường xuyên với người mới
+
+=== Collaboration Culture
+
+* **Encourage Participation**: Khuyến khích tham gia
+* **Recognize Contributions**: Ghi nhận đóng góp
+* **Foster Open Communication**: Khuyến khích giao tiếp mở
+* **Celebrate Successes**: Kỷ niệm thành công
+
+=== Communication
+
+* **Use @mentions**: Sử dụng mentions khi cần
+* **Be Clear and Concise**: Rõ ràng và súc tích
+* **Respond Promptly**: Phản hồi nhanh chóng
+* **Use Appropriate Tone**: Sử dụng tone phù hợp
+
+=== Group Management
+
+* **Clear Group Structure**: Cấu trúc nhóm rõ ràng
+* **Regular Group Reviews**: Review nhóm định kỳ
+* **Effective Group Communication**: Giao tiếp nhóm hiệu quả
+* **Group Performance Tracking**: Theo dõi hiệu suất nhóm
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Invitation không được gửi**: Kiểm tra email settings
+* **User không thể join**: Kiểm tra invitation link
+* **Comments không hiển thị**: Kiểm tra permissions
+* **Mentions không hoạt động**: Kiểm tra user database
+
+=== Giải pháp
+
+1. **Check email settings**: Kiểm tra cài đặt email
+2. **Verify permissions**: Kiểm tra quyền người dùng
+3. **Clear cache**: Xóa cache trình duyệt
+4. **Contact admin**: Liên hệ admin nếu cần
+
+== Liên kết liên quan
+
+* <<groups-users-management,Quản lý Nhóm và Người dùng>>
+* <<objectives-management,Quản lý Objectives>>
+* <<check-ins,Check-ins>>
+* <<notifications,Thông báo>>
+* <<personal-settings,Cài đặt Cá nhân>>

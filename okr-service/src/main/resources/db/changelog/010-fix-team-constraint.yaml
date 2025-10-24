@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-fix-team-constraint
+      author: assistant
+      changes:
+        - dropForeignKeyConstraint:
+            constraintName: fk_objectives_team
+            baseTableName: objectives

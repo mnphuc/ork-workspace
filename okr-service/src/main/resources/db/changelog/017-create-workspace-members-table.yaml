@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 017-create-workspace-members-table
+      author: assistant
+      changes:
+        - createTable:
+            tableName: workspace_members
+            columns:
+              - column: { name: id, length: 26, type: varchar(26), constraints: { primaryKey: true, nullable: false } }
+              - column: { name: workspace_id, length: 26, type: varchar(26), constraints: { nullable: false } }
+              - column: { name: user_id, length: 26, type: varchar(26), constraints: { nullable: false } }
+              - column: { name: role, length: 20, type: varchar(20), constraints: { nullable: false } }
+              - column: { name: status, length: 20, type: varchar(20), constraints: { nullable: false } }
+              - column: { name: created_by, length: 64, type: varchar(64) }
+              - column: { name: created_date, type: timestamp, defaultValueComputed: CURRENT_TIMESTAMP }
+              - column: { name: last_modified_by, length: 64, type: varchar(64) }
+              - column: { name: last_modified_date, type: timestamp }
+            constraints:
+              - uniqueConstraint:
+                  columnNames: workspace_id, user_id
+                  constraintName: uk_workspace_member
+              - foreignKeyConstraint:
+                  baseColumnNames: workspace_id
+                  baseTableName: workspace_members
+                  constraintName: fk_workspace_member_workspace
+                  referencedColumnNames: id
+                  referencedTableName: workspaces
+                  onDelete: CASCADE
+              - foreignKeyConstraint:
+                  baseColumnNames: user_id
+                  baseTableName: workspace_members
+                  constraintName: fk_workspace_member_user
+                  referencedColumnNames: id
+                  referencedTableName: users
+                  onDelete: CASCADE
+

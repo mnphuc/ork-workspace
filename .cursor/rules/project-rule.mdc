@@ -1,0 +1,21 @@
+---
+alwaysApply: true
+---
+okr-service:
+JDK 17 C:\Users\Admin\.jdks\ms-17.0.16\bin\java.exe
+not running backend using cmd, cli in tool
+đây là project backend, sử dụng công nghệ spring boot, postgres database, liquibase tool
+
+liquibase sử dụng format file yaml, mỗi bảng là 1 file riêng biệt, database mặc định luôn có id ulid, created_by, created_date, last_modified_by, last_modified_date
+
+request và response từ FE format dạng snake_case hết
+
+sử dụng lombok
+sử dụng mapper, mapstruct lib
+
+okr-web:
+đây là project font-end sử dụng nextjs, tailwindcss
+
+
+Chung
+không chạy test api bằng cli, không run backend hoặc fontend, mở browser để verify khi kết thúc task

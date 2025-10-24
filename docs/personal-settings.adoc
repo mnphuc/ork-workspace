@@ -1,0 +1,188 @@
+= Personal Settings (Cài đặt Cá nhân)
+:toc:
+:toclevels: 3
+:sectnums:
+:imagesdir: images
+
+== Mô tả tổng quan
+
+Chức năng Personal Settings cho phép người dùng quản lý thông tin cá nhân, cài đặt ngôn ngữ, và cấu hình các preferences cá nhân trong hệ thống Oboard. Đây là nơi người dùng có thể tùy chỉnh trải nghiệm sử dụng theo nhu cầu cá nhân.
+
+== Use Cases
+
+* **Cập nhật thông tin cá nhân**: Thay đổi tên, email, avatar
+* **Thay đổi ngôn ngữ**: Chọn ngôn ngữ hiển thị
+* **Cấu hình default groups**: Thiết lập nhóm mặc định
+* **Quản lý profile**: Cập nhật thông tin profile
+* **Tùy chỉnh preferences**: Cài đặt theo sở thích cá nhân
+
+== Hành vi người dùng
+
+=== Cập nhật thông tin cá nhân
+
+1. Truy cập trang Personal Settings
+2. Chỉnh sửa thông tin:
+   - User name
+   - Email address
+   - Avatar/Profile picture
+3. Lưu thay đổi
+
+=== Thay đổi ngôn ngữ
+
+1. Navigate đến Language section
+2. Chọn ngôn ngữ từ dropdown
+3. Hệ thống cập nhật ngay lập tức
+
+=== Cấu hình Default Groups
+
+1. Xem danh sách workspace và default group
+2. Thay đổi default group nếu cần
+3. Lưu cài đặt
+
+== Luồng sử dụng chi tiết
+
+=== Bước 1: Truy cập Personal Settings
+
+URL: `#/workspaces/settings/user-preferences`
+
+Trang hiển thị các section:
+- **Profile Information**: Thông tin cá nhân
+- **Language**: Cài đặt ngôn ngữ
+- **Default Groups**: Nhóm mặc định
+
+=== Bước 2: Cập nhật Profile Information
+
+**Profile Section**:
+- **Avatar**: Ảnh đại diện người dùng
+- **User Name**: Tên người dùng (Phuc Mai Nhan)
+- **Email**: Địa chỉ email (phucmnp9@gmail.com)
+
+**Edit Process**:
+1. Click vào trường cần chỉnh sửa
+2. Nhập thông tin mới
+3. Click Save hoặc Enter để lưu
+4. Hệ thống validate và cập nhật
+
+=== Bước 3: Cấu hình Language
+
+**Language Options**:
+- **English**: Tiếng Anh (mặc định)
+- **Vietnamese**: Tiếng Việt
+- **Other languages**: Các ngôn ngữ khác
+
+**Language Change Process**:
+1. Click vào language dropdown
+2. Chọn ngôn ngữ mong muốn
+3. Hệ thống reload với ngôn ngữ mới
+4. Tất cả text được translate
+
+=== Bước 4: Quản lý Default Groups
+
+**Default Groups Section**:
+- **Workspace Name**: Tên workspace (TEC)
+- **Default Group**: Nhóm mặc định (tech)
+
+**Group Management**:
+1. Xem danh sách workspace
+2. Xem default group của mỗi workspace
+3. Thay đổi default group nếu cần
+4. Lưu cài đặt
+
+== Ảnh minh họa
+
+image::settings-personal.png[Trang cài đặt cá nhân với thông tin profile, width=800]
+
+*Hình 1: Giao diện Personal Settings hiển thị thông tin cá nhân và cài đặt*
+
+== Các loại Settings
+
+=== Profile Settings
+
+* **Personal Information**: Thông tin cá nhân
+* **Contact Information**: Thông tin liên lạc
+* **Avatar Management**: Quản lý ảnh đại diện
+* **Account Security**: Bảo mật tài khoản
+
+=== Language Settings
+
+* **Interface Language**: Ngôn ngữ giao diện
+* **Date Format**: Định dạng ngày
+* **Time Format**: Định dạng giờ
+* **Number Format**: Định dạng số
+
+=== Group Settings
+
+* **Default Groups**: Nhóm mặc định
+* **Group Preferences**: Tùy chọn nhóm
+* **Group Notifications**: Thông báo nhóm
+* **Group Permissions**: Quyền nhóm
+
+=== Notification Settings
+
+* **Email Notifications**: Thông báo email
+* **In-app Notifications**: Thông báo trong app
+* **Push Notifications**: Thông báo push
+* **Notification Frequency**: Tần suất thông báo
+
+== Requirements
+
+=== Yêu cầu hệ thống
+
+* Đã đăng nhập vào hệ thống
+* Có quyền chỉnh sửa profile
+* Workspace đã được thiết lập
+* User đã được tạo
+
+=== Yêu cầu dữ liệu
+
+* Valid user information
+* Supported languages
+* Group structure
+* Notification settings
+
+== Best Practices
+
+=== Profile Management
+
+* **Keep Information Updated**: Cập nhật thông tin thường xuyên
+* **Use Professional Avatar**: Sử dụng ảnh chuyên nghiệp
+* **Clear Contact Info**: Thông tin liên lạc rõ ràng
+* **Regular Reviews**: Review profile định kỳ
+
+=== Language Selection
+
+* **Choose Appropriate Language**: Chọn ngôn ngữ phù hợp
+* **Consider Team Language**: Xem xét ngôn ngữ team
+* **Test Interface**: Test giao diện sau khi đổi
+* **Document Changes**: Ghi lại thay đổi
+
+=== Group Configuration
+
+* **Set Relevant Defaults**: Đặt default phù hợp
+* **Review Group Access**: Review quyền truy cập nhóm
+* **Update When Needed**: Cập nhật khi cần
+* **Communicate Changes**: Thông báo thay đổi
+
+== Troubleshooting
+
+=== Lỗi thường gặp
+
+* **Không thể cập nhật profile**: Kiểm tra quyền và thông tin
+* **Language không thay đổi**: Kiểm tra browser cache
+* **Default group không lưu**: Kiểm tra permissions
+* **Avatar không upload**: Kiểm tra kích thước và format
+
+=== Giải pháp
+
+1. **Check permissions**: Kiểm tra quyền user
+2. **Clear cache**: Xóa cache trình duyệt
+3. **Validate data**: Kiểm tra dữ liệu nhập
+4. **Contact support**: Liên hệ hỗ trợ nếu cần
+
+== Liên kết liên quan
+
+* <<authentication,Đăng nhập>>
+* <<workspace-settings,Cài đặt Workspace>>
+* <<groups-users-management,Quản lý Nhóm và Người dùng>>
+* <<notifications,Thông báo>>
+* <<collaboration,Tính năng Cộng tác>>

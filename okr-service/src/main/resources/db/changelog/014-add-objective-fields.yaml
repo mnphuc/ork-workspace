@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 014-add-objective-fields
+      author: assistant
+      changes:
+        - addColumn:
+            tableName: objectives
+            columns:
+              - column: { name: type, type: varchar(32), defaultValue: 'COMPANY' }
+              - column: { name: groups, type: text }
+              - column: { name: labels, type: text }
+              - column: { name: stakeholders, type: text }
+              - column: { name: start_date, type: date }
+              - column: { name: end_date, type: date }
+        - createIndex:
+            tableName: objectives
+            indexName: idx_objectives_type
+            columns:
+              - column: { name: type }
+        - createIndex:
+            tableName: objectives
+            indexName: idx_objectives_dates
+            columns:
+              - column: { name: start_date }
+              - column: { name: end_date }

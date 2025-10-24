@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-objective-alignments
+      author: assistant
+      changes:
+        - createTable:
+            tableName: objective_alignments
+            columns:
+              - column: { name: parent_objective_id, type: varchar(26), constraints: { nullable: false } }
+              - column: { name: child_objective_id, type: varchar(26), constraints: { nullable: false } }
+              - column: { name: created_by, type: varchar(64) }
+              - column: { name: created_date, type: timestamp, defaultValueComputed: CURRENT_TIMESTAMP }
+        - addPrimaryKey:
+            tableName: objective_alignments
+            columnNames: parent_objective_id, child_objective_id
+            constraintName: pk_objective_alignments
+        - addForeignKeyConstraint:
+            constraintName: fk_alignment_parent
+            baseTableName: objective_alignments
+            baseColumnNames: parent_objective_id
+            referencedTableName: objectives
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            constraintName: fk_alignment_child
+            baseTableName: objective_alignments
+            baseColumnNames: child_objective_id
+            referencedTableName: objectives
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+
+
+

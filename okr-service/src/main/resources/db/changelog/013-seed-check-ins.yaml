@@ -1,0 +1,216 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-seed-check-ins
+      author: assistant
+      changes:
+        # Check-ins for Key Result 1 (Market Share)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1W" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1L" }
+              - column: { name: value, valueNumeric: 15 }
+              - column: { name: note, value: "Initial market analysis shows 15% market share" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1A" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '30 days'" }
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1X" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1L" }
+              - column: { name: value, valueNumeric: 20 }
+              - column: { name: note, value: "Marketing campaign showing positive results" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1A" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '15 days'" }
+
+        # Check-ins for Key Result 2 (Product Features)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1Y" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1M" }
+              - column: { name: value, valueNumeric: 1 }
+              - column: { name: note, value: "First feature completed - Smart Scheduling" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1D" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '25 days'" }
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1Z" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1M" }
+              - column: { name: value, valueNumeric: 2 }
+              - column: { name: note, value: "Second feature completed - Calendar Analytics" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1E" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '10 days'" }
+
+        # Check-ins for Key Result 3 (Active Users)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2A" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1N" }
+              - column: { name: value, valueNumeric: 5000 }
+              - column: { name: note, value: "User growth accelerating" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1A" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '20 days'" }
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2B" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1N" }
+              - column: { name: value, valueNumeric: 7500 }
+              - column: { name: note, value: "Strong user acquisition from referral program" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1A" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '5 days'" }
+
+        # Check-ins for Key Result 4 (Customer Satisfaction)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2C" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1O" }
+              - column: { name: value, valueNumeric: 90 }
+              - column: { name: note, value: "Customer feedback improving" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1F" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '18 days'" }
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2D" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1O" }
+              - column: { name: value, valueNumeric: 92 }
+              - column: { name: note, value: "Support team improvements showing results" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1F" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '3 days'" }
+
+        # Check-ins for Key Result 5 (Bug Reports)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2E" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1P" }
+              - column: { name: value, valueNumeric: 30 }
+              - column: { name: note, value: "Bug reports reduced from 50% to 30%" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1D" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '12 days'" }
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2F" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1P" }
+              - column: { name: value, valueNumeric: 25 }
+              - column: { name: note, value: "Quality improvements continue" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1E" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '2 days'" }
+
+        # Check-ins for Key Result 6 (Uptime)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2G" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1Q" }
+              - column: { name: value, valueNumeric: 99.2 }
+              - column: { name: note, value: "Infrastructure improvements showing results" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1D" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '8 days'" }
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2H" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1Q" }
+              - column: { name: value, valueNumeric: 99.5 }
+              - column: { name: note, value: "Monitoring and alerting system working well" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1E" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '1 day'" }
+
+        # Check-ins for Key Result 7 (Deployment Time)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2I" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1R" }
+              - column: { name: value, valueNumeric: 2 }
+              - column: { name: note, value: "Initial automation setup" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1D" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '14 days'" }
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2J" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1R" }
+              - column: { name: value, valueNumeric: 5 }
+              - column: { name: note, value: "CI/CD pipeline improvements" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1E" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '6 days'" }
+
+        # Check-ins for Key Result 8 (Auto-scaling)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2K" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1S" }
+              - column: { name: value, valueNumeric: 0 }
+              - column: { name: note, value: "Planning phase - researching solutions" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1D" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '22 days'" }
+
+        # Check-ins for Key Result 9 (Production Incidents)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2L" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1T" }
+              - column: { name: value, valueNumeric: 1 }
+              - column: { name: note, value: "One minor incident this month" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1C" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '16 days'" }
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2M" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1T" }
+              - column: { name: value, valueNumeric: 2 }
+              - column: { name: note, value: "Two incidents total - on track for target" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1C" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '4 days'" }
+
+        # Check-ins for Key Result 10 (MRR)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2N" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1U" }
+              - column: { name: value, valueNumeric: 70000 }
+              - column: { name: note, value: "MRR growing steadily" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1C" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '11 days'" }
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2O" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1U" }
+              - column: { name: value, valueNumeric: 75000 }
+              - column: { name: note, value: "New enterprise customers driving growth" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1C" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '7 days'" }
+
+        # Check-ins for Key Result 11 (Churn Rate)
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2P" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1V" }
+              - column: { name: value, valueNumeric: 4.2 }
+              - column: { name: note, value: "Churn rate improving with better onboarding" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1C" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '9 days'" }
+        - insert:
+            tableName: check_ins
+            columns:
+              - column: { name: id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V2Q" }
+              - column: { name: key_result_id, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1V" }
+              - column: { name: value, valueNumeric: 3.5 }
+              - column: { name: note, value: "Customer success initiatives showing results" }
+              - column: { name: created_by, value: "01HZ8K9M2N3P4Q5R6S7T8U9V1C" }
+              - column: { name: created_date, valueComputed: "CURRENT_TIMESTAMP - INTERVAL '1 day'" }
+

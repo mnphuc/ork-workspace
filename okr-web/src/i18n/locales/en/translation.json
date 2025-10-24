@@ -1,0 +1,218 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "reset": "Reset",
+    "refresh": "Refresh",
+    "download": "Download",
+    "upload": "Upload",
+    "view": "View",
+    "details": "Details",
+    "actions": "Actions",
+    "status": "Status",
+    "date": "Date",
+    "time": "Time",
+    "name": "Name",
+    "description": "Description",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Phone",
+    "address": "Address"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "objectives": "Objectives",
+    "roadmap": "Roadmap",
+    "checkIns": "Check-ins",
+    "alignment": "Alignment",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "loginButton": "Login",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "register": {
+      "title": "Register",
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "registerButton": "Register",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "messages": {
+      "loginSuccess": "Login successful",
+      "loginFailed": "Login failed",
+      "registerSuccess": "Registration successful",
+      "registerFailed": "Registration failed",
+      "logoutSuccess": "Logout successful",
+      "invalidCredentials": "Invalid credentials",
+      "emailRequired": "Email is required",
+      "passwordRequired": "Password is required",
+      "passwordMismatch": "Passwords do not match"
+    }
+  },
+  "okr": {
+    "objective": {
+      "title": "Objective",
+      "create": "Create Objective",
+      "edit": "Edit Objective",
+      "delete": "Delete Objective",
+      "titleLabel": "Title",
+      "descriptionLabel": "Description",
+      "quarterLabel": "Quarter",
+      "statusLabel": "Status",
+      "ownerLabel": "Owner",
+      "progressLabel": "Progress",
+      "groupsLabel": "Groups",
+      "labelsLabel": "Labels",
+      "stakeholdersLabel": "Stakeholders",
+      "startDateLabel": "Start Date",
+      "endDateLabel": "End Date",
+      "types": {
+        "company": "Company",
+        "department": "Department",
+        "team": "Team",
+        "kpi": "KPI"
+      },
+      "statuses": {
+        "draft": "Draft",
+        "active": "Active",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "keyResult": {
+      "title": "Key Result",
+      "create": "Create Key Result",
+      "edit": "Edit Key Result",
+      "delete": "Delete Key Result",
+      "titleLabel": "Title",
+      "descriptionLabel": "Description",
+      "typeLabel": "Type",
+      "targetLabel": "Target",
+      "currentLabel": "Current",
+      "unitLabel": "Unit",
+      "types": {
+        "number": "Number",
+        "percentage": "Percentage",
+        "boolean": "Yes/No",
+        "currency": "Currency"
+      }
+    },
+    "checkIn": {
+      "title": "Check-in",
+      "create": "Create Check-in",
+      "edit": "Edit Check-in",
+      "delete": "Delete Check-in",
+      "commentLabel": "Comment",
+      "progressLabel": "Progress",
+      "dateLabel": "Date",
+      "history": "Check-in History"
+    },
+    "alignment": {
+      "title": "Objective Alignment",
+      "create": "Create Alignment",
+      "delete": "Delete Alignment",
+      "parentLabel": "Parent Objective",
+      "childLabel": "Child Objective",
+      "typeLabel": "Alignment Type",
+      "types": {
+        "supports": "Supports",
+        "contributes": "Contributes",
+        "blocks": "Blocks"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "summary": "Summary",
+    "objectives": "Objectives",
+    "keyResults": "Key Results",
+    "checkIns": "Check-ins",
+    "progress": "Progress",
+    "filters": {
+      "quarter": "Quarter",
+      "team": "Team",
+      "status": "Status",
+      "owner": "Owner"
+    },
+    "stats": {
+      "totalObjectives": "Total Objectives",
+      "completedObjectives": "Completed Objectives",
+      "inProgressObjectives": "In Progress Objectives",
+      "averageProgress": "Average Progress"
+    }
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Invalid email format",
+    "minLength": "Minimum {{count}} characters",
+    "maxLength": "Maximum {{count}} characters",
+    "min": "Minimum value is {{count}}",
+    "max": "Maximum value is {{count}}",
+    "pattern": "Invalid format",
+    "unique": "Value already exists",
+    "passwordMismatch": "Passwords do not match",
+    "invalidDate": "Invalid date",
+    "invalidNumber": "Invalid number"
+  },
+  "messages": {
+    "success": {
+      "created": "Created successfully",
+      "updated": "Updated successfully",
+      "deleted": "Deleted successfully",
+      "saved": "Saved successfully"
+    },
+    "error": {
+      "general": "An error occurred",
+      "network": "Network error",
+      "unauthorized": "Unauthorized access",
+      "forbidden": "Access forbidden",
+      "notFound": "Not found",
+      "serverError": "Server error",
+      "validation": "Validation error",
+      "saveFailed": "Save failed",
+      "deleteFailed": "Delete failed",
+      "loadFailed": "Load failed"
+    }
+  },
+  "language": {
+    "vi": "Tiếng Việt",
+    "en": "English",
+    "select": "Select Language"
+  }
+}
