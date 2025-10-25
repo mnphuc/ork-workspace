@@ -56,6 +56,9 @@ public class KeyResult {
     @Column(name = "current_value", precision = 19, scale = 2)
     private BigDecimal currentValue;
 
+    @Column(name = "weight", precision = 5, scale = 2)
+    private BigDecimal weight;
+
     @Column(name = "created_by", length = 64)
     private String createdBy;
 
@@ -82,6 +85,8 @@ public class KeyResult {
     public void setTargetValue(BigDecimal targetValue) { this.targetValue = targetValue; }
     public BigDecimal getCurrentValue() { return currentValue; }
     public void setCurrentValue(BigDecimal currentValue) { this.currentValue = currentValue; }
+    public BigDecimal getWeight() { return weight; }
+    public void setWeight(BigDecimal weight) { this.weight = weight; }
     public String getCreatedBy() { return createdBy; }
     public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
     public Instant getCreatedDate() { return createdDate; }

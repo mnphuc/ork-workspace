@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Layout } from '@/components/layout';
 import { logout } from '@/lib/auth';
-import { clearTokens } from '@/lib/api';
+import { clearTokens, apiFetch } from '@/lib/api';
 import { WorkspaceList } from '@/components/settings/WorkspaceList';
 import { WorkspaceForm } from '@/components/settings/WorkspaceForm';
+import { WorkspaceWizard } from '@/components/settings/WorkspaceWizard';
 import { IntervalsConfig } from '@/components/settings/IntervalsConfig';
 import { Modal } from '@/components/Modal';
 import { Loading } from '@/components/Loading';
@@ -14,14 +15,15 @@ interface Workspace {
   id: string;
   name: string;
   description: string;
-  visibility: 'public' | 'private' | 'restricted';
-  created_date: string;
-  last_modified_date: string;
-  user_count: number;
-  group_count: number;
-  objective_count: number;
   owner_id: string;
   status: 'active' | 'inactive' | 'archived';
+  settings?: string;
+  created_date: string;
+  last_modified_date: string;
+  member_count: number;
+  objective_count: number;
+  team_count: number;
+  last_activity?: string;
 }
 
 interface Interval {
@@ -43,6 +45,7 @@ export default function WorkspaceSettingsPage() {
   
   // Modal states
   const [showWorkspaceForm, setShowWorkspaceForm] = useState(false);
+  const [showWorkspaceWizard, setShowWorkspaceWizard] = useState(false);
   const [showIntervalsConfig, setShowIntervalsConfig] = useState(false);
   const [editingWorkspace, setEditingWorkspace] = useState<Workspace | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,53 +58,19 @@ export default function WorkspaceSettingsPage() {
   const loadWorkspaces = async () => {
     try {
       setLoading(true);
-      // Mock data for now - replace with actual API call
-      const mockWorkspaces: Workspace[] = [
-        {
-          id: '1',
-          name: 'Acme Corp OKRs',
-          description: 'Main workspace for Acme Corporation objectives and key results',
-          visibility: 'private',
-          created_date: '2024-01-15T00:00:00Z',
-          last_modified_date: '2024-01-20T00:00:00Z',
-          user_count: 25,
-          group_count: 5,
-          objective_count: 12,
-          owner_id: 'user-1',
-          status: 'active',
-        },
-        {
-          id: '2',
-          name: 'Engineering Team',
-          description: 'Engineering team specific objectives and projects',
-          visibility: 'restricted',
-          created_date: '2024-01-10T00:00:00Z',
-          last_modified_date: '2024-01-18T00:00:00Z',
-          user_count: 8,
-          group_count: 2,
-          objective_count: 6,
-          owner_id: 'user-1',
-          status: 'active',
-        },
-        {
-          id: '3',
-          name: 'Marketing Q1 2024',
-          description: 'Marketing objectives for Q1 2024',
-          visibility: 'public',
-          created_date: '2024-01-05T00:00:00Z',
-          last_modified_date: '2024-01-15T00:00:00Z',
-          user_count: 12,
-          group_count: 3,
-          objective_count: 8,
-          owner_id: 'user-2',
-          status: 'archived',
-        },
-      ];
+      setError(null);
       
-      setWorkspaces(mockWorkspaces);
+      // Load workspaces from API
+      const data = await apiFetch<Workspace[]>('/workspaces');
+      setWorkspaces(data);
     } catch (e: any) {
       setError(e.message || 'Failed to load workspaces');
-      if (e.message.includes('Authentication failed')) {
+      if (e.message && (
+        e.message.includes('401') ||
+        e.message.includes('403') ||
+        e.message.includes('Authentication') ||
+        e.message.includes('Unauthorized')
+      )) {
         clearTokens();
         window.location.href = '/login';
       }
@@ -160,7 +129,12 @@ export default function WorkspaceSettingsPage() {
 
   const handleCreateWorkspace = () => {
     setEditingWorkspace(null);
-    setShowWorkspaceForm(true);
+    setShowWorkspaceWizard(true);
+  };
+
+  const handleWorkspaceWizardComplete = (workspaceId: string) => {
+    setShowWorkspaceWizard(false);
+    loadWorkspaces(); // Reload workspaces to show the new one
   };
 
   const handleEditWorkspace = (workspace: Workspace) => {
@@ -174,20 +148,29 @@ export default function WorkspaceSettingsPage() {
       
       if (editingWorkspace) {
         // Update existing workspace
+        const updatedWorkspace = await apiFetch<Workspace>(`/workspaces/${editingWorkspace.id}`, {
+          method: 'PUT',
+          body: {
+            name: workspaceData.name,
+            description: workspaceData.description,
+            settings: workspaceData.settings || '{}'
+          }
+        });
+        
         setWorkspaces(prev => prev.map(w => 
-          w.id === editingWorkspace.id ? { ...w, ...workspaceData } : w
+          w.id === editingWorkspace.id ? updatedWorkspace : w
         ));
       } else {
         // Create new workspace
-        const newWorkspace: Workspace = {
-          ...workspaceData,
-          id: Date.now().toString(),
-          created_date: new Date().toISOString(),
-          last_modified_date: new Date().toISOString(),
-          user_count: 0,
-          group_count: 0,
-          objective_count: 0,
-        };
+        const newWorkspace = await apiFetch<Workspace>('/workspaces', {
+          method: 'POST',
+          body: {
+            name: workspaceData.name,
+            description: workspaceData.description,
+            settings: workspaceData.settings || '{}'
+          }
+        });
+        
         setWorkspaces(prev => [newWorkspace, ...prev]);
       }
       
@@ -195,6 +178,7 @@ export default function WorkspaceSettingsPage() {
       setEditingWorkspace(null);
     } catch (e: any) {
       console.error('Failed to save workspace:', e);
+      setError(e.message || 'Failed to save workspace');
     } finally {
       setIsSubmitting(false);
     }
@@ -202,20 +186,53 @@ export default function WorkspaceSettingsPage() {
 
   const handleDeleteWorkspace = async (workspaceId: string) => {
     if (confirm('Are you sure you want to delete this workspace? This action cannot be undone.')) {
-      setWorkspaces(prev => prev.filter(w => w.id !== workspaceId));
+      try {
+        await apiFetch(`/workspaces/${workspaceId}`, {
+          method: 'DELETE'
+        });
+        
+        setWorkspaces(prev => prev.filter(w => w.id !== workspaceId));
+      } catch (e: any) {
+        console.error('Failed to delete workspace:', e);
+        setError(e.message || 'Failed to delete workspace');
+      }
     }
   };
 
   const handleArchiveWorkspace = async (workspaceId: string) => {
-    setWorkspaces(prev => prev.map(w => 
-      w.id === workspaceId ? { ...w, status: 'archived' as const } : w
-    ));
+    try {
+      const updatedWorkspace = await apiFetch<Workspace>(`/workspaces/${workspaceId}`, {
+        method: 'PUT',
+        body: {
+          status: 'archived'
+        }
+      });
+      
+      setWorkspaces(prev => prev.map(w => 
+        w.id === workspaceId ? updatedWorkspace : w
+      ));
+    } catch (e: any) {
+      console.error('Failed to archive workspace:', e);
+      setError(e.message || 'Failed to archive workspace');
+    }
   };
 
   const handleRestoreWorkspace = async (workspaceId: string) => {
-    setWorkspaces(prev => prev.map(w => 
-      w.id === workspaceId ? { ...w, status: 'active' as const } : w
-    ));
+    try {
+      const updatedWorkspace = await apiFetch<Workspace>(`/workspaces/${workspaceId}`, {
+        method: 'PUT',
+        body: {
+          status: 'active'
+        }
+      });
+      
+      setWorkspaces(prev => prev.map(w => 
+        w.id === workspaceId ? updatedWorkspace : w
+      ));
+    } catch (e: any) {
+      console.error('Failed to restore workspace:', e);
+      setError(e.message || 'Failed to restore workspace');
+    }
   };
 
   const handleIntervalSave = async (updatedIntervals: Interval[]) => {
@@ -317,7 +334,7 @@ export default function WorkspaceSettingsPage() {
               onDelete={handleDeleteWorkspace}
               onArchive={handleArchiveWorkspace}
               onRestore={handleRestoreWorkspace}
-              currentUserId="user-1" // This should come from user context
+              currentUserId="user-1" // TODO: Get from user context
             />
           </div>
         </div>
@@ -375,6 +392,19 @@ export default function WorkspaceSettingsPage() {
               setShowWorkspaceForm(false);
               setEditingWorkspace(null);
             }}
+            isLoading={isSubmitting}
+          />
+        </Modal>
+
+        <Modal
+          isOpen={showWorkspaceWizard}
+          onClose={() => setShowWorkspaceWizard(false)}
+          title="Create New Workspace"
+          size="xl"
+        >
+          <WorkspaceWizard
+            onComplete={handleWorkspaceWizardComplete}
+            onCancel={() => setShowWorkspaceWizard(false)}
             isLoading={isSubmitting}
           />
         </Modal>

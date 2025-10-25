@@ -5,7 +5,7 @@ import { setTokens, clearTokens } from '@/lib/api';
 import { useTranslation } from 'react-i18next';
 
 export default function LoginPage() {
-  const { t } = useTranslation();
+  const { t, ready } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -32,6 +32,21 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  // Prevent hydration issues by not rendering until i18n is ready
+  if (!ready) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="text-center">
+          <div className="mx-auto h-12 w-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
+            <span className="text-white font-bold text-xl">O</span>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900">OKR Management</h1>
+          <p className="mt-2 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

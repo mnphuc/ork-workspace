@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { UserProvider } from '@/contexts/UserContext';
+import { UsersProvider } from '@/contexts/UsersContext';
 import { I18nProvider } from '@/components';
 import '@/lib/auth-interceptor'; // Initialize auth interceptor
 
@@ -30,7 +31,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}>
         <I18nProvider>
           <UserProvider>
-            {children}
+            <UsersProvider>
+              {children}
+            </UsersProvider>
           </UserProvider>
         </I18nProvider>
       </body>

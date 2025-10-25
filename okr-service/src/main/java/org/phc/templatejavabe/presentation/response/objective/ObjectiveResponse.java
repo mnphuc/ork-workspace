@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import org.phc.templatejavabe.presentation.response.keyresult.KeyResultResponse;
 
 public record ObjectiveResponse(
     String id,
@@ -25,7 +26,9 @@ public record ObjectiveResponse(
     @JsonProperty("start_date") String startDate,
     @JsonProperty("end_date") String endDate,
     @JsonProperty("last_check_in_date") Instant lastCheckInDate,
-    @JsonProperty("comments_count") Integer commentsCount
+    @JsonProperty("comments_count") Integer commentsCount,
+    @JsonProperty("key_results") List<KeyResultResponse> keyResults,
+    List<ObjectiveResponse> kpis
 ) {}
 
 

@@ -3,12 +3,11 @@ package org.phc.templatejavabe.domain.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.phc.templatejavabe.domain.model.Objective;
 import org.phc.templatejavabe.domain.model.ObjectiveStatus;
+import org.phc.templatejavabe.domain.model.ObjectiveType;
 import org.phc.templatejavabe.domain.model.KeyResult;
 import org.phc.templatejavabe.infrastructure.repository.ObjectiveRepository;
 import org.phc.templatejavabe.infrastructure.repository.KeyResultRepository;
@@ -44,6 +43,10 @@ public class ObjectiveService {
         return objectiveRepository.findByTeamIdAndQuarter(teamId, quarter);
     }
 
+    public List<Objective> findKPIsByParentId(String parentId) {
+        return objectiveRepository.findByParentIdAndType(parentId, ObjectiveType.KPI);
+    }
+
     @Transactional
     public Objective create(Objective o) { 
         // Set default status
@@ -71,7 +74,7 @@ public class ObjectiveService {
     }
 
     /**
-     * Calculate progress based on average of all Key Results
+     * Calculate progress based on weighted average of all Key Results
      */
     public void calculateProgress(Objective objective) {
         List<KeyResult> keyResults = keyResultRepository.findByObjectiveId(objective.getId());
@@ -81,17 +84,24 @@ public class ObjectiveService {
             return;
         }
 
-        BigDecimal totalProgress = keyResults.stream()
-            .map(this::calculateKeyResultProgress)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        // Calculate weighted progress
+        BigDecimal totalWeightedProgress = BigDecimal.ZERO;
+        BigDecimal totalWeight = BigDecimal.ZERO;
 
-        BigDecimal averageProgress = totalProgress.divide(
-            BigDecimal.valueOf(keyResults.size()), 
-            2, 
-            RoundingMode.HALF_UP
-        );
+        for (KeyResult kr : keyResults) {
+            BigDecimal progress = calculateKeyResultProgress(kr);
+            BigDecimal weight = kr.getWeight() != null ? kr.getWeight() : BigDecimal.ONE;
+            
+            totalWeightedProgress = totalWeightedProgress.add(progress.multiply(weight));
+            totalWeight = totalWeight.add(weight);
+        }
 
-        objective.setProgress(averageProgress);
+        if (totalWeight.compareTo(BigDecimal.ZERO) == 0) {
+            objective.setProgress(BigDecimal.ZERO);
+        } else {
+            BigDecimal weightedAverage = totalWeightedProgress.divide(totalWeight, 2, RoundingMode.HALF_UP);
+            objective.setProgress(weightedAverage);
+        }
     }
 
     /**
@@ -165,6 +175,65 @@ public class ObjectiveService {
     public boolean validateKeyResultLimit(String objectiveId) {
         List<KeyResult> keyResults = keyResultRepository.findByObjectiveId(objectiveId);
         return keyResults.size() < 5;
+    }
+
+    /**
+     * Duplicate an objective with all its key results
+     */
+    @Transactional
+    public Objective duplicate(Objective source) {
+        // Create new objective
+        Objective duplicate = new Objective();
+        duplicate.setTitle("Copy of " + source.getTitle());
+        duplicate.setDescription(source.getDescription());
+        duplicate.setOwnerId(source.getOwnerId());
+        duplicate.setTeamId(source.getTeamId());
+        duplicate.setWorkspaceId(source.getWorkspaceId());
+        duplicate.setQuarter(source.getQuarter());
+        duplicate.setType(source.getType());
+        duplicate.setGroups(source.getGroups());
+        duplicate.setLabels(source.getLabels());
+        duplicate.setStakeholders(source.getStakeholders());
+        duplicate.setStartDate(source.getStartDate());
+        duplicate.setEndDate(source.getEndDate());
+        duplicate.setParentId(source.getParentId());
+        
+        // Set default values for new objective
+        duplicate.setStatus(ObjectiveStatus.NOT_STARTED);
+        duplicate.setProgress(BigDecimal.ZERO);
+        duplicate.setWeight(source.getWeight() != null ? source.getWeight() : BigDecimal.ONE);
+        
+        // Save the new objective
+        Objective savedObjective = objectiveRepository.save(duplicate);
+        
+        // Duplicate all key results
+        List<KeyResult> sourceKeyResults = keyResultRepository.findByObjectiveId(source.getId());
+        for (KeyResult sourceKr : sourceKeyResults) {
+            KeyResult duplicateKr = new KeyResult();
+            duplicateKr.setObjectiveId(savedObjective.getId());
+            duplicateKr.setTitle(sourceKr.getTitle());
+            duplicateKr.setMetricType(sourceKr.getMetricType());
+            duplicateKr.setUnit(sourceKr.getUnit());
+            duplicateKr.setTargetValue(sourceKr.getTargetValue());
+            duplicateKr.setCurrentValue(BigDecimal.ZERO); // Reset current value
+            keyResultRepository.save(duplicateKr);
+        }
+        
+        return savedObjective;
+    }
+
+    /**
+     * Move an objective to a different team or workspace
+     */
+    @Transactional
+    public Objective move(Objective objective, String newTeamId, String newWorkspaceId) {
+        if (newTeamId != null && !newTeamId.trim().isEmpty()) {
+            objective.setTeamId(newTeamId);
+        }
+        if (newWorkspaceId != null && !newWorkspaceId.trim().isEmpty()) {
+            objective.setWorkspaceId(newWorkspaceId);
+        }
+        return objectiveRepository.save(objective);
     }
 }
 

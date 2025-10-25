@@ -2,20 +2,27 @@
 export interface Objective {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   owner_id: string;
-  team_id: string;
+  team_id?: string;
+  workspace_id?: string;
   quarter: string;
   status: string;
   progress: number;
-  created_date: string;
-  last_modified_date: string;
-  type?: 'COMPANY' | 'DEPARTMENT' | 'TEAM' | 'KPI';
-  groups?: string[];
+  weight?: number;
+  type?: string; // NEW: COMPANY, DEPARTMENT, TEAM, KPI
+  parent_id?: string; // NEW: for KPIs
+  groups: string[];
   labels?: string[];
   stakeholders?: string[];
   start_date?: string;
   end_date?: string;
+  last_check_in_date?: string;
+  comments_count: number;
+  key_results?: KeyResult[]; // NEW: loaded from backend
+  kpis?: Objective[]; // NEW: loaded from backend (objectives with type=KPI)
+  created_date: string;
+  last_modified_date: string;
 }
 
 export interface KeyResult {
@@ -23,9 +30,10 @@ export interface KeyResult {
   objective_id: string;
   title: string;
   metric_type: string;
-  unit: string;
+  unit?: string;
   target_value: number;
   current_value: number;
+  weight: number; // NEW
   created_date: string;
   last_modified_date: string;
 }

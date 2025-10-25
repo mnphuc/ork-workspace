@@ -1,0 +1,74 @@
+@startuml objectives-list-flow
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam activity {
+  BackgroundColor #E8F4FD
+  BorderColor #1E88E5
+  FontColor #1E88E5
+}
+skinparam note {
+  BackgroundColor #FFF3E0
+  BorderColor #FF9800
+  FontColor #FF9800
+}
+
+title Objectives List API Flow
+
+start
+
+:User navigates to Objectives page;
+note right: Frontend loads /okr page
+
+:Check authentication token;
+if (Token exists?) then (yes)
+  :Token valid?;
+  if (Token valid?) then (yes)
+    :Check workspace context;
+    if (Workspace selected?) then (yes)
+      :Call GET /objectives API;
+      note right: With workspaceId parameter
+      
+      :Backend receives request;
+      :Validate authentication;
+      if (Auth valid?) then (yes)
+        :Query objectives by workspace;
+        :Load key results for each objective;
+        :Load KPIs for each objective;
+        :Calculate weighted progress;
+        :Build response with nested data;
+        :Return JSON response;
+        
+        :Frontend receives response;
+        :Parse response data;
+        :Map status from uppercase to lowercase;
+        :Update component state;
+        :Render tree table with objectives;
+        note right: Show expandable rows with\nkey results and KPIs
+        
+        stop
+      else (no)
+        :Return 401 Unauthorized;
+        :Frontend handles auth error;
+        :Redirect to login page;
+        stop
+      endif
+    else (no)
+      :Show "No workspace selected" message;
+      stop
+    endif
+  else (no)
+    :Try refresh token;
+    if (Refresh successful?) then (yes)
+      :Retry API call with new token;
+    else (no)
+      :Clear tokens;
+      :Redirect to login page;
+      stop
+    endif
+  endif
+else (no)
+  :Redirect to login page;
+  stop
+endif
+
+@enduml

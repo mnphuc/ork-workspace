@@ -89,6 +89,7 @@
     "objective": {
       "title": "Objective",
       "create": "Create Objective",
+      "createNew": "Create new objective",
       "edit": "Edit Objective",
       "delete": "Delete Objective",
       "titleLabel": "Title",
@@ -102,6 +103,15 @@
       "stakeholdersLabel": "Stakeholders",
       "startDateLabel": "Start Date",
       "endDateLabel": "End Date",
+      "parentLabel": "Parent Objective",
+      "addNestedItem": "Add nested item",
+      "createObjective": "Create objective",
+      "createMetric": "Create metric",
+      "interval": "Interval",
+      "dates": "Dates",
+      "addLabel": "Add label",
+      "addStakeholder": "Add stakeholder",
+      "createAnother": "Create another",
       "types": {
         "company": "Company",
         "department": "Department",

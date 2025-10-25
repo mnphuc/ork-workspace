@@ -121,7 +121,7 @@ public class CheckInService {
         KeyResult kr = keyResultRepository.findById(keyResultId).orElse(null);
         if (kr != null) {
             if (remainingCheckIns.isEmpty()) {
-                kr.setCurrentValue(java.math.BigDecimal.ZERO);
+                kr.setCurrentValue(BigDecimal.ZERO);
             } else {
                 kr.setCurrentValue(remainingCheckIns.get(0).getValue());
             }

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal } from '@/components/Modal';
 import { Input } from '@/components/Input';
 import { Button } from '@/components/Button';
@@ -7,6 +8,7 @@ import { Select } from '@/components/Select';
 import { Textarea } from '@/components/Textarea';
 import { apiFetch } from '@/lib/api';
 import { ObjectiveType } from '@/components/ObjectiveTypeSelector';
+import { ParentSelector } from '@/components/ParentSelector';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { useUser } from '@/contexts/UserContext';
 
@@ -20,6 +22,7 @@ interface ObjectiveFormData {
   end_date: string;
   labels: string[];
   stakeholders: string[];
+  parent_id?: string | null;
 }
 
 interface ObjectiveModalProps {
@@ -35,6 +38,7 @@ export function ObjectiveModal({
   onSave, 
   selectedType 
 }: ObjectiveModalProps) {
+  const { t } = useTranslation();
   const { currentWorkspace } = useWorkspace();
   const { user } = useUser();
   const [formData, setFormData] = useState<ObjectiveFormData>({
@@ -47,6 +51,7 @@ export function ObjectiveModal({
     end_date: '',
     labels: [],
     stakeholders: [],
+    parent_id: null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -121,7 +126,7 @@ export function ObjectiveModal({
   const typeIcon = getTypeIcon(formData.type);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Create new objective" size="xl">
+    <Modal isOpen={isOpen} onClose={onClose} title={t('okr.objective.createNew')} size="xl">
       <div className="flex gap-6">
         {/* Main Content */}
         <div className="flex-1">
@@ -137,16 +142,22 @@ export function ObjectiveModal({
               <div className={`w-8 h-8 ${typeIcon.color} rounded flex items-center justify-center text-white font-semibold text-sm`}>
                 {typeIcon.icon}
               </div>
-              <span className="text-lg font-semibold text-gray-900">Create new objective</span>
+              <span className="text-lg font-semibold text-gray-900">{t('okr.objective.createNew')}</span>
             </div>
+
+            {/* Parent Objective */}
+            <ParentSelector
+              value={formData.parent_id || undefined}
+              onChange={(parentId) => setFormData(prev => ({ ...prev, parent_id: parentId }))}
+            />
 
             {/* Title */}
             <div>
               <Input
-                label="Title"
+                label={t('okr.objective.titleLabel')}
                 value={formData.title}
                 onChange={(value) => setFormData(prev => ({ ...prev, title: value }))}
-                placeholder="Title"
+                placeholder={t('okr.objective.titleLabel')}
                 required
                 className="text-2xl font-semibold"
               />
@@ -154,10 +165,10 @@ export function ObjectiveModal({
 
             {/* Description */}
             <Textarea
-              label="Description"
+              label={t('okr.objective.descriptionLabel')}
               value={formData.description}
               onChange={(value) => setFormData(prev => ({ ...prev, description: value }))}
-              placeholder="Add a description..."
+              placeholder={t('okr.objective.descriptionLabel')}
               rows={4}
             />
 
@@ -167,7 +178,7 @@ export function ObjectiveModal({
                 onClick={() => setShowNestedDropdown(!showNestedDropdown)}
                 className="w-full flex items-center justify-between px-3 py-2 border border-gray-300 rounded-md bg-gray-50 hover:bg-gray-100 text-gray-700"
               >
-                <span>Add nested item</span>
+                <span>{t('okr.objective.addNestedItem')}</span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
@@ -187,7 +198,7 @@ export function ObjectiveModal({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                       </svg>
                     </div>
-                    <span className="text-gray-900 font-medium">Create objective</span>
+                    <span className="text-gray-900 font-medium">{t('okr.objective.createObjective')}</span>
                     <svg className="w-4 h-4 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
@@ -205,7 +216,7 @@ export function ObjectiveModal({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                       </svg>
                     </div>
-                    <span className="text-gray-900 font-medium">Create metric</span>
+                    <span className="text-gray-900 font-medium">{t('okr.objective.createMetric')}</span>
                     <svg className="w-4 h-4 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
@@ -243,7 +254,7 @@ export function ObjectiveModal({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Groups</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('okr.objective.groupsLabel')}</label>
               <div className="flex items-center gap-2">
                 <div className="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs flex items-center gap-1">
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,7 +270,7 @@ export function ObjectiveModal({
           <div className="bg-white rounded-lg border border-gray-200 p-4">
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Interval</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('okr.objective.interval')}</label>
                 <Select
                   value={formData.quarter}
                   onChange={(value) => setFormData(prev => ({ ...prev, quarter: value }))}
@@ -273,7 +284,7 @@ export function ObjectiveModal({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Dates</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('okr.objective.dates')}</label>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -284,19 +295,19 @@ export function ObjectiveModal({
 
               <div>
                 <Input
-                  label="Add label"
+                  label={t('okr.objective.addLabel')}
                   value={formData.labels.join(', ')}
                   onChange={(value) => handleArrayInput('labels', value)}
-                  placeholder="Add label..."
+                  placeholder={t('okr.objective.addLabel')}
                 />
               </div>
 
               <div>
                 <Input
-                  label="Add stakeholder"
+                  label={t('okr.objective.addStakeholder')}
                   value={formData.stakeholders.join(', ')}
                   onChange={(value) => handleArrayInput('stakeholders', value)}
-                  placeholder="Add stakeholder..."
+                  placeholder={t('okr.objective.addStakeholder')}
                 />
               </div>
             </div>
@@ -308,7 +319,7 @@ export function ObjectiveModal({
       <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
         <label className="flex items-center gap-2 text-sm text-gray-600">
           <input type="checkbox" className="rounded" />
-          Create another
+{t('okr.objective.createAnother')}
         </label>
         
         <div className="flex gap-3">
@@ -318,14 +329,14 @@ export function ObjectiveModal({
             onClick={onClose}
             disabled={loading}
           >
-            Cancel
+{t('common.cancel')}
           </Button>
           <Button
             type="submit"
             loading={loading}
             onClick={handleSubmit}
           >
-            Create
+{t('common.create')}
           </Button>
         </div>
       </div>

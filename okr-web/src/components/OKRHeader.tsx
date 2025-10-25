@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from 'react';
+import { CreateDropdown } from './CreateDropdown';
+import { useUsers } from '@/contexts/UsersContext';
 
 interface OKRHeaderProps {
   onQuarterChange?: (quarter: string) => void;
@@ -20,6 +22,7 @@ export function OKRHeader({
   onExport,
   onCreate
 }: OKRHeaderProps) {
+  const { users } = useUsers();
   const [selectedQuarter, setSelectedQuarter] = useState('Q4 2025');
   const [selectedOwner, setSelectedOwner] = useState('All owners');
   const [selectedGroup, setSelectedGroup] = useState('All groups');
@@ -33,6 +36,12 @@ export function OKRHeader({
   const handleOwnerChange = (owner: string) => {
     setSelectedOwner(owner);
     onOwnerFilter?.(owner);
+  };
+
+  const getDisplayOwner = () => {
+    if (selectedOwner === 'All owners') return '👤 All owners';
+    const user = users.find(u => u.id === selectedOwner);
+    return user ? `👤 ${user.full_name}` : '👤 All owners';
   };
 
   const handleGroupChange = (group: string) => {
@@ -65,13 +74,23 @@ export function OKRHeader({
 
           {/* Owner filter */}
           <div className="relative">
-            <button className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              <span className="mr-2">👤</span>
-              {selectedOwner}
-              <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <select 
+              value={selectedOwner}
+              onChange={(e) => handleOwnerChange(e.target.value)}
+              className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none pr-8"
+            >
+              <option value="All owners">👤 All owners</option>
+              {users.map(user => (
+                <option key={user.id} value={user.id}>
+                  👤 {user.full_name}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
-            </button>
+            </div>
           </div>
 
           {/* Group filter */}
@@ -128,14 +147,8 @@ export function OKRHeader({
             Download .xlsx
           </button>
 
-          {/* Create button */}
-          <button
-            onClick={onCreate}
-            className="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <span className="mr-2">+</span>
-            Create
-          </button>
+          {/* Create dropdown */}
+          <CreateDropdown onCreate={onCreate || (() => {})} />
         </div>
       </div>
 

@@ -1,11 +1,18 @@
 package org.phc.templatejavabe.application.mapper;
 
+import java.math.BigDecimal;
 import org.phc.templatejavabe.domain.model.Objective;
 import org.phc.templatejavabe.domain.model.ObjectiveStatus;
 import org.phc.templatejavabe.domain.model.ObjectiveType;
+import org.phc.templatejavabe.domain.service.KeyResultService;
+import org.phc.templatejavabe.domain.service.ObjectiveService;
 import org.phc.templatejavabe.presentation.request.objective.CreateObjectiveRequest;
 import org.phc.templatejavabe.presentation.request.objective.UpdateObjectiveRequest;
 import org.phc.templatejavabe.presentation.response.objective.ObjectiveResponse;
+import org.phc.templatejavabe.presentation.response.keyresult.KeyResultResponse;
+import org.phc.templatejavabe.application.mapper.KeyResultMapper;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ObjectiveMapper {
     public static Objective toEntity(CreateObjectiveRequest req) {
@@ -40,7 +47,7 @@ public class ObjectiveMapper {
         }
         
         // Set new fields
-        o.setWeight(req.weight() != null ? req.weight() : java.math.BigDecimal.ONE);
+        o.setWeight(req.weight() != null ? req.weight() : BigDecimal.ONE);
         o.setGroups(req.groups());
         o.setLabels(req.labels());
         o.setStakeholders(req.stakeholders());
@@ -102,7 +109,46 @@ public class ObjectiveMapper {
             o.getStartDate() != null ? o.getStartDate().toString() : null,
             o.getEndDate() != null ? o.getEndDate().toString() : null,
             null, // lastCheckInDate - will be calculated separately
-            0 // commentsCount - will be calculated separately
+            0, // commentsCount - will be calculated separately
+            List.of(), // keyResults - empty for backward compatibility
+            List.of() // kpis - empty for backward compatibility
+        );
+    }
+
+    public static ObjectiveResponse toResponseWithChildren(Objective o, KeyResultService keyResultService, ObjectiveService objectiveService) {
+        // Load key results
+        List<KeyResultResponse> keyResults = keyResultService.findByObjectiveId(o.getId()).stream()
+            .map(KeyResultMapper::toResponse)
+            .collect(Collectors.toList());
+
+        // Load KPIs (objectives with type=KPI and parentId=objectiveId)
+        List<ObjectiveResponse> kpis = objectiveService.findKPIsByParentId(o.getId()).stream()
+            .map(kpi -> toResponse(kpi)) // Use simple toResponse for KPIs to avoid infinite recursion
+            .collect(Collectors.toList());
+
+        return new ObjectiveResponse(
+            o.getId(), 
+            o.getTitle(), 
+            o.getDescription(), 
+            o.getOwnerId(), 
+            o.getTeamId(), 
+            o.getWorkspaceId(),
+            o.getQuarter(), 
+            o.getStatus() != null ? o.getStatus().name() : null,
+            o.getProgress(),
+            o.getWeight(),
+            o.getCreatedDate(),
+            o.getLastModifiedDate(),
+            o.getType() != null ? o.getType().name() : null,
+            parseGroups(o.getGroups()),
+            o.getLabels(),
+            o.getStakeholders(),
+            o.getStartDate() != null ? o.getStartDate().toString() : null,
+            o.getEndDate() != null ? o.getEndDate().toString() : null,
+            null, // lastCheckInDate - will be calculated separately
+            0, // commentsCount - will be calculated separately
+            keyResults,
+            kpis
         );
     }
 

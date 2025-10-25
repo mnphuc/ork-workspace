@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_parent_id_to_objectives
+      author: system
+      changes:
+        - addColumn:
+            tableName: objectives
+            columns:
+              - column:
+                  name: parent_id
+                  type: varchar(26)

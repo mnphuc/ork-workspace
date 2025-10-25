@@ -95,4 +95,13 @@ public class KeyResultController {
         // This would need CheckInService integration
         return ResponseEntity.ok(Map.of("message", "Check-in created"));
     }
+
+    @PostMapping("/{id}/duplicate")
+    public ResponseEntity<KeyResultResponse> duplicate(@PathVariable String id) {
+        return keyResultService.findById(id)
+            .map(keyResultService::duplicate)
+            .map(KeyResultMapper::toResponse)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

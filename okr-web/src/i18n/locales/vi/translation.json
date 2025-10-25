@@ -89,6 +89,7 @@
     "objective": {
       "title": "Mục tiêu",
       "create": "Tạo mục tiêu",
+      "createNew": "Tạo mục tiêu mới",
       "edit": "Sửa mục tiêu",
       "delete": "Xóa mục tiêu",
       "titleLabel": "Tiêu đề",
@@ -102,6 +103,15 @@
       "stakeholdersLabel": "Các bên liên quan",
       "startDateLabel": "Ngày bắt đầu",
       "endDateLabel": "Ngày kết thúc",
+      "parentLabel": "Mục tiêu cha",
+      "addNestedItem": "Thêm mục con",
+      "createObjective": "Tạo mục tiêu",
+      "createMetric": "Tạo chỉ số",
+      "interval": "Khoảng thời gian",
+      "dates": "Ngày tháng",
+      "addLabel": "Thêm nhãn",
+      "addStakeholder": "Thêm bên liên quan",
+      "createAnother": "Tạo thêm",
       "types": {
         "company": "Công ty",
         "department": "Phòng ban",

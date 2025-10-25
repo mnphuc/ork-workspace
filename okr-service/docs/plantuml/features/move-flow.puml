@@ -1,0 +1,41 @@
+@startuml
+title Move Objective Flow
+
+actor User
+participant "Frontend" as FE
+participant "ObjectiveController" as OC
+participant "ObjectiveService" as OS
+participant "Database" as DB
+
+User -> FE: Click "Move" action
+FE -> OC: PATCH /objectives/{id}/move
+note right: Request body: { "team_id": "new_team", "workspace_id": "new_workspace" }
+
+OC -> OS: findById(id)
+OS -> DB: SELECT * FROM objectives WHERE id = ?
+DB --> OS: Objective data
+OS --> OC: Optional<Objective>
+
+alt Objective found
+    OC -> OS: move(objective, newTeamId, newWorkspaceId)
+    
+    alt Team ID provided
+        OS -> DB: UPDATE objectives SET team_id = ? WHERE id = ?
+    end
+    
+    alt Workspace ID provided
+        OS -> DB: UPDATE objectives SET workspace_id = ? WHERE id = ?
+    end
+    
+    DB --> OS: Updated objective
+    OS --> OC: Moved objective
+    OC -> OS: toResponseWithChildren()
+    OS --> OC: ObjectiveResponse with children
+    OC --> FE: 200 OK with moved objective
+    FE --> User: Show success message
+else Objective not found
+    OC --> FE: 404 Not Found
+    FE --> User: Show error message
+end
+
+@enduml

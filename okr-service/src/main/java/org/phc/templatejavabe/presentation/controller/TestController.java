@@ -1,45 +1,25 @@
 package org.phc.templatejavabe.presentation.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import java.time.Instant;
-import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/health")
-    public Map<String, Object> health() {
-        logger.info("=== TEST CONTROLLER HEALTH CHECK ===");
-        logger.info("API endpoint /api/test/health called");
+    @GetMapping("/password")
+    public String testPassword() {
+        String password = "password";
+        String existingHash = "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi";
         
-        return Map.of(
-            "status", "OK",
-            "message", "Backend API is working!",
-            "timestamp", Instant.now().toString(),
-            "java_version", System.getProperty("java.version"),
-            "spring_profile", System.getProperty("spring.profiles.active", "default")
-        );
-    }
-
-    @GetMapping("/security")
-    public Map<String, Object> security() {
-        logger.info("=== TEST CONTROLLER SECURITY CHECK ===");
-        logger.info("API endpoint /api/test/security called - This should be public");
+        boolean matches = passwordEncoder.matches(password, existingHash);
         
-        return Map.of(
-            "status", "OK",
-            "message", "Security configuration is working!",
-            "timestamp", Instant.now().toString(),
-            "note", "This endpoint is accessible without authentication"
-        );
+        return "Password 'password' matches existing hash: " + matches + "\n" +
+               "Existing hash: " + existingHash + "\n" +
+               "New hash for 'password': " + passwordEncoder.encode(password);
     }
 }
-
-

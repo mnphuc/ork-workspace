@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_weight_to_key_results
+      author: system
+      changes:
+        - addColumn:
+            tableName: key_results
+            columns:
+              - column:
+                  name: weight
+                  type: decimal(5,2)
+                  defaultValue: "1.0"

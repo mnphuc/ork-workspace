@@ -1,0 +1,158 @@
+= Tree Table API Documentation
+
+== Overview
+
+This document describes the API enhancements for the tree table functionality in the OKR system. The tree table displays objectives with their associated key results and KPIs in a hierarchical structure.
+
+== API Endpoints
+
+=== Enhanced Objectives List API
+
+==== GET /objectives
+
+Returns a list of objectives with their associated key results and KPIs.
+
+**Response Format:**
+
+[source,json]
+----
+[
+  {
+    "id": "obj-1",
+    "title": "Become the market leader in technology solutions",
+    "description": "Establish our company as the leading technology provider",
+    "owner_id": "phuc.mai",
+    "team_id": "tech",
+    "workspace_id": "workspace-1",
+    "quarter": "Q4 2025",
+    "status": "ON_TRACK",
+    "progress": 39.0,
+    "weight": 1.0,
+    "type": "COMPANY",
+    "groups": ["tech"],
+    "key_results": [
+      {
+        "id": "kr-1",
+        "objective_id": "obj-1",
+        "title": "Achieve $10 million in revenue",
+        "metric_type": "NUMBER",
+        "unit": "USD",
+        "target_value": 10000000,
+        "current_value": 0,
+        "weight": 1.0
+      }
+    ],
+    "kpis": [
+      {
+        "id": "kpi-1",
+        "title": "Drive Sales and Revenue Growth",
+        "type": "KPI",
+        "parent_id": "obj-1"
+      }
+    ]
+  }
+]
+----
+
+=== Duplicate APIs
+
+==== POST /objectives/{id}/duplicate
+
+Duplicates an objective with all its key results and KPIs.
+
+**Response:** Returns the duplicated objective with children.
+
+==== POST /key-results/{id}/duplicate
+
+Duplicates a key result.
+
+**Response:** Returns the duplicated key result.
+
+=== Move API
+
+==== PATCH /objectives/{id}/move
+
+Moves an objective to a different team or workspace.
+
+**Request Body:**
+
+[source,json]
+----
+{
+  "team_id": "new_team_id",
+  "workspace_id": "new_workspace_id"
+}
+----
+
+**Response:** Returns the moved objective with children.
+
+=== Custom Weights
+
+Key results now support custom weights for progress calculation. The objective progress is calculated using weighted average instead of simple average.
+
+**Weight Field:**
+- Default value: 1.0
+- Type: BigDecimal
+- Precision: 5,2
+
+=== Threshold Management
+
+KPIs can have thresholds defined for monitoring performance.
+
+**Threshold Model:**
+- `objective_id`: Reference to the KPI objective
+- `condition_type`: ABOVE_OR_EQUAL, BELOW_OR_EQUAL, EQUAL, BETWEEN
+- `threshold_value`: The threshold value
+- `unit`: Unit of measurement
+
+== Database Changes
+
+=== New Fields
+
+1. **objectives.parent_id**: Links KPIs to their parent objectives
+2. **key_results.weight**: Custom weight for progress calculation
+3. **thresholds table**: New table for KPI thresholds
+
+=== Migrations
+
+1. `add_parent_id_to_objectives.yaml`: Adds parent_id column to objectives
+2. `add_weight_to_key_results.yaml`: Adds weight column to key_results
+3. `create_threshold_table.yaml`: Creates thresholds table
+
+== Error Handling
+
+=== Common Error Codes
+
+- `404 Not Found`: Objective or Key Result not found
+- `400 Bad Request`: Invalid request data
+- `500 Internal Server Error`: Server error during processing
+
+=== Validation Rules
+
+1. **Duplicate API**: 
+   - Objective must exist
+   - Key results are duplicated with reset current values
+   - KPIs are duplicated with reset progress
+
+2. **Move API**:
+   - At least one of team_id or workspace_id must be provided
+   - User must have permission to move to target team/workspace
+
+3. **Weight Field**:
+   - Must be non-negative
+   - Defaults to 1.0 if not provided
+
+== Performance Considerations
+
+1. **N+1 Query Problem**: The enhanced list API loads key results and KPIs for each objective. Consider implementing batch loading for large datasets.
+
+2. **Weighted Progress Calculation**: The new weighted average calculation is more complex but provides better accuracy for progress tracking.
+
+3. **Threshold Queries**: Threshold lookups are performed separately and should be cached for frequently accessed KPIs.
+
+== Future Enhancements
+
+1. **Bulk Operations**: Support for bulk duplicate and move operations
+2. **Threshold Alerts**: Real-time notifications when thresholds are exceeded
+3. **Progress Analytics**: Advanced analytics for weighted progress tracking
+4. **API Versioning**: Version the API to support backward compatibility

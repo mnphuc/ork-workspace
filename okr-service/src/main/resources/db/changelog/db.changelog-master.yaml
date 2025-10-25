@@ -39,6 +39,18 @@ databaseChangeLog:
       file: db/changelog/018-add-workspace-id-to-objectives.yaml
   - include:
       file: db/changelog/019-add-weight-to-objectives.yaml
+  - include:
+      file: db/changelog/add_parent_id_to_objectives.yaml
+  - include:
+      file: db/changelog/create_threshold_table.yaml
+  - include:
+      file: db/changelog/add_weight_to_key_results.yaml
+  - include:
+      file: db/changelog/create_groups_table.yaml
+  - include:
+      file: db/changelog/create_group_members_table.yaml
+  - include:
+      file: db/changelog/create_intervals_table.yaml
 
 
 

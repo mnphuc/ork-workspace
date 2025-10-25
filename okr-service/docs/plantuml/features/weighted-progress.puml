@@ -1,0 +1,39 @@
+@startuml
+title Weighted Progress Calculation Flow
+
+participant "ObjectiveService" as OS
+participant "KeyResultService" as KRS
+participant "Database" as DB
+
+OS -> KRS: findByObjectiveId(objectiveId)
+KRS -> DB: SELECT * FROM key_results WHERE objective_id = ?
+DB --> KRS: List<KeyResult>
+KRS --> OS: List<KeyResult>
+
+OS -> OS: calculateProgress(objective)
+
+note over OS: Calculate weighted progress
+OS -> OS: totalWeightedProgress = 0
+OS -> OS: totalWeight = 0
+
+loop For each KeyResult
+    OS -> OS: progress = calculateKeyResultProgress(kr)
+    OS -> OS: weight = kr.getWeight() ?? 1.0
+    OS -> OS: totalWeightedProgress += progress * weight
+    OS -> OS: totalWeight += weight
+end
+
+alt totalWeight > 0
+    OS -> OS: weightedAverage = totalWeightedProgress / totalWeight
+    OS -> OS: objective.setProgress(weightedAverage)
+else
+    OS -> OS: objective.setProgress(0)
+end
+
+OS -> DB: UPDATE objectives SET progress = ? WHERE id = ?
+DB --> OS: Updated objective
+
+note over OS: Progress calculation formula:
+note over OS: Progress = Σ(progress_i * weight_i) / Σ(weight_i)
+
+@enduml

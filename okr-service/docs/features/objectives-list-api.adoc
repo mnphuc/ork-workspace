@@ -1,0 +1,325 @@
+= Objectives List API Documentation
+
+== Overview
+
+This document describes the API endpoint for retrieving objectives with their associated key results and KPIs in a hierarchical tree structure.
+
+== API Endpoint
+
+=== GET /objectives
+
+Retrieves a list of objectives with their nested key results and KPIs.
+
+**URL:** `GET /objectives`
+
+**Query Parameters:**
+
+[cols="1,2,3,4"]
+|===
+|Parameter |Type |Required |Description
+
+|workspaceId
+|String
+|No
+|Filter objectives by workspace ID
+
+|quarter
+|String
+|No
+|Filter objectives by quarter (e.g., "Q4 2025")
+
+|teamId
+|String
+|No
+|Filter objectives by team ID
+
+|ownerId
+|String
+|No
+|Filter objectives by owner ID
+|===
+
+**Authentication:** Bearer token required
+
+**Request Example:**
+
+[source,http]
+----
+GET /objectives?workspaceId=workspace-1&quarter=Q4%202025 HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+Accept-Language: vi
+----
+
+**Response Format:**
+
+[source,json]
+----
+[
+  {
+    "id": "obj-1",
+    "title": "Become the market leader in technology solutions",
+    "description": "Establish our company as the leading technology provider",
+    "owner_id": "phuc.mai",
+    "team_id": "tech",
+    "workspace_id": "workspace-1",
+    "quarter": "Q4 2025",
+    "status": "ON_TRACK",
+    "progress": 39.0,
+    "weight": 1.0,
+    "type": "COMPANY",
+    "groups": ["tech"],
+    "labels": "strategic,revenue",
+    "stakeholders": "ceo,cfo",
+    "start_date": "2024-01-01",
+    "end_date": "2024-12-31",
+    "created_date": "2024-01-01T00:00:00Z",
+    "last_modified_date": "2024-12-01T10:30:00Z",
+    "last_check_in_date": null,
+    "comments_count": 0,
+    "key_results": [
+      {
+        "id": "kr-1",
+        "objective_id": "obj-1",
+        "title": "Achieve $10 million in revenue",
+        "metric_type": "CURRENCY",
+        "unit": "USD",
+        "target_value": 10000000,
+        "current_value": 0,
+        "weight": 0.4,
+        "created_date": "2024-01-01T00:00:00Z",
+        "last_modified_date": "2024-12-01T10:30:00Z"
+      },
+      {
+        "id": "kr-2",
+        "objective_id": "obj-1",
+        "title": "Secure partnerships with 20 major clients",
+        "metric_type": "NUMBER",
+        "unit": "clients",
+        "target_value": 20,
+        "current_value": 6,
+        "weight": 0.6,
+        "created_date": "2024-01-01T00:00:00Z",
+        "last_modified_date": "2024-12-01T10:30:00Z"
+      }
+    ],
+    "kpis": [
+      {
+        "id": "kpi-1",
+        "title": "Drive Sales and Revenue Growth",
+        "description": "KPI for sales performance",
+        "owner_id": "phuc.mai",
+        "team_id": "tech",
+        "workspace_id": "workspace-1",
+        "quarter": "Q4 2025",
+        "status": "NOT_STARTED",
+        "progress": 0.0,
+        "weight": 1.0,
+        "type": "KPI",
+        "groups": ["tech"],
+        "labels": null,
+        "stakeholders": null,
+        "start_date": null,
+        "end_date": null,
+        "created_date": "2024-01-01T00:00:00Z",
+        "last_modified_date": "2024-12-01T10:30:00Z",
+        "last_check_in_date": null,
+        "comments_count": 0,
+        "key_results": [],
+        "kpis": []
+      }
+    ]
+  }
+]
+----
+
+**Response Fields:**
+
+[cols="1,2,3"]
+|===
+|Field |Type |Description
+
+|id
+|String
+|Unique objective identifier (ULID)
+
+|title
+|String
+|Objective title
+
+|description
+|String
+|Objective description
+
+|owner_id
+|String
+|Owner user ID
+
+|team_id
+|String
+|Team ID
+
+|workspace_id
+|String
+|Workspace ID
+
+|quarter
+|String
+|Quarter identifier (e.g., "Q4 2025")
+
+|status
+|String
+|Objective status: NOT_STARTED, ON_TRACK, AT_RISK, COMPLETED, CANCELLED
+
+|progress
+|BigDecimal
+|Progress percentage (0-100)
+
+|weight
+|BigDecimal
+|Objective weight for progress calculation
+
+|type
+|String
+|Objective type: COMPANY, DEPARTMENT, TEAM, KPI
+
+|groups
+|Array[String]
+|Associated groups
+
+|labels
+|String
+|Comma-separated labels
+
+|stakeholders
+|String
+|Comma-separated stakeholder IDs
+
+|start_date
+|String
+|Start date (ISO 8601)
+
+|end_date
+|String
+|End date (ISO 8601)
+
+|created_date
+|String
+|Creation timestamp (ISO 8601)
+
+|last_modified_date
+|String
+|Last modification timestamp (ISO 8601)
+
+|last_check_in_date
+|String
+|Last check-in timestamp (ISO 8601)
+
+|comments_count
+|Integer
+|Number of comments
+
+|key_results
+|Array[KeyResultResponse]
+|Associated key results
+
+|kpis
+|Array[ObjectiveResponse]
+|Associated KPIs (objectives with type=KPI)
+|===
+
+== Error Responses
+
+=== 401 Unauthorized
+
+[source,json]
+----
+{
+  "error": "Unauthorized",
+  "message": "Authentication token is missing or invalid"
+}
+----
+
+=== 403 Forbidden
+
+[source,json]
+----
+{
+  "error": "Forbidden",
+  "message": "Insufficient permissions to access objectives"
+}
+----
+
+=== 500 Internal Server Error
+
+[source,json]
+----
+{
+  "error": "Internal Server Error",
+  "message": "An unexpected error occurred while processing the request"
+}
+----
+
+== Business Logic
+
+=== Filtering Logic
+
+1. **workspaceId**: If provided, filter objectives by workspace
+2. **quarter**: If provided with workspaceId, filter by both workspace and quarter
+3. **ownerId**: If provided with quarter, filter by owner and quarter
+4. **teamId**: If provided with quarter, filter by team and quarter
+5. **No filters**: Return all objectives
+
+=== Progress Calculation
+
+Objective progress is calculated using weighted average of key results:
+
+```
+progress = Σ(key_result_progress × key_result_weight) / Σ(key_result_weight)
+```
+
+=== Data Loading
+
+The API loads objectives with their nested children:
+- Key results are loaded for each objective
+- KPIs (objectives with type=KPI) are loaded as children
+- Progress is calculated using weighted averages
+
+== Performance Considerations
+
+1. **N+1 Query Problem**: The API loads key results and KPIs for each objective. For large datasets, consider implementing batch loading.
+
+2. **Weighted Progress Calculation**: Complex calculation performed for each objective.
+
+3. **Nested Data**: Large response payloads for objectives with many key results and KPIs.
+
+== Usage Examples
+
+=== Get all objectives for a workspace
+
+[source,http]
+----
+GET /objectives?workspaceId=workspace-1
+----
+
+=== Get objectives for specific quarter
+
+[source,http]
+----
+GET /objectives?workspaceId=workspace-1&quarter=Q4%202025
+----
+
+=== Get objectives by owner
+
+[source,http]
+----
+GET /objectives?ownerId=phuc.mai&quarter=Q4%202025
+----
+
+=== Get objectives by team
+
+[source,http]
+----
+GET /objectives?teamId=tech&quarter=Q4%202025
+----

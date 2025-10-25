@@ -227,3 +227,4 @@ Accept: application/json
 - Team membership is determined by manager_id field (simplified implementation)
 
 
+

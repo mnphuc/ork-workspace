@@ -1,6 +1,7 @@
 package org.phc.templatejavabe.presentation.controller;
 
 import jakarta.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import org.phc.templatejavabe.domain.service.KeyResultService;
 import org.phc.templatejavabe.domain.service.AlignmentService;
 import org.phc.templatejavabe.presentation.request.objective.CreateObjectiveRequest;
 import org.phc.templatejavabe.presentation.request.objective.UpdateObjectiveRequest;
+import org.phc.templatejavabe.presentation.request.objective.MoveObjectiveRequest;
 import org.phc.templatejavabe.presentation.response.objective.ObjectiveResponse;
 import org.phc.templatejavabe.presentation.response.keyresult.KeyResultResponse;
 import org.phc.templatejavabe.application.mapper.ObjectiveMapper;
@@ -56,14 +58,14 @@ public class ObjectiveController {
         }
         
         return objectives.stream()
-            .map(ObjectiveMapper::toResponse)
+            .map(obj -> ObjectiveMapper.toResponseWithChildren(obj, keyResultService, objectiveService))
             .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ObjectiveResponse> get(@PathVariable String id) {
         return objectiveService.findById(id)
-            .map(ObjectiveMapper::toResponse)
+            .map(obj -> ObjectiveMapper.toResponseWithChildren(obj, keyResultService, objectiveService))
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -104,7 +106,7 @@ public class ObjectiveController {
         kr.setTitle(keyResultData.get("title").toString());
         kr.setMetricType(org.phc.templatejavabe.domain.model.MetricType.valueOf(keyResultData.get("metric_type").toString()));
         kr.setUnit(keyResultData.get("unit").toString());
-        kr.setTargetValue(new java.math.BigDecimal(keyResultData.get("target_value").toString()));
+        kr.setTargetValue(new BigDecimal(keyResultData.get("target_value").toString()));
         
         KeyResult saved = keyResultService.create(kr);
         return ResponseEntity.ok(KeyResultMapper.toResponse(saved));
@@ -142,6 +144,24 @@ public class ObjectiveController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         objectiveService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/duplicate")
+    public ResponseEntity<ObjectiveResponse> duplicate(@PathVariable String id) {
+        return objectiveService.findById(id)
+            .map(objectiveService::duplicate)
+            .map(duplicated -> ObjectiveMapper.toResponseWithChildren(duplicated, keyResultService, objectiveService))
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{id}/move")
+    public ResponseEntity<ObjectiveResponse> move(@PathVariable String id, @Valid @RequestBody MoveObjectiveRequest req) {
+        return objectiveService.findById(id)
+            .map(objective -> objectiveService.move(objective, req.teamId(), req.workspaceId()))
+            .map(moved -> ObjectiveMapper.toResponseWithChildren(moved, keyResultService, objectiveService))
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
 

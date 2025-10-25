@@ -33,6 +33,9 @@ public class KeyResultService {
     public KeyResult create(KeyResult keyResult) {
         validateMetric(keyResult);
         keyResult.setCurrentValue(BigDecimal.ZERO);
+        if (keyResult.getWeight() == null) {
+            keyResult.setWeight(BigDecimal.ONE);
+        }
         return keyResultRepository.save(keyResult);
     }
 
@@ -90,6 +93,22 @@ public class KeyResultService {
             .multiply(BigDecimal.valueOf(100));
         
         return progress.min(BigDecimal.valueOf(100));
+    }
+
+    /**
+     * Duplicate a key result
+     */
+    @Transactional
+    public KeyResult duplicate(KeyResult source) {
+        KeyResult duplicate = new KeyResult();
+        duplicate.setObjectiveId(source.getObjectiveId());
+        duplicate.setTitle("Copy of " + source.getTitle());
+        duplicate.setMetricType(source.getMetricType());
+        duplicate.setUnit(source.getUnit());
+        duplicate.setTargetValue(source.getTargetValue());
+        duplicate.setCurrentValue(BigDecimal.ZERO); // Reset current value
+        duplicate.setWeight(source.getWeight() != null ? source.getWeight() : BigDecimal.ONE);
+        return keyResultRepository.save(duplicate);
     }
 }
 

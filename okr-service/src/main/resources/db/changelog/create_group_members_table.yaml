@@ -1,0 +1,87 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-group-members-table
+      author: system
+      changes:
+        - createTable:
+            tableName: group_members
+            columns:
+              - column:
+                  name: id
+                  type: varchar(26)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: group_id
+                  type: varchar(26)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: varchar(26)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    defaultValue: 'MEMBER'
+              - column:
+                  name: permissions
+                  type: text
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                    defaultValue: 'ACTIVE'
+              - column:
+                  name: created_by
+                  type: varchar(26)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_modified_by
+                  type: varchar(26)
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+              - column:
+                  name: joined_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_activity
+                  type: timestamp
+            indexes:
+              - index:
+                  name: idx_group_members_group_id
+                  columns:
+                    - column:
+                        name: group_id
+              - index:
+                  name: idx_group_members_user_id
+                  columns:
+                    - column:
+                        name: user_id
+              - index:
+                  name: idx_group_members_status
+                  columns:
+                    - column:
+                        name: status
+              - index:
+                  name: idx_group_members_group_user
+                  columns:
+                    - column:
+                        name: group_id
+                    - column:
+                        name: user_id
+

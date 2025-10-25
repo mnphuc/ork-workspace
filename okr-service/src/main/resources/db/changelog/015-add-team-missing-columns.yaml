@@ -10,3 +10,4 @@ databaseChangeLog:
               - column: { name: manager_id, type: varchar(26) }
 
 
+

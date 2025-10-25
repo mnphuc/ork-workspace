@@ -1,0 +1,47 @@
+@startuml
+title Duplicate Objective Flow
+
+actor User
+participant "Frontend" as FE
+participant "ObjectiveController" as OC
+participant "ObjectiveService" as OS
+participant "KeyResultService" as KRS
+participant "Database" as DB
+
+User -> FE: Click "Duplicate" action
+FE -> OC: POST /objectives/{id}/duplicate
+OC -> OS: findById(id)
+OS -> DB: SELECT * FROM objectives WHERE id = ?
+DB --> OS: Objective data
+OS --> OC: Optional<Objective>
+
+alt Objective found
+    OC -> OS: duplicate(objective)
+    OS -> DB: INSERT INTO objectives (title, description, ...)
+    DB --> OS: New objective ID
+    
+    OS -> KRS: findByObjectiveId(sourceId)
+    KRS -> DB: SELECT * FROM key_results WHERE objective_id = ?
+    DB --> KRS: Key results list
+    KRS --> OS: List<KeyResult>
+    
+    loop For each key result
+        OS -> DB: INSERT INTO key_results (objective_id, title, ...)
+        DB --> OS: New key result ID
+    end
+    
+    OS --> OC: Duplicated objective
+    OC -> OS: toResponseWithChildren()
+    OS -> KRS: findByObjectiveId(newObjectiveId)
+    KRS -> DB: SELECT * FROM key_results WHERE objective_id = ?
+    DB --> KRS: New key results
+    KRS --> OS: List<KeyResult>
+    OS --> OC: ObjectiveResponse with children
+    OC --> FE: 200 OK with duplicated objective
+    FE --> User: Show success message
+else Objective not found
+    OC --> FE: 404 Not Found
+    FE --> User: Show error message
+end
+
+@enduml

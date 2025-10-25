@@ -6,6 +6,8 @@ import org.phc.templatejavabe.presentation.request.keyresult.CreateKeyResultRequ
 import org.phc.templatejavabe.presentation.request.keyresult.UpdateKeyResultRequest;
 import org.phc.templatejavabe.presentation.response.keyresult.KeyResultResponse;
 
+import java.math.BigDecimal;
+
 public class KeyResultMapper {
     public static KeyResult toEntity(CreateKeyResultRequest req) {
         KeyResult kr = new KeyResult();
@@ -48,6 +50,7 @@ public class KeyResultMapper {
             kr.getUnit(),
             kr.getTargetValue(),
             kr.getCurrentValue(),
+            kr.getWeight() != null ? kr.getWeight() : BigDecimal.ONE,
             kr.getCreatedDate(),
             kr.getLastModifiedDate()
         );

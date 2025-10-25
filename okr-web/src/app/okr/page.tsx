@@ -51,6 +51,7 @@ function ObjectivesContent() {
   const [filteredObjectives, setFilteredObjectives] = useState<Objective[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedOwner, setSelectedOwner] = useState<string>('All owners');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<ObjectiveType | null>(null);
   
@@ -90,20 +91,8 @@ function ObjectivesContent() {
       return;
     }
     
-    apiFetch<Objective[]>(`/objectives?workspaceId=${currentWorkspace.id}`)
-      .then((data) => {
-        setObjectives(data);
-        setFilteredObjectives(data);
-      })
-      .catch((e) => {
-        setError(e.message || 'Failed to load');
-        // If it's an auth error, redirect to login
-        if (e.message.includes('Authentication failed')) {
-          clearTokens();
-          window.location.href = '/login';
-        }
-      })
-      .finally(() => setLoading(false));
+    // Load objectives from API
+    loadObjectives();
   }, [currentWorkspace, workspaceLoading]);
 
   // Apply search and filters
@@ -155,11 +144,20 @@ function ObjectivesContent() {
       });
     }
 
+    // Filter by owner
+    if (selectedOwner !== 'All owners') {
+      filtered = filtered.filter(obj => obj.owner_id === selectedOwner);
+    }
+
     setFilteredObjectives(filtered);
-  }, [objectives, searchQuery, filters]);
+  }, [objectives, searchQuery, filters, selectedOwner]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+  };
+
+  const handleOwnerFilter = (owner: string) => {
+    setSelectedOwner(owner);
   };
 
   const handleFilterChange = (key: string, value: any) => {
@@ -186,21 +184,31 @@ function ObjectivesContent() {
   };
 
   const handleImport = async (importData: any) => {
-    console.log('Importing objectives:', importData);
-    // Implement import logic here
-    setShowImportModal(false);
-    // Reload objectives after import
-    await loadObjectives();
+    try {
+      console.log('Importing objectives:', importData);
+      // TODO: Implement import logic here
+      setShowImportModal(false);
+      // Reload objectives after import
+      await loadObjectives();
+    } catch (e: any) {
+      console.error('Failed to import objectives:', e);
+      alert('Failed to import objectives: ' + (e.message || 'Unknown error'));
+    }
   };
 
   const handleBulkEdit = async (bulkEditData: any) => {
-    console.log('Bulk editing objectives:', bulkEditData);
-    // Implement bulk edit logic here
-    setShowBulkEditModal(false);
-    setSelectedObjectives([]);
-    setSelectAll(false);
-    // Reload objectives after bulk edit
-    await loadObjectives();
+    try {
+      console.log('Bulk editing objectives:', bulkEditData);
+      // TODO: Implement bulk edit logic here
+      setShowBulkEditModal(false);
+      setSelectedObjectives([]);
+      setSelectAll(false);
+      // Reload objectives after bulk edit
+      await loadObjectives();
+    } catch (e: any) {
+      console.error('Failed to bulk edit objectives:', e);
+      alert('Failed to bulk edit objectives: ' + (e.message || 'Unknown error'));
+    }
   };
 
   const handleSelectObjective = (objective: Objective, selected: boolean) => {
@@ -236,7 +244,8 @@ function ObjectivesContent() {
     
     try {
       await apiFetch(`/objectives/${id}`, { method: 'DELETE' });
-      setObjectives(objectives.filter(obj => obj.id !== id));
+      // Reload objectives to refresh the list
+      await loadObjectives();
     } catch (e: unknown) {
       console.error('Failed to delete objective:', e);
       alert('Failed to delete objective');
@@ -253,22 +262,79 @@ function ObjectivesContent() {
     setSelectedType(null);
   };
 
-  const handleObjectiveSave = (objective: Objective) => {
-    // Add the new objective to the list
-    setObjectives(prev => [objective, ...prev]);
-    setIsModalOpen(false);
-    setSelectedType(null);
+  const handleObjectiveSave = async (objective: Objective) => {
+    try {
+      // Create objective via API
+      const response = await apiFetch<Objective>('/objectives', {
+        method: 'POST',
+        body: {
+          title: objective.title,
+          description: objective.description,
+          owner_id: objective.owner_id,
+          team_id: objective.team_id,
+          workspace_id: currentWorkspace?.id,
+          quarter: objective.quarter,
+          status: objective.status.toUpperCase().replace(/_/g, ''),
+          type: objective.type || 'COMPANY',
+          groups: Array.isArray(objective.groups) ? objective.groups.join(',') : objective.groups,
+          weight: objective.weight || 1.0
+        }
+      });
+      
+      // Reload objectives to get the latest data
+      await loadObjectives();
+      
+      setIsModalOpen(false);
+      setSelectedType(null);
+    } catch (e: any) {
+      console.error('Failed to create objective:', e);
+      alert('Failed to create objective: ' + (e.message || 'Unknown error'));
+    }
   };
 
   const loadObjectives = async () => {
     if (!currentWorkspace) return;
     
+    setLoading(true);
+    setError(null);
+    
     try {
       const data = await apiFetch<Objective[]>(`/objectives?workspaceId=${currentWorkspace.id}`);
-      setObjectives(data);
-      setFilteredObjectives(data);
+      
+      // Map backend response to frontend format
+      const mappedData = data.map(objective => ({
+        ...objective,
+        // Convert status from uppercase to lowercase with underscore
+        status: objective.status.toLowerCase().replace(/([A-Z])/g, '_$1').replace(/^_/, ''),
+        // Convert date fields from Instant to string
+        created_date: objective.created_date ? new Date(objective.created_date).toISOString().split('T')[0] : '',
+        last_modified_date: objective.last_modified_date ? new Date(objective.last_modified_date).toISOString().split('T')[0] : '',
+        last_check_in_date: objective.last_check_in_date ? new Date(objective.last_check_in_date).toISOString().split('T')[0] : undefined,
+        // Map key results status
+        key_results: objective.key_results?.map(kr => ({
+          ...kr,
+          status: kr.status ? kr.status.toLowerCase().replace(/([A-Z])/g, '_$1').replace(/^_/, '') : 'not_started',
+          created_date: kr.created_date ? new Date(kr.created_date).toISOString().split('T')[0] : '',
+          last_modified_date: kr.last_modified_date ? new Date(kr.last_modified_date).toISOString().split('T')[0] : ''
+        })) || [],
+        // Map KPIs status
+        kpis: objective.kpis?.map(kpi => ({
+          ...kpi,
+          status: kpi.status.toLowerCase().replace(/([A-Z])/g, '_$1').replace(/^_/, ''),
+          created_date: kpi.created_date ? new Date(kpi.created_date).toISOString().split('T')[0] : '',
+          last_modified_date: kpi.last_modified_date ? new Date(kpi.last_modified_date).toISOString().split('T')[0] : '',
+          last_check_in_date: kpi.last_check_in_date ? new Date(kpi.last_check_in_date).toISOString().split('T')[0] : undefined,
+          key_results: [],
+          kpis: []
+        })) || []
+      }));
+      
+      setObjectives(mappedData);
+      setFilteredObjectives(mappedData);
     } catch (e: any) {
-      setError(e.message || 'Failed to load');
+      setError(e.message || 'Failed to load objectives');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -298,12 +364,12 @@ function ObjectivesContent() {
       {/* OKR Header */}
       <OKRHeader
         onQuarterChange={(quarter) => console.log('Quarter changed:', quarter)}
-        onOwnerFilter={(owner) => console.log('Owner filter:', owner)}
+        onOwnerFilter={handleOwnerFilter}
         onGroupFilter={(group) => console.log('Group filter:', group)}
         onSearch={(query) => handleSearch(query)}
         onShare={() => console.log('Share')}
         onExport={() => setShowExportModal(true)}
-        onCreate={() => handleTypeSelect('COMPANY' as any)}
+        onCreate={(type) => handleTypeSelect(type as any)}
       />
 
       {/* Search and Filters */}

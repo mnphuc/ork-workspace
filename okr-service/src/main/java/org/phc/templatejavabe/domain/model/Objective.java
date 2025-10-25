@@ -93,6 +93,9 @@ public class Objective {
     @Column(name = "end_date")
     private java.time.LocalDate endDate;
 
+    @Column(name = "parent_id", length = 26)
+    private String parentId;
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getTitle() { return title; }
@@ -131,6 +134,8 @@ public class Objective {
     public void setStartDate(java.time.LocalDate startDate) { this.startDate = startDate; }
     public java.time.LocalDate getEndDate() { return endDate; }
     public void setEndDate(java.time.LocalDate endDate) { this.endDate = endDate; }
+    public String getParentId() { return parentId; }
+    public void setParentId(String parentId) { this.parentId = parentId; }
 }
 
 

@@ -21,7 +21,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: 'vi',
+    fallbackLng: 'en',
+    lng: 'en', // Set default language to English to prevent hydration issues
     debug: process.env.NODE_ENV === 'development',
     
     detection: {
@@ -31,6 +32,11 @@ i18n
     
     interpolation: {
       escapeValue: false,
+    },
+    
+    // Prevent hydration issues by ensuring consistent language
+    react: {
+      useSuspense: false,
     },
   });
 

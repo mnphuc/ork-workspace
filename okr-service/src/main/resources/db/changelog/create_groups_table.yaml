@@ -1,0 +1,87 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-groups-table
+      author: system
+      changes:
+        - createTable:
+            tableName: groups
+            columns:
+              - column:
+                  name: id
+                  type: varchar(26)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(500)
+              - column:
+                  name: workspace_id
+                  type: varchar(26)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: group_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    defaultValue: 'TEAM'
+              - column:
+                  name: settings
+                  type: text
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                    defaultValue: 'ACTIVE'
+              - column:
+                  name: created_by
+                  type: varchar(26)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_modified_by
+                  type: varchar(26)
+              - column:
+                  name: last_modified_date
+                  type: timestamp
+              - column:
+                  name: owner_id
+                  type: varchar(26)
+                  constraints:
+                    nullable: false
+            indexes:
+              - index:
+                  name: idx_groups_workspace_id
+                  columns:
+                    - column:
+                        name: workspace_id
+              - index:
+                  name: idx_groups_owner_id
+                  columns:
+                    - column:
+                        name: owner_id
+              - index:
+                  name: idx_groups_status
+                  columns:
+                    - column:
+                        name: status
+              - index:
+                  name: idx_groups_name_workspace
+                  columns:
+                    - column:
+                        name: name
+                    - column:
+                        name: workspace_id
+

@@ -12,6 +12,7 @@ public record KeyResultResponse(
     String unit,
     @JsonProperty("target_value") BigDecimal targetValue,
     @JsonProperty("current_value") BigDecimal currentValue,
+    BigDecimal weight,
     @JsonProperty("created_date") Instant createdDate,
     @JsonProperty("last_modified_date") Instant lastModifiedDate
 ) {}

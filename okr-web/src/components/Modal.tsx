@@ -36,7 +36,11 @@ export function Modal({
           <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
             <button
-              onClick={onClose}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onClose();
+              }}
               className="text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-md hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

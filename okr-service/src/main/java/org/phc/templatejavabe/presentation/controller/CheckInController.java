@@ -1,6 +1,7 @@
 package org.phc.templatejavabe.presentation.controller;
 
 import jakarta.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -53,7 +54,7 @@ public class CheckInController {
 
             // Update fields from request
             if (updateData.containsKey("value")) {
-                existing.setValue(new java.math.BigDecimal(updateData.get("value").toString()));
+                existing.setValue(new BigDecimal(updateData.get("value").toString()));
             }
             if (updateData.containsKey("note")) {
                 existing.setNote(updateData.get("note").toString());

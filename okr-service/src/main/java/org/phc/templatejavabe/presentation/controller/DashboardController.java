@@ -1,5 +1,6 @@
 package org.phc.templatejavabe.presentation.controller;
 
+import java.math.BigDecimal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +38,7 @@ public class DashboardController {
         }
         
         // Convert to response format
-        int objectivesProgress = ((java.math.BigDecimal) summary.get("average_progress")).intValue();
+        int objectivesProgress = ((BigDecimal) summary.get("average_progress")).intValue();
         int metricsProgress = objectivesProgress; // Same for now
         
         @SuppressWarnings("unchecked")

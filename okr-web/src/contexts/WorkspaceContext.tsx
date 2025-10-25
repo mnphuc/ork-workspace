@@ -36,12 +36,12 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
         return;
       }
       
-      const data = await apiFetch<WorkspaceSummary[]>('/workspaces');
-      setWorkspaces(data);
+      // Load workspaces from API
+      const workspacesData = await apiFetch<WorkspaceSummary[]>('/workspaces');
       
-      // Always set first workspace as current if available
-      if (data.length > 0) {
-        setCurrentWorkspace(data[0]);
+      setWorkspaces(workspacesData);
+      if (workspacesData.length > 0) {
+        setCurrentWorkspace(workspacesData[0]);
       }
     } catch (e: any) {
       console.error('Error loading workspaces:', e);
