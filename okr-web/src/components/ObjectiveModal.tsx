@@ -172,6 +172,28 @@ export function ObjectiveModal({
               rows={4}
             />
 
+            {/* Date Fields */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Input
+                  label={t('okr.objective.startDate')}
+                  type="date"
+                  value={formData.start_date}
+                  onChange={(value) => setFormData(prev => ({ ...prev, start_date: value }))}
+                  placeholder="YYYY-MM-DD"
+                />
+              </div>
+              <div>
+                <Input
+                  label={t('okr.objective.endDate')}
+                  type="date"
+                  value={formData.end_date}
+                  onChange={(value) => setFormData(prev => ({ ...prev, end_date: value }))}
+                  placeholder="YYYY-MM-DD"
+                />
+              </div>
+            </div>
+
             {/* Add Nested Item */}
             <div className="relative">
               <button

@@ -6,6 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Id;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -43,6 +46,10 @@ public class Objective {
 
     @Column(name = "team_id", length = 26)
     private String teamId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id", insertable = false, updatable = false)
+    private Group team;
 
     @Column(name = "workspace_id", length = 26)
     private String workspaceId;
@@ -106,6 +113,8 @@ public class Objective {
     public void setOwnerId(String ownerId) { this.ownerId = ownerId; }
     public String getTeamId() { return teamId; }
     public void setTeamId(String teamId) { this.teamId = teamId; }
+    public Group getTeam() { return team; }
+    public void setTeam(Group team) { this.team = team; }
     public String getWorkspaceId() { return workspaceId; }
     public void setWorkspaceId(String workspaceId) { this.workspaceId = workspaceId; }
     public String getQuarter() { return quarter; }

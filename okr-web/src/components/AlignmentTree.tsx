@@ -145,6 +145,9 @@ export function AlignmentTree({
     const isExpanded = expandedNodes.has(node.id);
     const hasChildren = node.children && node.children.length > 0;
     const availableChildren = getAvailableChildren(node.id);
+    
+    // Debug logging
+    console.log(`Node ${node.id}: hasChildren=${hasChildren}, children=`, node.children);
 
     return (
       <div key={node.id} className="relative">

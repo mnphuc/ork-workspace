@@ -25,7 +25,7 @@ public class IntervalMapper {
         response.setStatus(interval.getStatus());
         response.setCreatedDate(interval.getCreatedDate() != null ? interval.getCreatedDate().toString() : null);
         response.setLastModifiedDate(interval.getLastModifiedDate() != null ? interval.getLastModifiedDate().toString() : null);
-        response.setObjectiveCount(interval.getObjectiveCount());
+        response.setObjectiveCount(0); // No direct relationship - would need business logic to calculate
         response.setOwnerId(interval.getOwnerId());
 
         return response;

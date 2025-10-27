@@ -1,32 +1,30 @@
 "use client";
 import React, { useState, useRef } from 'react';
 import { Modal } from './Modal';
+import { Button } from './Button';
+import { Input } from './Input';
+import { Select } from './Select';
+import { apiFetch } from '@/lib/api';
 
 interface ImportModalProps {
   isOpen: boolean;
   onClose: () => void;
   onImport: (importData: ImportData) => void;
-  dataType: 'objectives' | 'keyresults' | 'users' | 'teams';
+  dataType: 'objectives' | 'keyresults' | 'checkins' | 'users';
 }
 
 interface ImportData {
+  format: 'excel' | 'csv' | 'json';
   file: File;
+  options: {
+    skipDuplicates: boolean;
+    updateExisting: boolean;
+    validateData: boolean;
+    createMissingTeams: boolean;
+  };
   mapping: {
     [key: string]: string;
   };
-  options: {
-    skipFirstRow: boolean;
-    createMissingTeams: boolean;
-    updateExisting: boolean;
-    validateData: boolean;
-  };
-}
-
-interface FieldMapping {
-  sourceField: string;
-  targetField: string;
-  required: boolean;
-  dataType: 'text' | 'number' | 'date' | 'boolean';
 }
 
 export function ImportModal({ 
@@ -35,425 +33,354 @@ export function ImportModal({
   onImport, 
   dataType 
 }: ImportModalProps) {
+  const [format, setFormat] = useState<'excel' | 'csv' | 'json'>('excel');
   const [file, setFile] = useState<File | null>(null);
-  const [mapping, setMapping] = useState<{[key: string]: string}>({});
   const [options, setOptions] = useState({
-    skipFirstRow: true,
-    createMissingTeams: true,
+    skipDuplicates: true,
     updateExisting: false,
     validateData: true,
+    createMissingTeams: true
   });
-  const [previewData, setPreviewData] = useState<any[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [step, setStep] = useState<'upload' | 'mapping' | 'preview'>('upload');
+  const [mapping, setMapping] = useState<{[key: string]: string}>({});
+  const [importing, setImporting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [preview, setPreview] = useState<any[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Field definitions based on data type
-  const getFieldDefinitions = (): FieldMapping[] => {
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setError(null);
+      // Auto-detect format based on file extension
+      const extension = selectedFile.name.split('.').pop()?.toLowerCase();
+      if (extension === 'csv') {
+        setFormat('csv');
+      } else if (extension === 'json') {
+        setFormat('json');
+      } else if (extension === 'xlsx' || extension === 'xls') {
+        setFormat('excel');
+      }
+      // Load preview
+      loadPreview(selectedFile);
+    }
+  };
+
+  const loadPreview = async (file: File) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('format', format);
+      
+      const response = await apiFetch('/import/preview', {
+        method: 'POST',
+        body: formData
+      });
+      
+      setPreview(response.preview || []);
+      
+      // Auto-generate mapping based on preview
+      if (response.preview && response.preview.length > 0) {
+        const sampleRow = response.preview[0];
+        const autoMapping: {[key: string]: string} = {};
+        
+        Object.keys(sampleRow).forEach(key => {
+          const lowerKey = key.toLowerCase();
+          if (lowerKey.includes('title') || lowerKey.includes('name')) {
+            autoMapping[key] = 'title';
+          } else if (lowerKey.includes('description')) {
+            autoMapping[key] = 'description';
+          } else if (lowerKey.includes('status')) {
+            autoMapping[key] = 'status';
+          } else if (lowerKey.includes('progress')) {
+            autoMapping[key] = 'progress';
+          } else if (lowerKey.includes('owner') || lowerKey.includes('assignee')) {
+            autoMapping[key] = 'owner_id';
+          } else if (lowerKey.includes('team') || lowerKey.includes('group')) {
+            autoMapping[key] = 'team_id';
+          } else if (lowerKey.includes('quarter')) {
+            autoMapping[key] = 'quarter';
+          } else if (lowerKey.includes('start') || lowerKey.includes('begin')) {
+            autoMapping[key] = 'start_date';
+          } else if (lowerKey.includes('end') || lowerKey.includes('due')) {
+            autoMapping[key] = 'end_date';
+          }
+        });
+        
+        setMapping(autoMapping);
+      }
+    } catch (e: any) {
+      console.error('Failed to load preview:', e);
+      setError('Failed to load file preview');
+    }
+  };
+
+  const handleImport = async () => {
+    if (!file) return;
+
+    try {
+      setImporting(true);
+      setError(null);
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('format', format);
+      formData.append('options', JSON.stringify(options));
+      formData.append('mapping', JSON.stringify(mapping));
+
+      const response = await apiFetch(`/import/${dataType}`, {
+        method: 'POST',
+        body: formData
+      });
+
+      onImport({
+        format,
+        file,
+        options,
+        mapping
+      });
+
+      onClose();
+    } catch (e: any) {
+      console.error('Import failed:', e);
+      setError(e.message || 'Import failed');
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  const getFieldOptions = () => {
     switch (dataType) {
       case 'objectives':
         return [
-          { sourceField: 'title', targetField: 'title', required: true, dataType: 'text' },
-          { sourceField: 'description', targetField: 'description', required: false, dataType: 'text' },
-          { sourceField: 'owner', targetField: 'owner_id', required: true, dataType: 'text' },
-          { sourceField: 'team', targetField: 'team_id', required: true, dataType: 'text' },
-          { sourceField: 'quarter', targetField: 'quarter', required: true, dataType: 'text' },
-          { sourceField: 'status', targetField: 'status', required: false, dataType: 'text' },
+          { value: 'title', label: 'Title' },
+          { value: 'description', label: 'Description' },
+          { value: 'status', label: 'Status' },
+          { value: 'progress', label: 'Progress' },
+          { value: 'owner_id', label: 'Owner ID' },
+          { value: 'team_id', label: 'Team ID' },
+          { value: 'quarter', label: 'Quarter' },
+          { value: 'start_date', label: 'Start Date' },
+          { value: 'end_date', label: 'End Date' },
+          { value: 'parent_id', label: 'Parent ID' }
         ];
       case 'keyresults':
         return [
-          { sourceField: 'title', targetField: 'title', required: true, dataType: 'text' },
-          { sourceField: 'objective', targetField: 'objective_id', required: true, dataType: 'text' },
-          { sourceField: 'metric_type', targetField: 'metric_type', required: true, dataType: 'text' },
-          { sourceField: 'unit', targetField: 'unit', required: true, dataType: 'text' },
-          { sourceField: 'target_value', targetField: 'target_value', required: true, dataType: 'number' },
-          { sourceField: 'current_value', targetField: 'current_value', required: false, dataType: 'number' },
+          { value: 'title', label: 'Title' },
+          { value: 'metric_type', label: 'Metric Type' },
+          { value: 'unit', label: 'Unit' },
+          { value: 'target_value', label: 'Target Value' },
+          { value: 'current_value', label: 'Current Value' },
+          { value: 'objective_id', label: 'Objective ID' }
+        ];
+      case 'checkins':
+        return [
+          { value: 'key_result_id', label: 'Key Result ID' },
+          { value: 'value', label: 'Value' },
+          { value: 'note', label: 'Note' },
+          { value: 'created_date', label: 'Created Date' }
         ];
       case 'users':
         return [
-          { sourceField: 'name', targetField: 'name', required: true, dataType: 'text' },
-          { sourceField: 'email', targetField: 'email', required: true, dataType: 'text' },
-          { sourceField: 'role', targetField: 'role', required: true, dataType: 'text' },
-          { sourceField: 'team', targetField: 'team_id', required: false, dataType: 'text' },
-        ];
-      case 'teams':
-        return [
-          { sourceField: 'name', targetField: 'name', required: true, dataType: 'text' },
-          { sourceField: 'type', targetField: 'type', required: true, dataType: 'text' },
-          { sourceField: 'parent', targetField: 'parent_id', required: false, dataType: 'text' },
+          { value: 'email', label: 'Email' },
+          { value: 'full_name', label: 'Full Name' },
+          { value: 'role', label: 'Role' },
+          { value: 'status', label: 'Status' }
         ];
       default:
         return [];
     }
   };
 
-  const fieldDefinitions = getFieldDefinitions();
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      processFile(selectedFile);
-    }
-  };
-
-  const processFile = async (file: File) => {
-    setIsProcessing(true);
-    
-    try {
-      const text = await file.text();
-      const lines = text.split('\n').filter(line => line.trim());
-      
-      if (lines.length === 0) {
-        throw new Error('File is empty');
-      }
-
-      // Parse CSV
-      const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-      const data = lines.slice(1).map(line => {
-        const values = line.split(',').map(v => v.trim().replace(/"/g, ''));
-        const row: any = {};
-        headers.forEach((header, index) => {
-          row[header] = values[index] || '';
-        });
-        return row;
-      });
-
-      setPreviewData(data.slice(0, 5)); // Show first 5 rows
-      
-      // Auto-map fields
-      const autoMapping: {[key: string]: string} = {};
-      fieldDefinitions.forEach(field => {
-        const matchingHeader = headers.find(header => 
-          header.toLowerCase().includes(field.sourceField.toLowerCase()) ||
-          field.sourceField.toLowerCase().includes(header.toLowerCase())
-        );
-        if (matchingHeader) {
-          autoMapping[matchingHeader] = field.targetField;
-        }
-      });
-      
-      setMapping(autoMapping);
-      setStep('mapping');
-    } catch (error) {
-      console.error('Error processing file:', error);
-      alert('Error processing file. Please check the format.');
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const handleMappingChange = (sourceField: string, targetField: string) => {
-    setMapping(prev => ({
-      ...prev,
-      [sourceField]: targetField
-    }));
-  };
-
-  const handleOptionChange = (key: keyof typeof options, value: boolean) => {
-    setOptions(prev => ({
-      ...prev,
-      [key]: value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!file) return;
-
-    const importData: ImportData = {
-      file,
-      mapping,
-      options,
-    };
-
-    await onImport(importData);
-    onClose();
-  };
-
-  const handleReset = () => {
-    setFile(null);
-    setMapping({});
-    setPreviewData([]);
-    setStep('upload');
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
-
-  const getDataTypeLabel = () => {
-    switch (dataType) {
-      case 'objectives': return 'Objectives';
-      case 'keyresults': return 'Key Results';
-      case 'users': return 'Users';
-      case 'teams': return 'Teams';
-      default: return 'Data';
-    }
-  };
-
-  const getFileTypeDescription = () => {
+  const getFormatOptions = () => {
     switch (dataType) {
       case 'objectives':
-        return 'CSV file with columns: title, description, owner, team, quarter, status';
       case 'keyresults':
-        return 'CSV file with columns: title, objective, metric_type, unit, target_value, current_value';
+        return [
+          { value: 'excel', label: 'Excel (.xlsx)' },
+          { value: 'csv', label: 'CSV (.csv)' },
+          { value: 'json', label: 'JSON (.json)' }
+        ];
+      case 'checkins':
+        return [
+          { value: 'csv', label: 'CSV (.csv)' },
+          { value: 'json', label: 'JSON (.json)' }
+        ];
       case 'users':
-        return 'CSV file with columns: name, email, role, team';
-      case 'teams':
-        return 'CSV file with columns: name, type, parent';
+        return [
+          { value: 'excel', label: 'Excel (.xlsx)' },
+          { value: 'csv', label: 'CSV (.csv)' }
+        ];
       default:
-        return 'CSV file';
+        return [];
     }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={`Import ${getDataTypeLabel()}`} size="lg">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Step Indicator */}
-        <div className="flex items-center space-x-4">
-          {[
-            { key: 'upload', label: 'Upload', icon: '📁' },
-            { key: 'mapping', label: 'Map Fields', icon: '🔗' },
-            { key: 'preview', label: 'Preview', icon: '👁️' },
-          ].map((stepItem, index) => (
-            <div key={stepItem.key} className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
-                step === stepItem.key 
-                  ? 'bg-blue-600 text-white' 
-                  : index < ['upload', 'mapping', 'preview'].indexOf(step)
-                    ? 'bg-green-600 text-white'
-                    : 'bg-gray-200 text-gray-600'
-              }`}>
-                {index < ['upload', 'mapping', 'preview'].indexOf(step) ? '✓' : stepItem.icon}
-              </div>
-              <span className={`ml-2 text-sm ${
-                step === stepItem.key ? 'text-blue-600 font-medium' : 'text-gray-500'
-              }`}>
-                {stepItem.label}
-              </span>
-              {index < 2 && <div className="w-8 h-px bg-gray-200 mx-4" />}
-            </div>
-          ))}
-        </div>
-
-        {/* Upload Step */}
-        {step === 'upload' && (
-          <div className="space-y-4">
-            <div className="text-center">
-              <div className="text-4xl mb-4">📊</div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Upload {getDataTypeLabel()} File
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                {getFileTypeDescription()}
-              </p>
-            </div>
-
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".csv,.xlsx,.xls"
-                onChange={handleFileSelect}
-                className="hidden"
-              />
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
-              >
-                Choose File
-              </button>
-              <p className="text-xs text-gray-500 mt-2">
-                Supported formats: CSV, Excel (.xlsx, .xls)
-              </p>
-            </div>
-
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={`Import ${dataType.charAt(0).toUpperCase() + dataType.slice(1)}`}
+      size="lg"
+    >
+      <div className="space-y-6">
+        {/* File Selection */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Select File
+          </label>
+          <div className="flex items-center space-x-4">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx,.xls,.csv,.json"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+            <Button
+              onClick={() => fileInputRef.current?.click()}
+              variant="outline"
+              className="flex items-center space-x-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              <span>Choose File</span>
+            </Button>
             {file && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                <div className="flex items-center space-x-2">
-                  <span className="text-green-600">✓</span>
-                  <span className="text-sm text-green-800">
-                    File selected: {file.name} ({(file.size / 1024).toFixed(1)} KB)
-                  </span>
-                </div>
-              </div>
+              <span className="text-sm text-gray-600">
+                {file.name} ({(file.size / 1024).toFixed(1)} KB)
+              </span>
             )}
           </div>
-        )}
+        </div>
 
-        {/* Mapping Step */}
-        {step === 'mapping' && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900">Map Fields</h3>
-            <p className="text-sm text-gray-600">
-              Map the columns in your file to the required fields
-            </p>
+        {/* Format Selection */}
+        <div>
+          <Select
+            label="File Format"
+            value={format}
+            onChange={setFormat}
+            options={getFormatOptions()}
+            disabled={!file}
+          />
+        </div>
 
-            <div className="space-y-3">
-              {Object.keys(previewData[0] || {}).map(sourceField => (
-                <div key={sourceField} className="flex items-center space-x-3">
-                  <div className="w-32 text-sm text-gray-700 truncate">
-                    {sourceField}
-                  </div>
-                  <div className="text-gray-400">→</div>
-                  <select
-                    value={mapping[sourceField] || ''}
-                    onChange={(e) => handleMappingChange(sourceField, e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
-                  >
-                    <option value="">Select field...</option>
-                    {fieldDefinitions.map(field => (
-                      <option key={field.targetField} value={field.targetField}>
-                        {field.targetField} {field.required && '*'}
-                      </option>
-                    ))}
-                  </select>
+        {/* Import Options */}
+        <div className="space-y-3">
+          <h4 className="text-sm font-medium text-gray-700">Import Options</h4>
+          <div className="space-y-2">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={options.skipDuplicates}
+                onChange={(e) => setOptions(prev => ({ ...prev, skipDuplicates: e.target.checked }))}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="ml-2 text-sm text-gray-700">Skip duplicate entries</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={options.updateExisting}
+                onChange={(e) => setOptions(prev => ({ ...prev, updateExisting: e.target.checked }))}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="ml-2 text-sm text-gray-700">Update existing entries</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={options.validateData}
+                onChange={(e) => setOptions(prev => ({ ...prev, validateData: e.target.checked }))}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="ml-2 text-sm text-gray-700">Validate data before import</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={options.createMissingTeams}
+                onChange={(e) => setOptions(prev => ({ ...prev, createMissingTeams: e.target.checked }))}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="ml-2 text-sm text-gray-700">Create missing teams/groups</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Field Mapping */}
+        {preview.length > 0 && (
+          <div className="space-y-3">
+            <h4 className="text-sm font-medium text-gray-700">Field Mapping</h4>
+            <div className="space-y-2">
+              {Object.keys(preview[0] || {}).map((field) => (
+                <div key={field} className="flex items-center space-x-3">
+                  <span className="text-sm text-gray-600 w-32 truncate">{field}</span>
+                  <span className="text-gray-400">→</span>
+                  <Select
+                    value={mapping[field] || ''}
+                    onChange={(value) => setMapping(prev => ({ ...prev, [field]: value }))}
+                    options={[
+                      { value: '', label: 'Skip this field' },
+                      ...getFieldOptions()
+                    ]}
+                    className="flex-1"
+                  />
                 </div>
               ))}
             </div>
+          </div>
+        )}
 
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-              <div className="text-sm text-yellow-800">
-                <strong>Note:</strong> Fields marked with * are required
-              </div>
+        {/* Preview */}
+        {preview.length > 0 && (
+          <div className="space-y-3">
+            <h4 className="text-sm font-medium text-gray-700">Preview (First 5 rows)</h4>
+            <div className="bg-gray-50 rounded-lg p-4 max-h-40 overflow-y-auto">
+              <pre className="text-xs text-gray-600">
+                {JSON.stringify(preview.slice(0, 5), null, 2)}
+              </pre>
             </div>
           </div>
         )}
 
-        {/* Preview Step */}
-        {step === 'preview' && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-medium text-gray-900">Preview Data</h3>
-            <p className="text-sm text-gray-600">
-              Review the first few rows of your data
-            </p>
-
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    {Object.keys(previewData[0] || {}).map(header => (
-                      <th key={header} className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                        {header}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {previewData.map((row, index) => (
-                    <tr key={index}>
-                      {Object.values(row).map((value, cellIndex) => (
-                        <td key={cellIndex} className="px-3 py-2 text-sm text-gray-900">
-                          {String(value)}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* Import Options */}
-        {step !== 'upload' && (
-          <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-3">Import Options</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">Skip first row (headers)</span>
-                <input
-                  type="checkbox"
-                  checked={options.skipFirstRow}
-                  onChange={(e) => handleOptionChange('skipFirstRow', e.target.checked)}
-                  className="rounded"
-                />
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">Create missing teams</span>
-                <input
-                  type="checkbox"
-                  checked={options.createMissingTeams}
-                  onChange={(e) => handleOptionChange('createMissingTeams', e.target.checked)}
-                  className="rounded"
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">Update existing records</span>
-                <input
-                  type="checkbox"
-                  checked={options.updateExisting}
-                  onChange={(e) => handleOptionChange('updateExisting', e.target.checked)}
-                  className="rounded"
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">Validate data before import</span>
-                <input
-                  type="checkbox"
-                  checked={options.validateData}
-                  onChange={(e) => handleOptionChange('validateData', e.target.checked)}
-                  className="rounded"
-                />
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-red-800">Import Error</h3>
+                <div className="mt-2 text-sm text-red-700">
+                  <p>{error}</p>
+                </div>
               </div>
             </div>
           </div>
         )}
 
         {/* Actions */}
-        <div className="flex justify-between pt-4 border-t border-gray-200">
-          <div className="flex space-x-3">
-            {step !== 'upload' && (
-              <button
-                type="button"
-                onClick={() => setStep(step === 'mapping' ? 'upload' : 'mapping')}
-                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 text-sm"
-              >
-                Back
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={handleReset}
-              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 text-sm"
-            >
-              Reset
-            </button>
-          </div>
-          
-          <div className="flex space-x-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 text-sm"
-            >
-              Cancel
-            </button>
-            {step === 'mapping' && (
-              <button
-                type="button"
-                onClick={() => setStep('preview')}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
-              >
-                Preview
-              </button>
-            )}
-            {step === 'preview' && (
-              <button
-                type="submit"
-                disabled={isProcessing}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-              >
-                {isProcessing ? 'Importing...' : `Import ${getDataTypeLabel()}`}
-              </button>
-            )}
-          </div>
+        <div className="flex justify-end space-x-3">
+          <Button
+            onClick={onClose}
+            variant="ghost"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleImport}
+            disabled={!file || importing}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            {importing ? 'Importing...' : 'Import Data'}
+          </Button>
         </div>
-      </form>
+      </div>
     </Modal>
   );
 }
-
-

@@ -33,3 +33,4 @@ public class UpdateIntervalRequest {
     private String settings; // JSON string for interval settings
 }
 
+

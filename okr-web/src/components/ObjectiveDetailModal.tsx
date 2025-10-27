@@ -164,7 +164,15 @@ export function ObjectiveDetailModal({ isOpen, onClose, objective }: ObjectiveDe
                   <h2 className="text-lg font-semibold text-gray-900">Nested items</h2>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <button className="text-sm text-gray-500 hover:text-gray-700">Custom weights +</button>
+                  <button 
+                    onClick={() => {
+                      // TODO: Implement add key result functionality
+                      console.log('Add key result clicked');
+                    }}
+                    className="text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 px-2 py-1 rounded"
+                  >
+                    Custom weights +
+                  </button>
                 </div>
               </div>
 

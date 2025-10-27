@@ -62,7 +62,7 @@ public class Group {
     @OneToMany(mappedBy = "groupId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<GroupMember> members = new ArrayList<>();
 
-    @OneToMany(mappedBy = "groupId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Objective> objectives = new ArrayList<>();
 
     // Helper methods

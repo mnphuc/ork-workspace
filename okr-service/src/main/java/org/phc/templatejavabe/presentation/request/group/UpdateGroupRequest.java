@@ -24,3 +24,4 @@ public class UpdateGroupRequest {
     private String settings; // JSON string for group settings
 }
 
+

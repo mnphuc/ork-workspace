@@ -37,7 +37,11 @@
     "email": "Email",
     "password": "Password",
     "phone": "Phone",
-    "address": "Address"
+    "address": "Address",
+    "first": "First",
+    "to": "To",
+    "get": "Get",
+    "started": "Started"
   },
   "navigation": {
     "home": "Home",
@@ -103,6 +107,8 @@
       "stakeholdersLabel": "Stakeholders",
       "startDateLabel": "Start Date",
       "endDateLabel": "End Date",
+      "startDate": "Start Date",
+      "endDate": "End Date",
       "parentLabel": "Parent Objective",
       "addNestedItem": "Add nested item",
       "createObjective": "Create objective",

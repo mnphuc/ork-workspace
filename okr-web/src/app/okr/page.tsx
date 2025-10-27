@@ -93,7 +93,7 @@ function ObjectivesContent() {
     
     // Load objectives from API
     loadObjectives();
-  }, [currentWorkspace, workspaceLoading]);
+  }, [currentWorkspace?.id, workspaceLoading]); // Use currentWorkspace.id instead of currentWorkspace
 
   // Apply search and filters
   useEffect(() => {
@@ -301,8 +301,13 @@ function ObjectivesContent() {
     try {
       const data = await apiFetch<Objective[]>(`/objectives?workspaceId=${currentWorkspace.id}`);
       
+      // Remove duplicates based on id
+      const uniqueData = data.filter((objective, index, self) => 
+        index === self.findIndex(obj => obj.id === objective.id)
+      );
+      
       // Map backend response to frontend format
-      const mappedData = data.map(objective => ({
+      const mappedData = uniqueData.map(objective => ({
         ...objective,
         // Convert status from uppercase to lowercase with underscore
         status: objective.status.toLowerCase().replace(/([A-Z])/g, '_$1').replace(/^_/, ''),

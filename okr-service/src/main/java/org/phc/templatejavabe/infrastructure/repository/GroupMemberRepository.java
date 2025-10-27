@@ -37,3 +37,4 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, String
     boolean existsByGroupIdAndUserIdAndStatus(String groupId, String userId, String status);
 }
 
+

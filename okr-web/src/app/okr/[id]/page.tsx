@@ -213,6 +213,8 @@ export default function ObjectiveDetailPage() {
 
   const handleKeyResultSaved = async () => {
     await loadObjectiveData();
+    setShowKeyResultModal(false);
+    setEditingKeyResult(null);
   };
 
   const handleAddComment = async (content: string, parentId?: string) => {

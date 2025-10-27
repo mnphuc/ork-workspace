@@ -40,8 +40,25 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
       const workspacesData = await apiFetch<WorkspaceSummary[]>('/workspaces');
       
       setWorkspaces(workspacesData);
-      if (workspacesData.length > 0) {
-        setCurrentWorkspace(workspacesData[0]);
+      
+      // Only set current workspace if none is selected
+      if (workspacesData.length > 0 && !currentWorkspace) {
+        // Try to restore from localStorage first
+        const savedWorkspaceId = localStorage.getItem('current_workspace_id');
+        if (savedWorkspaceId) {
+          const savedWorkspace = workspacesData.find(w => w.id === savedWorkspaceId);
+          if (savedWorkspace) {
+            setCurrentWorkspace(savedWorkspace);
+          } else {
+            // Fallback to first workspace if saved workspace not found
+            setCurrentWorkspace(workspacesData[0]);
+            localStorage.setItem('current_workspace_id', workspacesData[0].id);
+          }
+        } else {
+          // No saved workspace, use first one
+          setCurrentWorkspace(workspacesData[0]);
+          localStorage.setItem('current_workspace_id', workspacesData[0].id);
+        }
       }
     } catch (e: any) {
       console.error('Error loading workspaces:', e);
@@ -80,12 +97,29 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
     }
   }, [currentWorkspace]);
 
+  // Initialize workspace from localStorage on mount
+  useEffect(() => {
+    const savedWorkspaceId = localStorage.getItem('current_workspace_id');
+    if (savedWorkspaceId && workspaces.length > 0 && !currentWorkspace) {
+      const savedWorkspace = workspaces.find(w => w.id === savedWorkspaceId);
+      if (savedWorkspace) {
+        setCurrentWorkspace(savedWorkspace);
+      }
+    }
+  }, [workspaces, currentWorkspace]);
+
+  // Enhanced setCurrentWorkspace that saves to localStorage
+  const handleSetCurrentWorkspace = (workspace: WorkspaceSummary) => {
+    setCurrentWorkspace(workspace);
+    localStorage.setItem('current_workspace_id', workspace.id);
+  };
+
   const value: WorkspaceContextType = {
     currentWorkspace,
     workspaces,
     loading,
     error,
-    setCurrentWorkspace,
+    setCurrentWorkspace: handleSetCurrentWorkspace,
     refreshWorkspaces,
   };
 

@@ -10,8 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "intervals")
@@ -69,17 +67,16 @@ public class Interval {
     private String ownerId;
 
     // Relationships
-    @OneToMany(mappedBy = "intervalId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Objective> objectives = new ArrayList<>();
+    // Note: Objectives are not directly related to intervals through a foreign key
+    // The relationship is conceptual through quarters or date ranges
 
     // Helper methods
     public boolean isDateInRange(LocalDate date) {
         return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
 
-    public int getObjectiveCount() {
-        return objectives != null ? objectives.size() : 0;
-    }
+    // Note: Objective count would need to be calculated through business logic
+    // based on quarters or date ranges, not through a direct relationship
 
     public void activate() {
         this.isActive = true;

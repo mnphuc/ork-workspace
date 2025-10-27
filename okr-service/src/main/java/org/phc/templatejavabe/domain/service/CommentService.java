@@ -31,6 +31,10 @@ public class CommentService {
             throw new IllegalArgumentException("Comment must be associated with either an objective or a key result, but not both");
         }
 
+        // Set audit fields
+        comment.setCreatedBy(comment.getAuthorId());
+        comment.setCreatedDate(java.time.Instant.now());
+        
         return commentRepository.save(comment);
     }
 

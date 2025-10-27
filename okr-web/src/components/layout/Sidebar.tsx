@@ -98,6 +98,7 @@ export function Sidebar({ onLogout, isOpen = false, onClose }: SidebarProps) {
           <button 
             onClick={onLogout} 
             className="w-full flex items-center justify-center gap-2 text-gray-600 hover:text-red-600 py-2 text-sm hover:bg-gray-100 rounded-lg transition-colors"
+            data-testid="logout-button"
           >
             <span>🚪</span>
             <span>{mounted ? t('navigation.logout') : 'Logout'}</span>

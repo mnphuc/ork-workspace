@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -90,5 +91,24 @@ public class UserService {
         } catch (Exception e) {
             throw new RuntimeException("Invalid refresh token");
         }
+    }
+
+    public User updateUser(String userId, Map<String, Object> updateData) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        User user = userOpt.get();
+        
+        // Update fields if provided
+        if (updateData.containsKey("full_name")) {
+            user.setFullName((String) updateData.get("full_name"));
+        }
+        if (updateData.containsKey("avatar_url")) {
+            user.setAvatarUrl((String) updateData.get("avatar_url"));
+        }
+        
+        return userRepository.save(user);
     }
 }

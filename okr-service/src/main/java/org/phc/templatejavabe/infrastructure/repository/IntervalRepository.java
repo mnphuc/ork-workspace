@@ -48,3 +48,4 @@ public interface IntervalRepository extends JpaRepository<Interval, String> {
     boolean hasActiveIntervalInWorkspace(@Param("workspaceId") String workspaceId);
 }
 
+

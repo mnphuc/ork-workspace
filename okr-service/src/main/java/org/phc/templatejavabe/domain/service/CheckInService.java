@@ -71,6 +71,13 @@ public class CheckInService {
         
         // Update Key Result current value
         kr.setCurrentValue(c.getValue());
+        // Ensure current value is not null and not negative
+        if (kr.getCurrentValue() == null) {
+            kr.setCurrentValue(BigDecimal.ZERO);
+        }
+        if (kr.getCurrentValue().compareTo(BigDecimal.ZERO) < 0) {
+            kr.setCurrentValue(BigDecimal.ZERO);
+        }
         keyResultService.update(kr);
         
         // Update Objective progress
@@ -98,6 +105,13 @@ public class CheckInService {
         KeyResult kr = keyResultRepository.findById(existing.getKeyResultId()).orElse(null);
         if (kr != null) {
             kr.setCurrentValue(saved.getValue());
+            // Ensure current value is not null and not negative
+            if (kr.getCurrentValue() == null) {
+                kr.setCurrentValue(BigDecimal.ZERO);
+            }
+            if (kr.getCurrentValue().compareTo(BigDecimal.ZERO) < 0) {
+                kr.setCurrentValue(BigDecimal.ZERO);
+            }
             keyResultService.update(kr);
             
             // Update Objective progress

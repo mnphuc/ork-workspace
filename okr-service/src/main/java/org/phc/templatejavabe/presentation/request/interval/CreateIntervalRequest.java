@@ -44,3 +44,4 @@ public class CreateIntervalRequest {
     private String settings; // JSON string for interval settings
 }
 
+

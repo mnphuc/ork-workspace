@@ -52,7 +52,10 @@ public class AuthController {
             ));
         } catch (RuntimeException e) {
             Locale locale = LocaleContextHolder.getLocale();
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of(
+                "error", e.getMessage(),
+                "message", messageSource.getMessage("auth.register.failed", null, locale)
+            ));
         }
     }
 
@@ -93,6 +96,36 @@ public class AuthController {
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.status(401).build();
+        }
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<Map<String, Object>> updateCurrentUser(@RequestBody Map<String, Object> updateData) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
+                return ResponseEntity.status(401).body(Map.of(
+                    "error", "Unauthorized",
+                    "message", "User not authenticated"
+                ));
+            }
+
+            String userId = auth.getName();
+            User updatedUser = userService.updateUser(userId, updateData);
+            
+            Map<String, Object> userInfo = Map.of(
+                "id", updatedUser.getId(),
+                "email", updatedUser.getEmail(),
+                "full_name", updatedUser.getFullName(),
+                "avatar_url", updatedUser.getAvatarUrl() != null ? updatedUser.getAvatarUrl() : "",
+                "status", updatedUser.getStatus().toString()
+            );
+            return ResponseEntity.ok(userInfo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "error", e.getMessage(),
+                "message", "Failed to update profile"
+            ));
         }
     }
 }

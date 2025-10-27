@@ -25,3 +25,4 @@ public class AddMemberRequest {
     private String permissions; // JSON string for specific permissions
 }
 
+
