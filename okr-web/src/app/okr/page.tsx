@@ -91,9 +91,10 @@ function ObjectivesContent() {
       return;
     }
     
-    // Load objectives from API
+    // Always reload objectives when workspace changes
     loadObjectives();
-  }, [currentWorkspace?.id, workspaceLoading]); // Use currentWorkspace.id instead of currentWorkspace
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentWorkspace?.id, workspaceLoading]);
 
   // Apply search and filters
   useEffect(() => {
@@ -252,8 +253,21 @@ function ObjectivesContent() {
     }
   };
 
-  const handleTypeSelect = (type: ObjectiveType) => {
-    setSelectedType(type);
+  const handleTypeSelect = (type: ObjectiveType | string) => {
+    // Convert string to ObjectiveType if needed
+    let objectiveType: ObjectiveType;
+    if (typeof type === 'string') {
+      // Map string to ObjectiveType
+      objectiveType = {
+        type: type as 'COMPANY' | 'DEPARTMENT' | 'TEAM' | 'KPI',
+        label: type === 'COMPANY' ? 'Company' : type === 'DEPARTMENT' ? 'Department' : type === 'TEAM' ? 'Team' : 'KPI',
+        icon: type === 'COMPANY' ? 'C' : type === 'DEPARTMENT' ? 'Dp' : type === 'TEAM' ? 'T' : 'KPI',
+        color: type === 'COMPANY' ? 'bg-blue-600' : type === 'DEPARTMENT' ? 'bg-blue-500' : type === 'TEAM' ? 'bg-blue-400' : 'bg-red-500'
+      };
+    } else {
+      objectiveType = type;
+    }
+    setSelectedType(objectiveType);
     setIsModalOpen(true);
   };
 
@@ -264,31 +278,14 @@ function ObjectivesContent() {
 
   const handleObjectiveSave = async (objective: Objective) => {
     try {
-      // Create objective via API
-      const response = await apiFetch<Objective>('/objectives', {
-        method: 'POST',
-        body: {
-          title: objective.title,
-          description: objective.description,
-          owner_id: objective.owner_id,
-          team_id: objective.team_id,
-          workspace_id: currentWorkspace?.id,
-          quarter: objective.quarter,
-          status: objective.status.toUpperCase().replace(/_/g, ''),
-          type: objective.type || 'COMPANY',
-          groups: Array.isArray(objective.groups) ? objective.groups.join(',') : objective.groups,
-          weight: objective.weight || 1.0
-        }
-      });
-      
-      // Reload objectives to get the latest data
+      // Objective already created by ObjectiveModal, just reload data
       await loadObjectives();
       
       setIsModalOpen(false);
       setSelectedType(null);
     } catch (e: any) {
-      console.error('Failed to create objective:', e);
-      alert('Failed to create objective: ' + (e.message || 'Unknown error'));
+      console.error('Failed to reload objectives:', e);
+      alert('Failed to reload objectives: ' + (e.message || 'Unknown error'));
     }
   };
 
@@ -343,18 +340,7 @@ function ObjectivesContent() {
     }
   };
 
-  if (loading || workspaceLoading) {
-    return (
-      <div className="animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
-        <div className="space-y-4">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-24 bg-gray-200 rounded-lg"></div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+  // Don't show full page loading, let it render and show loading inside table
 
   if (error) {
     return (
@@ -374,7 +360,7 @@ function ObjectivesContent() {
         onSearch={(query) => handleSearch(query)}
         onShare={() => console.log('Share')}
         onExport={() => setShowExportModal(true)}
-        onCreate={(type) => handleTypeSelect(type as any)}
+        onCreate={handleTypeSelect}
       />
 
       {/* Search and Filters */}
@@ -461,14 +447,14 @@ function ObjectivesContent() {
       </div>
       
       {/* OKR Table */}
-      {filteredObjectives.length > 0 ? (
-        <OKRTable
-          objectives={filteredObjectives}
-          onViewDetails={(objective) => handleViewDetails(objective.id)}
-          onEdit={(objective) => handleEdit(objective.id)}
-          onDelete={(objective) => handleDelete(objective.id)}
-        />
-      ) : (
+      <OKRTable
+        objectives={filteredObjectives}
+        onViewDetails={(objective) => handleViewDetails(objective.id)}
+        onEdit={(objective) => handleEdit(objective.id)}
+        onDelete={(objective) => handleDelete(objective.id)}
+        loading={loading || workspaceLoading}
+      />
+      {!loading && !workspaceLoading && filteredObjectives.length === 0 && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
           <div className="text-gray-400 text-6xl mb-4">🎯</div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">{t('okr.objective.title')} {t('common.no')}</h3>

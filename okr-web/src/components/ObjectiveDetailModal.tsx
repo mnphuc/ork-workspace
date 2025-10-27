@@ -4,6 +4,7 @@ import { Modal } from './Modal';
 import { StatusPill } from './StatusPill';
 import { GroupPills } from './GroupPill';
 import { formatDate } from '@/lib/date-utils';
+import { KPICheckInModal } from './KPICheckInModal';
 
 interface KeyResult {
   id: string;
@@ -53,6 +54,7 @@ interface ObjectiveDetailModalProps {
 export function ObjectiveDetailModal({ isOpen, onClose, objective }: ObjectiveDetailModalProps) {
   const [activeTab, setActiveTab] = useState<'comments' | 'activity'>('comments');
   const [commentText, setCommentText] = useState('');
+  const [showKPICheckIn, setShowKPICheckIn] = useState(false);
 
   if (!objective) return null;
 
@@ -322,15 +324,24 @@ export function ObjectiveDetailModal({ isOpen, onClose, objective }: ObjectiveDe
             <div className="text-sm text-gray-600 mb-3">
               {objective.last_check_in_date ? formatDate(objective.last_check_in_date) : 'Not yet'}
             </div>
-            <button 
-              onClick={() => {
-                // TODO: Implement check-in functionality
-                alert('Check-in functionality will be implemented here');
-              }}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Check-in
-            </button>
+            {objective.type === 'KPI' ? (
+              <button 
+                onClick={() => setShowKPICheckIn(true)}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Check-in
+              </button>
+            ) : (
+              <button 
+                onClick={() => {
+                  // TODO: Implement check-in functionality for regular objectives
+                  alert('Check-in functionality will be implemented here');
+                }}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Check-in
+              </button>
+            )}
           </div>
 
           {/* Details Section */}
@@ -399,6 +410,22 @@ export function ObjectiveDetailModal({ isOpen, onClose, objective }: ObjectiveDe
           </div>
         </div>
       </div>
+      
+      <KPICheckInModal
+        isOpen={showKPICheckIn}
+        onClose={() => setShowKPICheckIn(false)}
+        kpi={objective.type === 'KPI' ? objective : null}
+        onSubmit={async (keyResultId, value, note) => {
+          try {
+            // TODO: Implement check-in API call
+            alert(`Check-in submitted: ${value}, note: ${note || 'none'}`);
+            setShowKPICheckIn(false);
+          } catch (error) {
+            console.error('Check-in failed:', error);
+            alert('Failed to submit check-in. Please try again.');
+          }
+        }}
+      />
     </Modal>
   );
 }

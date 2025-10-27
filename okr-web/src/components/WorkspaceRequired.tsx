@@ -13,8 +13,8 @@ export function WorkspaceRequired({ children, fallback }: WorkspaceRequiredProps
   const { currentWorkspace, loading, error, workspaces } = useWorkspace();
   const { t } = useTranslation();
 
-  // Show loading while workspaces are being loaded
-  if (loading) {
+  // Show loading only if we're loading AND don't have a current workspace
+  if (loading && !currentWorkspace) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">

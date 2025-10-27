@@ -8,9 +8,8 @@ interface WorkspaceSelectorProps {
 }
 
 export function WorkspaceSelector({ onWorkspaceChange }: WorkspaceSelectorProps) {
-  const { currentWorkspace, workspaces, loading, setCurrentWorkspace, refreshWorkspaces } = useWorkspace();
+  const { currentWorkspace, workspaces, loading, setCurrentWorkspace } = useWorkspace();
   const [isOpen, setIsOpen] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Handle click outside to close dropdown
@@ -33,6 +32,10 @@ export function WorkspaceSelector({ onWorkspaceChange }: WorkspaceSelectorProps)
   const handleWorkspaceSelect = (workspace: typeof workspaces[0]) => {
     setCurrentWorkspace(workspace);
     setIsOpen(false);
+    
+    // Reload the current page to load new workspace data
+    window.location.reload();
+    
     if (onWorkspaceChange) {
       onWorkspaceChange(workspace.id);
     }
@@ -72,19 +75,8 @@ export function WorkspaceSelector({ onWorkspaceChange }: WorkspaceSelectorProps)
     <div className="relative" ref={dropdownRef}>
       <div 
         className="px-3 py-2 bg-blue-50 rounded-lg border border-blue-200 cursor-pointer hover:bg-blue-100 transition-colors"
-        onClick={async (e) => {
+        onClick={(e) => {
           e.stopPropagation();
-          if (!isOpen) {
-            // Only refresh workspaces if they are empty to avoid blink
-            if (workspaces.length === 0 && !loading && !isRefreshing) {
-              setIsRefreshing(true);
-              try {
-                await refreshWorkspaces();
-              } finally {
-                setIsRefreshing(false);
-              }
-            }
-          }
           setIsOpen(!isOpen);
         }}
       >
@@ -92,7 +84,7 @@ export function WorkspaceSelector({ onWorkspaceChange }: WorkspaceSelectorProps)
           <div className="flex items-center space-x-2">
             <span className="text-blue-600">🏢</span>
             <span className="text-sm font-medium text-blue-800 truncate">
-              {isRefreshing ? 'Loading...' : (currentWorkspace?.name || 'Select Workspace')}
+              {currentWorkspace?.name || 'Select Workspace'}
             </span>
           </div>
           <svg 

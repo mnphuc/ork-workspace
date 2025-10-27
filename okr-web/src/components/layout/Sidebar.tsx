@@ -1,12 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { useUser } from '@/contexts/UserContext';
 import { useTranslation } from 'react-i18next';
 import { WorkspaceSelector } from '@/components/WorkspaceSelector';
-import { useWorkspace } from '@/contexts/WorkspaceContext';
 
 interface SidebarProps {
   onLogout?: () => void;
@@ -16,21 +14,10 @@ interface SidebarProps {
 
 export function Sidebar({ onLogout, isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const { user } = useUser();
   const { t } = useTranslation();
-  const { refreshWorkspaces, workspaces, loading, error } = useWorkspace();
-  const [mounted, setMounted] = useState(false);
+  const [mounted] = useState(true); // Always mounted in client-side rendering
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Load workspaces when sidebar opens (only if not already loaded)
-  useEffect(() => {
-    if (isOpen && workspaces.length === 0 && !loading && !error) {
-      refreshWorkspaces();
-    }
-  }, [isOpen, refreshWorkspaces, workspaces.length, loading, error]);
+  // Don't load workspaces in sidebar - already handled by WorkspaceContext
   
   const menuItems = [
     { path: '/home', label: mounted ? t('navigation.home') : 'Home', icon: '🏠' },
@@ -82,8 +69,6 @@ export function Sidebar({ onLogout, isOpen = false, onClose }: SidebarProps) {
               icon={item.icon}
               active={pathname === item.path || 
                 (item.path === '/okr' && pathname.startsWith('/okr'))}
-              onWorkspaceRefresh={refreshWorkspaces}
-              shouldRefreshWorkspaces={workspaces.length === 0 && !loading}
             >
               {item.label}
             </NavLink>
@@ -109,25 +94,15 @@ export function Sidebar({ onLogout, isOpen = false, onClose }: SidebarProps) {
   );
 }
 
-function NavLink({ href, icon, children, active = false, onWorkspaceRefresh, shouldRefreshWorkspaces }: { 
+function NavLink({ href, icon, children, active = false }: { 
   href: string; 
   icon: string; 
   children: React.ReactNode; 
   active?: boolean;
-  onWorkspaceRefresh?: () => void;
-  shouldRefreshWorkspaces?: boolean;
 }) {
-  const handleClick = async (e: React.MouseEvent) => {
-    // Only refresh workspaces if needed to avoid blink
-    if (onWorkspaceRefresh && shouldRefreshWorkspaces) {
-      await onWorkspaceRefresh();
-    }
-  };
-
   return (
     <Link 
       href={href}
-      onClick={handleClick}
       className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-150 ${
         active 
           ? 'bg-blue-100 text-blue-700 font-medium' 

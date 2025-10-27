@@ -58,13 +58,30 @@ export function ObjectiveModal({
   const [showNestedDropdown, setShowNestedDropdown] = useState(false);
 
   useEffect(() => {
+    console.log('selectedType changed:', selectedType);
     if (selectedType) {
+      console.log('Setting formData.type to:', selectedType.type);
+      setFormData(prev => {
+        const updated = {
+          ...prev,
+          type: selectedType.type
+        };
+        console.log('Updated formData:', updated);
+        return updated;
+      });
+    }
+  }, [selectedType]);
+
+  // Reset form when modal opens
+  useEffect(() => {
+    if (isOpen && selectedType) {
+      console.log('Modal opened with selectedType:', selectedType);
       setFormData(prev => ({
         ...prev,
         type: selectedType.type
       }));
     }
-  }, [selectedType]);
+  }, [isOpen, selectedType]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,20 +101,52 @@ export function ObjectiveModal({
     }
 
     try {
+      // Use selectedType if available, otherwise use formData.type
+      const typeToUse = selectedType?.type || formData.type;
+      console.log('Creating objective with data:', formData);
+      console.log('selectedType:', selectedType);
+      console.log('formData.type:', formData.type);
+      console.log('Type value to use:', typeToUse);
+      
+      const requestBody = {
+        ...formData,
+        type: typeToUse, // Explicitly set type from selectedType
+        workspace_id: currentWorkspace.id,
+        owner_id: user.id, // Use snake_case for backend
+        // Convert arrays to strings for backend compatibility
+        groups: formData.groups.join(','),
+        labels: formData.labels.join(','),
+        stakeholders: formData.stakeholders.join(','),
+        parent_id: formData.parent_id || null, // Include parent_id
+      };
+      console.log('Request body being sent:', requestBody);
       const response = await apiFetch('/objectives', {
         method: 'POST',
-        body: {
-          ...formData,
-          workspace_id: currentWorkspace.id,
-          owner_id: user.id, // Use snake_case for backend
-          // Convert arrays to strings for backend compatibility
-          groups: formData.groups.join(','),
-          labels: formData.labels.join(','),
-          stakeholders: formData.stakeholders.join(','),
-        }
+        body: requestBody
       });
-      onSave(response);
+      
+      // Don't call onSave, just close modal - the parent will reload data
+      // Reset form
+      setFormData({
+        title: '',
+        description: '',
+        type: 'COMPANY',
+        groups: [],
+        quarter: '2025-Q4',
+        start_date: '',
+        end_date: '',
+        labels: [],
+        stakeholders: [],
+        parent_id: null,
+      });
+      
+      // Don't call onSave here - let parent handle it
       onClose();
+      
+      // Call onSave after a short delay to ensure modal is closed
+      setTimeout(() => {
+        onSave(response);
+      }, 100);
     } catch (err: any) {
       setError(err.message || 'Failed to create objective');
     } finally {
@@ -123,7 +172,7 @@ export function ObjectiveModal({
     }
   };
 
-  const typeIcon = getTypeIcon(formData.type);
+  const typeIcon = getTypeIcon(selectedType?.type || formData.type);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t('okr.objective.createNew')} size="xl">
@@ -265,7 +314,7 @@ export function ObjectiveModal({
               <div className={`w-6 h-6 ${typeIcon.color} rounded flex items-center justify-center text-white font-semibold text-xs`}>
                 {typeIcon.icon}
               </div>
-              <span className="font-medium text-gray-900">{formData.type === 'TEAM' ? 'Team' : formData.type}</span>
+              <span className="font-medium text-gray-900">{(selectedType?.type || formData.type) === 'TEAM' ? 'Team' : (selectedType?.type || formData.type)}</span>
             </div>
             
             <div className="flex items-center gap-2 mb-3">

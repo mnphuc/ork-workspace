@@ -33,3 +33,14 @@ export async function deleteKeyResult(id: string) {
     method: 'DELETE'
   });
 }
+
+export async function createCheckIn(keyResultId: string, value: number, note?: string) {
+  return apiFetch('/check-ins', {
+    method: 'POST',
+    body: {
+      key_result_id: keyResultId,
+      value: value,
+      note: note
+    }
+  });
+}

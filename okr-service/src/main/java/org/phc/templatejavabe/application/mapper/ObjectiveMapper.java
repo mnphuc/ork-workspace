@@ -68,6 +68,9 @@ public class ObjectiveMapper {
             }
         }
         
+        // Set parent ID
+        o.setParentId(req.parentId());
+        
         return o;
     }
 

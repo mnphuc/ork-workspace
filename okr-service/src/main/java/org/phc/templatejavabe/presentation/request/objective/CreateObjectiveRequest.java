@@ -17,7 +17,8 @@ public record CreateObjectiveRequest(
     String labels,
     String stakeholders,
     @JsonProperty("start_date") String startDate,
-    @JsonProperty("end_date") String endDate
+    @JsonProperty("end_date") String endDate,
+    @JsonProperty("parent_id") String parentId
 ) {}
 
 

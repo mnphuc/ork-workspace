@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { StatusPill } from './StatusPill';
 import { GroupPills } from './GroupPill';
 import { formatDate } from '@/lib/date-utils';
-import { duplicateObjective, duplicateKeyResult, moveObjective, deleteObjective, deleteKeyResult } from '@/lib/okr-api';
+import { duplicateObjective, duplicateKeyResult, moveObjective, deleteObjective, deleteKeyResult, createCheckIn } from '@/lib/okr-api';
 import { MoveDialog } from './MoveDialog';
 import { ObjectiveDetailModal } from './ObjectiveDetailModal';
+import { KPICheckInModal } from './KPICheckInModal';
 import { useUsers } from '@/contexts/UsersContext';
 
 interface KeyResult {
@@ -34,6 +35,7 @@ interface KPI {
   owner_id?: string;
   last_check_in_date?: string;
   comments_count: number;
+  type?: string;
 }
 
 interface Objective {
@@ -50,6 +52,7 @@ interface Objective {
   comments_count: number;
   key_results?: KeyResult[];
   kpis?: KPI[];
+  type?: string;
 }
 
 interface OKRTableProps {
@@ -57,9 +60,10 @@ interface OKRTableProps {
   onEdit?: (objective: Objective) => void;
   onDelete?: (objective: Objective) => void;
   onViewDetails?: (objective: Objective) => void;
+  loading?: boolean;
 }
 
-export function OKRTable({ objectives, onEdit, onDelete, onViewDetails }: OKRTableProps) {
+export function OKRTable({ objectives, onEdit, onDelete, onViewDetails, loading = false }: OKRTableProps) {
   const { getUserName } = useUsers();
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -67,6 +71,9 @@ export function OKRTable({ objectives, onEdit, onDelete, onViewDetails }: OKRTab
   const [moveDialogItem, setMoveDialogItem] = useState<any>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedObjective, setSelectedObjective] = useState<Objective | null>(null);
+  const [showKPICheckInModal, setShowKPICheckInModal] = useState(false);
+  const [selectedKPI, setSelectedKPI] = useState<Objective | null>(null);
+  const [isSubmittingCheckIn, setIsSubmittingCheckIn] = useState(false);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -116,8 +123,14 @@ export function OKRTable({ objectives, onEdit, onDelete, onViewDetails }: OKRTab
   };
 
   const handleObjectiveClick = (objective: Objective) => {
-    setSelectedObjective(objective);
-    setShowDetailModal(true);
+    // Check if this is a KPI
+    if (objective.type === 'KPI') {
+      setSelectedKPI(objective);
+      setShowKPICheckInModal(true);
+    } else {
+      setSelectedObjective(objective);
+      setShowDetailModal(true);
+    }
   };
 
   const handleAction = async (action: string, item: any) => {
@@ -336,7 +349,7 @@ export function OKRTable({ objectives, onEdit, onDelete, onViewDetails }: OKRTab
                   </button>
                 )}
                 {!hasChildren && <div className="w-6 mr-2"></div>}
-                {getItemTypeIcon('objective')}
+                {objective.type === 'KPI' ? getItemTypeIcon('kpi') : getItemTypeIcon('objective')}
                 <button
                   onClick={() => handleObjectiveClick(objective)}
                   className="text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors text-left"
@@ -465,9 +478,12 @@ export function OKRTable({ objectives, onEdit, onDelete, onViewDetails }: OKRTab
                   <div className="flex items-center" style={{ marginLeft: `${(level + 1) * 24}px` }}>
                     <div className="w-6 mr-2"></div>
                     {getItemTypeIcon('kpi')}
-                    <span className="text-sm text-gray-700">
+                    <button
+                      onClick={() => handleObjectiveClick({ ...kpi, type: 'KPI' })}
+                      className="text-sm text-gray-700 hover:text-blue-600 transition-colors text-left"
+                    >
                       {kpi.title}
-                    </span>
+                    </button>
                   </div>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
@@ -528,9 +544,9 @@ export function OKRTable({ objectives, onEdit, onDelete, onViewDetails }: OKRTab
   return (
     <>
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-auto max-h-[calc(100vh-300px)]">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-50 sticky top-0 z-10">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                   Objectives and Metrics
@@ -565,7 +581,18 @@ export function OKRTable({ objectives, onEdit, onDelete, onViewDetails }: OKRTab
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {objectives.map((objective) => renderObjectiveRow(objective))}
+              {loading ? (
+                <tr>
+                  <td colSpan={10} className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center justify-center space-y-3">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                      <p className="text-sm text-gray-600">Loading objectives...</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                objectives.map((objective) => renderObjectiveRow(objective))
+              )}
             </tbody>
           </table>
         </div>
@@ -582,6 +609,27 @@ export function OKRTable({ objectives, onEdit, onDelete, onViewDetails }: OKRTab
         isOpen={showDetailModal}
         onClose={() => setShowDetailModal(false)}
         objective={selectedObjective}
+      />
+      
+      <KPICheckInModal
+        isOpen={showKPICheckInModal}
+        onClose={() => setShowKPICheckInModal(false)}
+        kpi={selectedKPI}
+        onSubmit={async (keyResultId, value, note) => {
+          setIsSubmittingCheckIn(true);
+          try {
+            await createCheckIn(keyResultId, value, note);
+            setShowKPICheckInModal(false);
+            // Reload page to refresh data
+            window.location.reload();
+          } catch (error) {
+            console.error('Check-in failed:', error);
+            alert('Failed to submit check-in. Please try again.');
+          } finally {
+            setIsSubmittingCheckIn(false);
+          }
+        }}
+        isLoading={isSubmittingCheckIn}
       />
     </>
   );

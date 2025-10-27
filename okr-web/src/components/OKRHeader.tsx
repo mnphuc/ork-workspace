@@ -10,7 +10,7 @@ interface OKRHeaderProps {
   onSearch?: (query: string) => void;
   onShare?: () => void;
   onExport?: () => void;
-  onCreate?: () => void;
+  onCreate?: (type: string) => void;
 }
 
 export function OKRHeader({
