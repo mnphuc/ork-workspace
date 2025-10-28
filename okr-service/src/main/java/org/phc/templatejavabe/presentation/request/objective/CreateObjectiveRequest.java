@@ -2,6 +2,7 @@ package org.phc.templatejavabe.presentation.request.objective;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import lombok.NoArgsConstructor;
 
 public record CreateObjectiveRequest(
     @NotBlank String title,
